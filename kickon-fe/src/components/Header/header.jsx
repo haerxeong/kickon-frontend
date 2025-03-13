@@ -20,12 +20,8 @@ const Header = () => {
 
             {/* 네비게이션 메뉴 */}
             <NavMenu>
-                <NavItem as={Link} to="/news">
-                    뉴스
-                </NavItem>
-                <NavItem as={Link} to="/community">
-                    클럽 커뮤니티
-                </NavItem>
+                <NavItem to="/news">뉴스</NavItem>
+                <NavItem to="/community">클럽 커뮤니티</NavItem>
             </NavMenu>
         </HeaderWrapper>
     );

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const HeaderWrapper = styled.header`
     display: flex;
@@ -9,7 +10,8 @@ export const HeaderWrapper = styled.header`
 `;
 
 export const Logo = styled.div`
-    flex: 1; /* 로고가 왼쪽에 위치하도록 설정 */
+    /* 로고가 왼쪽에 위치하도록 설정 */
+    margin-right: 30px; /* 로고와 첫 번째 NavItem 사이 간격 */
 
     a img {
         height: 40px; /* 로고 이미지 높이 */
@@ -21,17 +23,10 @@ export const NavMenu = styled.nav`
     display: flex;
 `;
 
-export const NavItem = styled.div`
+export const NavItem = styled(Link)`
     margin-left: 20px; /* 네비게이션 아이템 간 간격 */
     font-size: 16px;
     font-weight: bold;
-
-    a {
-        text-decoration: none;
-        color: #222;
-
-        &:hover {
-            color: #ff1b6d; /* 호버 시 강조 색상 */
-        }
-    }
+    text-decoration: none; /* 밑줄 제거 */
+    color: #222; /* 검정색 글씨 */
 `;
