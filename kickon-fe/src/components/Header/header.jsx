@@ -6,19 +6,25 @@ import {
     NavMenu,
     NavItem,
 } from "./header.style";
+import LogoImage from "../../assets/Logo.svg"; // 로고 이미지 경로
 
 const Header = () => {
     return (
         <HeaderWrapper>
+            {/* 로고 */}
             <Logo>
-                <Link to="/">KICK-ON</Link>
+                <Link to="/">
+                    <img src={LogoImage} alt="KICK-ON Logo" />
+                </Link>
             </Logo>
+
+            {/* 네비게이션 메뉴 */}
             <NavMenu>
                 <NavItem as={Link} to="/news">
                     뉴스
                 </NavItem>
                 <NavItem as={Link} to="/community">
-                    팬 커뮤니티
+                    클럽 커뮤니티
                 </NavItem>
             </NavMenu>
         </HeaderWrapper>
