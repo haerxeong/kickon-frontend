@@ -12,7 +12,7 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #FFF; /* 배경색 설정 */
+  background-color: #363636; /* 배경색 설정 */
 `;
 
 const MainContent = styled.div`
