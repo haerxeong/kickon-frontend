@@ -1,12 +1,25 @@
 import './App.css'
 
-function App() {
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-    return (
-        <>
-            <h1>Kick On Frontend</h1>
-        </>
-    )
+import HomePage from "./pages/Home/home.jsx"
+import RootLayout from "./layout/root-layout.jsx";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <RootLayout />,
+        children: [
+            {
+                index: true,
+                element: <HomePage />,
+            },
+        ],
+    },
+]);
+
+function App() {
+    return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
