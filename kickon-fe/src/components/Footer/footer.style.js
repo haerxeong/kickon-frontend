@@ -38,3 +38,23 @@ export const FooterText = styled.p`
   font-size: 0.75rem; /* 약 12px (12px ÷ 16 = 0.75rem) */
   color: #666; /* 회색 텍스트 */
 `;
+
+export const FooterContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  background-color: #f8f8f8; /* 배경색 */
+`;
+
+export const FooterTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  background-color: #f8f8f8; /* 배경색 */
+`;
