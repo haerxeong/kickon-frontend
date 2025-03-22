@@ -7,6 +7,7 @@ import NewsList from "../components/NewsList/newsList";
 import CommunityBoard from "../components/CommunityBoard/communityBoard";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
+import Profile from "../components/Profile/profile.jsx";
 
 const Layout = styled.div`
   display: flex;
@@ -65,7 +66,7 @@ const RootLayout = () => {
                 {/* 오른쪽 컬럼 */}
                 <RightColumn>
                     <Section>
-                        <RankingTable /> {/* 승점 순위표 */}
+                        <Profile /> {/*프로필*/}
                     </Section>
                     <Section>
                         <NewsList /> {/* 인기 뉴스 리스트 */}
