@@ -29,7 +29,7 @@ const RankingTable = ({ title, rankings, type = "season" }) => {
             <Title>{title}</Title>
             <Divider />
             <LeagueSelector onClick={toggleDropdown}>
-                K리그1 <DropdownArrow isOpen={isOpen}>▼</DropdownArrow>
+                K리그 1 <DropdownArrow isOpen={isOpen}>▼</DropdownArrow>
             </LeagueSelector>
             <Divider />
 
@@ -55,14 +55,14 @@ const RankingTable = ({ title, rankings, type = "season" }) => {
                 <tbody>
                 {rankings.map((item, index) => (
                     <TableRow key={index}>
-                        <TableData align="center" width="40px">{item.rank}</TableData>
+                        <TableData>{item.rank}</TableData>
                         <TeamCell>
-                            <TeamLogo src="/team-logo.png" alt={`${item.team} logo`} />
+                            <TeamLogo src="../../assets/sample_img.png" alt={`${item.team} logo`} />
                             <TeamName>{item.team}</TeamName>
                         </TeamCell>
-                        <TableData align="center" width="50px">{item.games}</TableData>
-                        <TableData align="center" width="50px">{item.points}</TableData>
-                        {type === "season" && <TableData align="center" width="50px">{item.goals}</TableData>}
+                        <TableData>{item.games}</TableData>
+                        <TableData>{item.points}</TableData>
+                        {type === "season" && <TableData>{item.goals}</TableData>}
                     </TableRow>
                 ))}
                 </tbody>

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const TableContainer = styled.div`
-    width: 11rem; 
-    margin-left: 7rem; 
+    width: 13.5rem; 
+    margin-left: 3rem; 
     background-color: #ffffff;
     border-radius: 0.4rem;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
@@ -11,7 +11,7 @@ export const TableContainer = styled.div`
 
 export const Title = styled.p`
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.75rem;
     font-weight: bold;
     color: #333;
 `;
@@ -20,17 +20,20 @@ export const Divider = styled.hr`
     border: 0;
     height: 0.0625rem;
     background-color: #eeeeee;
-    //margin: 0.75rem 0;
+    margin: 0.75rem 0;
 `;
 
 export const LeagueSelector = styled.div` // k리그
     display: flex;
-    justify-content: space-between;
     align-items: center;
     font-size: 0.7rem;
     font-weight: 1000;
     color: #333;
     cursor: pointer;
+
+    & > span {
+        margin-left: 0.5rem; 
+    }
 `;
 
 export const DropdownArrow = styled.span` // 수정
@@ -48,29 +51,29 @@ export const Table = styled.table` // 각 행
 
 export const HeaderRow = styled.tr`
     display: grid;
-    grid-template-columns: 2.5rem 1fr 3.125rem 3.125rem ${props => props.type === "season" ? "3.125rem" : ""};
-    padding: 0.5rem 0;
+    grid-template-columns: 2.5rem 1fr 2rem 2rem 2rem;
+    padding: 0.25rem 0;
     color: #666;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 `;
 
 export const TableHeader = styled.th`
     text-align: ${props => props.align || 'center'};
     font-weight: normal;
     color: #666;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 `;
 
 export const TableRow = styled.tr`
     display: grid;
-    grid-template-columns: 2.5rem 1fr 3.125rem 3.125rem ${props => props.type === "season" ? "3.125rem" : ""};
+    grid-template-columns: 1rem 1fr 2rem 2rem 1.5rem;
     align-items: center;
-    padding: 0.375rem 0;
+    padding: 0.25rem 0;
 `;
 
 export const TableData = styled.td`
-    text-align: ${props => props.align || 'center'};
-    font-size: 0.875rem;
+    text-align: ${props => props.align || 'left'};
+    font-size: 0.7rem; 
     width: ${props => props.width || 'auto'};
 `;
 
@@ -88,5 +91,5 @@ export const TeamLogo = styled.img`
 `;
 
 export const TeamName = styled.span`
-    font-size: 0.875rem;
+    font-size: 0.7rem;
 `;
