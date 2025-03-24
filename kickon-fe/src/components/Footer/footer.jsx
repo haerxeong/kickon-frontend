@@ -1,6 +1,7 @@
+// Footer.jsx
 import React, { Component } from 'react';
 import { FooterContainer, FooterContent, FooterLogo, FooterTextWrapper, FooterMenu, FooterText } from './footer.style';
-import LogoImage from "../../assets/Logo.svg"; // 로고 이미지 경로
+import LogoImage from "../../assets/Logo_text.png"; // 로고 이미지 경로
 
 class Footer extends Component {
     render() {
@@ -19,7 +20,8 @@ class Footer extends Component {
                         </FooterMenu>
                         <FooterText>
                             Copyright 2025. Kick-on. All pictures cannot be copied without permission
-                            &nbsp;&nbsp; E-mail: business.kickon@gmail.com
+                            <br />
+                            E-mail: business.kickon@gmail.com
                         </FooterText>
                     </FooterTextWrapper>
                 </FooterContent>
