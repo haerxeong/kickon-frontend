@@ -102,9 +102,9 @@ const RootLayout = () => {
                     <MatchCard />
                       
                     {/*프로필*/}
-                    <Section>
+                    <RightTopSection>
                         <Profile /> 
-                    </Section>
+                    </RightTopSection>
 
                     {/* 뉴스 섹션 */}
                     <NewsContainer>
