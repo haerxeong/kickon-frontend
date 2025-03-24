@@ -1,0 +1,32 @@
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+export const HeaderWrapper = styled.header`
+    display: flex;
+    align-items: center;
+    background-color: #fff; /* 배경 흰색 */
+    padding: 10px 5%; /* 좌우 여백 */
+    border-bottom: 1px solid #ddd; /* 하단 경계선 */
+`;
+
+export const Logo = styled.div`
+    /* 로고가 왼쪽에 위치하도록 설정 */
+    margin-right: 30px; /* 로고와 첫 번째 NavItem 사이 간격 */
+
+    a img {
+        height: 40px; /* 로고 이미지 높이 */
+        width: auto;
+    }
+`;
+
+export const NavMenu = styled.nav`
+    display: flex;
+`;
+
+export const NavItem = styled(Link)`
+    margin-left: 20px; /* 네비게이션 아이템 간 간격 */
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none; /* 밑줄 제거 */
+    color: #222; /* 검정색 글씨 */
+`;
