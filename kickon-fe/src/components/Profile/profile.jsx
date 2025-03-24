@@ -1,14 +1,54 @@
-import React from "react";
-import { ProfileContainer, StyledButton, LogoImage } from "./Profile.style";
+import React, {useState} from "react";
+import { ProfileContainer, StyledButton, LogoImage,  CardContainer, ProfileInfo, ProfileImage,
+    UserDetails, Username, ProfileEdit,
+    UserStats, StatBox, StatTitle, StatValue,
+    LogoutButton  } from "./Profile.style";
 import Logo from "../../assets/Logo_image_black.svg";
+import Image from "../../assets/Profile_image.svg";
 
 
 const Profile = () => {
-    return (
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    return isLoggedIn ? (
+        <UserCard onLogout={() => setIsLoggedIn(false)} />
+    ) : (
         <ProfileContainer>
             <LogoImage src={Logo} alt="프로필 이미지" />
-            <StyledButton>간편 로그인 하기</StyledButton>
+            <StyledButton onClick={() => setIsLoggedIn(true)}>
+                간편 로그인 하기
+            </StyledButton>
         </ProfileContainer>
+    );
+};
+
+const UserCard = ({ onLogout }) => {
+    return (
+        <CardContainer>
+            {/* 프로필 정보 */}
+            <ProfileInfo>
+                <ProfileImage src={Image} alt="프로필 이미지" />
+                <UserDetails>
+                    <Username>닉네임 님</Username>
+                    <ProfileEdit>프로필 설정 &gt;</ProfileEdit>
+                </UserDetails>
+            </ProfileInfo>
+
+            {/* 유저 통계 정보 */}
+            <UserStats>
+                <StatBox>
+                    <StatTitle>이번 시즌 우리 팀 내 순위</StatTitle>
+                    <StatValue>-위</StatValue>
+                </StatBox>
+                <StatBox>
+                    <StatTitle>지금까지 모은 포인트</StatTitle>
+                    <StatValue>0 P</StatValue>
+                </StatBox>
+            </UserStats>
+
+            {/* 로그아웃 버튼 */}
+            <LogoutButton onClick={onLogout}>로그아웃</LogoutButton>
+        </CardContainer>
     );
 };
 
