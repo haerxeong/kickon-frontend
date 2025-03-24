@@ -12,35 +12,6 @@ export const BannerContainer = styled.div`
     padding-left: 1.25rem; /* 20px -> 1.25rem */
 `;
 
-export const Overlay = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-`;
-
-export const TextContainer = styled.div`
-    position: relative;
-    color: white;
-    text-align: left;
-    margin-left: 7.5rem; /* 120px -> 7.5rem */
-`;
-
-export const MainText = styled.h1`
-    font-size: 6rem;
-    font-weight: 1000;
-    font-style: italic;
-    margin-bottom: 0.3125rem; /* 5px -> 0.3125rem */
-`;
-
-export const SubText = styled.p`
-    font-size: 1.5rem;
-    font-style: italic;
-    margin-top: 0;
-`;
-
 export const ArrowButton = styled.button`
     position: absolute;
     top: 50%;

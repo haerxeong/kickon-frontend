@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import banner1 from '../../assets/banner1.jpg';
+import banner2 from '../../assets/banner2.jpg';
+import banner3 from '../../assets/banner3.jpg';
 import {
-    BannerContainer, Overlay, TextContainer, MainText, SubText,
-    LeftArrow, RightArrow, IndicatorContainer, IndicatorDot
+    BannerContainer, LeftArrow, RightArrow, IndicatorContainer, IndicatorDot
 } from './mainBanner.style';
 
-const images = [
-    'https://pplx-res.cloudinary.com/image/upload/v1742812791/user_uploads/NsLfdIIdgqrKPSc/image.jpg',
-    'https://example.com/image2.jpg',
-    'https://example.com/image3.jpg'
-];
+const images = [banner1, banner2, banner3];
 
 class MainBanner extends Component {
     state = {
@@ -33,16 +31,10 @@ class MainBanner extends Component {
 
         return (
             <BannerContainer style={{ backgroundImage: `url(${images[currentIndex]})` }}>
-                <Overlay />
 
                 <LeftArrow onClick={this.handlePrev}>
                     <ChevronLeft size={80} strokeWidth={1} />
                 </LeftArrow>
-
-                <TextContainer>
-                    <MainText>KICK-ON</MainText>
-                    <SubText>내 손 안의 스타디움</SubText>
-                </TextContainer>
 
                 <RightArrow onClick={this.handleNext}>
                     <ChevronRight size={80} strokeWidth={1} />
