@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FooterContainer, FooterContent, FooterLogo, FooterTextWrapper, FooterMenu, FooterText } from './footer.style';
+import { FooterContainer, FooterContent, FooterLogo, FooterTextWrapper, FooterMenu, FooterTextRow } from './footer.style';
 import LogoImage from "../../assets/Logo_text.png"; // 로고 이미지 경로 변경
 
 class Footer extends Component {
@@ -18,12 +18,12 @@ class Footer extends Component {
               <a href="/terms">서비스 이용약관</a> | <a href="/privacy">개인정보처리방침</a>
             </FooterMenu>
 
-            {/* 저작권 및 이메일 정보 */}
-            <FooterText>
+            {/* 저작권 및 이메일 정보 (한 줄로 배치) */}
+            <FooterTextRow>
               Copyright ©️ 2025 Kick-on. All pictures cannot be copied without permission.
-              &nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp; {/* 공백 추가 */}
               E-mail: business.kickon@gmail.com
-            </FooterText>
+            </FooterTextRow>
           </FooterTextWrapper>
         </FooterContent>
       </FooterContainer>
