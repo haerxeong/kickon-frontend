@@ -153,6 +153,21 @@ export const StatTitle = styled.p`
     top: 9px;
 `;
 
+export const Icon = styled.img`
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+`;
+
+export const handleIconClick = () => {
+    alert("아이콘이 클릭되었습니다!"); // 클릭 시 동작 예시 (원하는 동작으로 변경)
+};
+
 export const StatValue = styled.p`
     color: #000;
     text-align: center;

@@ -2,9 +2,10 @@ import React, {useState} from "react";
 import { ProfileContainer, StyledButton, LogoImage,  CardContainer, ProfileInfo, ProfileImage,
     UserDetails, Username, ProfileEdit,
     UserStats, StatBox, StatTitle, StatValue,
-    LogoutButton  } from "./Profile.style";
+    LogoutButton, Icon, handleIconClick  } from "./Profile.style";
 import Logo from "../../assets/Logo_image_black.svg";
 import Image from "../../assets/Profile_image.svg";
+import InfoIcon from "../../assets/Question.svg";
 
 
 const Profile = () => {
@@ -41,7 +42,10 @@ const UserCard = ({ onLogout }) => {
                     <StatValue>-위</StatValue>
                 </StatBox>
                 <StatBox>
-                    <StatTitle>지금까지 모은 포인트</StatTitle>
+                    <StatTitle>
+                        지금까지 모은 포인트
+                        <Icon src={InfoIcon} alt="정보" onClick={handleIconClick} />
+                    </StatTitle>
                     <StatValue>0 P</StatValue>
                 </StatBox>
             </UserStats>
