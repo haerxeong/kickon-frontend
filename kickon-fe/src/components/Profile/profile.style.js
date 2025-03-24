@@ -4,8 +4,8 @@ export const ProfileContainer = styled.div`
     width: 20.125rem; /* 322px */
     height: 9rem; /* 144px */
     flex-shrink: 0;
-    border-radius: 10px;
-    border: 1px solid #DCDCDC; /* 직접 색상 적용 */
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #DCDCDC; /* 직접 색상 적용 */
     background: #FFF; /* 직접 색상 적용 */
     position: relative;
 `;
@@ -32,7 +32,7 @@ export const StyledButton = styled.button`
 
     border-radius: 1.25rem; /* 20px */
     background: #C00C0B; /* 직접 색상 적용 */
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0rem 0.25rem 0.5rem 0rem rgba(0, 0, 0, 0.2);
     color: white; /* 글자색 추가 */
     font-size: 1rem; /* 16px */
     font-weight: bold;
@@ -49,8 +49,8 @@ export const CardContainer = styled.div`
     width: 20.125rem; /* 322px */
     height: 9rem; /* 144px */
     flex-shrink: 0;
-    border-radius: 10px;
-    border: 1px solid #DCDCDC; /* 직접 색상 적용 */
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #DCDCDC; /* 직접 색상 적용 */
     background: #FFF; /* 직접 색상 적용 */
     position: relative;
 
@@ -88,9 +88,9 @@ export const UserDetails = styled.div`
 export const Username = styled.p`
     color: #000;
     font-family: Pretendard;
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 600;
-    line-height: 24px;
+    line-height: 1.5rem;
     margin: 0;
 `;
 
@@ -107,8 +107,8 @@ export const ProfileEdit = styled.button`
 `;
 export const UserStats = styled.div`
     display: flex;
-    width: 322px;
-    height: 52px;
+    width: 20.125rem;
+    height: 3.25rem;
     flex-direction: row;
     justify-content: space-between;
     align-items: center; /* ✅ 세로 가운데 정렬 */
@@ -138,7 +138,7 @@ export const StatBox = styled.div`
     justify-content: center; /* ✅ 위아래 간격 균등하게 */
     position: relative;
     height: 100%; /* ✅ 부모 요소(UserStats)의 높이를 채우도록 설정 */
-    padding: 9px 0;
+    padding: 0.5625rem 0;
     
 `;
 export const StatTitle = styled.p`
@@ -150,18 +150,18 @@ export const StatTitle = styled.p`
     font-weight: 400;
     line-height: 1rem; /* 160% */
     position: absolute;
-    top: 9px;
+    top: 0.5625rem;
 `;
 
 export const Icon = styled.img`
-    width: 12px;
-    height: 12px;
-    margin-left: 4px;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-left: 0.25rem;
     background: none;
     border: none;
     cursor: pointer;
     position: absolute;
-    top: 2px;
+    top:0.125rem;
 `;
 
 export const handleIconClick = () => {
