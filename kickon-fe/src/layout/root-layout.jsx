@@ -8,6 +8,7 @@ import NewsList from "../components/NewsList/newsList";
 import CommunityBoard from "../components/CommunityBoard/communityBoard";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
+import Profile from "../components/Profile/profile.jsx";
 import {currentSeasonRankings, predictionRankings} from "../mocks/rankings.js";
 
 const Layout = styled.div`
@@ -99,6 +100,11 @@ const RootLayout = () => {
                     <MatchCard />
                     <MatchCard />
                     <MatchCard />
+                      
+                    {/*프로필*/}
+                    <Section>
+                        <Profile /> 
+                    </Section>
 
                     {/* 뉴스 섹션 */}
                     <NewsContainer>
