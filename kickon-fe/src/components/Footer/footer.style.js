@@ -13,7 +13,7 @@ export const FooterContent = styled.div`
     flex-direction: row; /* 로고와 텍스트를 가로로 배열 */
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px; /* 메인 콘텐츠와 동일한 너비 */
+    max-width: 75rem; /* 1200px */
     height: 100%;
     margin: 0 auto; /* 중앙 정렬 */
     padding: 0 2rem;

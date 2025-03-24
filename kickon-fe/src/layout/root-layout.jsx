@@ -19,33 +19,33 @@ const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 1.25rem; /* 20px */
 `;
 
 const ContentWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    width: 1200px; /* 메인 콘텐츠 너비 고정 */
-    gap: 16px;
+    width: 75rem; /* 1200px */
+    gap: 1rem; /* 16px */
 `;
 
 const LeftColumn = styled.div`
-    width: 368px;
+    width: 23rem; /* 368px */
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem; /* 16px */
 `;
 
 const MainContent = styled.main`
     flex: 1;
-    width: 600px; /* 항상 일정한 너비 */
+    width: 37.5rem; /* 600px */
 `;
 
 const RightColumn = styled.div`
-    width: 368px;
+    width: 23rem; /* 368px */
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem; /* 16px */
 `;
 
 const RootLayout = () => {
