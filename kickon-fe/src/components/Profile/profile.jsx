@@ -3,9 +3,9 @@ import { ProfileContainer, StyledButton, LogoImage,  CardContainer, ProfileInfo,
     UserDetails, Username, ProfileEdit,
     UserStats, StatBox, StatTitle, StatValue,
     LogoutButton, Icon, handleIconClick  } from "./Profile.style";
-import Logo from "../../assets/Logo_image_black.svg";
-import Image from "../../assets/Profile_image.svg";
-import InfoIcon from "../../assets/Question.svg";
+import Logo from "../../assets/logo_image_black.svg";
+import Image from "../../assets/profile_image.svg";
+import InfoIcon from "../../assets/question.svg";
 
 
 const Profile = () => {

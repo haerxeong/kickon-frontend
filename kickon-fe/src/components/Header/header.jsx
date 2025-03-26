@@ -6,7 +6,7 @@ import {
     NavMenu,
     NavItem,
 } from "./header.style";
-import LogoImage from "../../assets/Logo.svg"; // 로고 이미지 경로
+import LogoImage from "../../assets/logo.svg"; // 로고 이미지 경로
 
 const Header = () => {
     return (
