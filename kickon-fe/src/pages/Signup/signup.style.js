@@ -12,7 +12,7 @@ export const SignupContainer = styled.div`
   border-radius: 0.75rem;
   border: 1px solid #e0e0e0;
   background: #ffffff;
-  margin: auto;
+  margin-bottom: 5rem;
 `;
 
 export const SignupTitle = styled.h1`
