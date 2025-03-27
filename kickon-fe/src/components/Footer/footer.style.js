@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const FooterContainer = styled.footer`
   display: flex;
@@ -6,7 +6,7 @@ export const FooterContainer = styled.footer`
   justify-content: flex-start; /* 전체 컨테이너 왼쪽 정렬 */
   max-width: 100%;
   height: 10rem;
-  padding: 0 30rem 0 10rem;
+  padding: 0 20rem 0 10rem;
   background-color: ${(props) => (props.isDark ? "#363636" : "#fff")};
 `;
 
@@ -20,7 +20,7 @@ export const FooterContent = styled.div`
 export const FooterLogo = styled.div`
   display: flex;
   margin-right: 2rem; /* 로고 오른쪽 여백 추가 */
-  
+
   img {
     width: 7rem;
     height: auto;
