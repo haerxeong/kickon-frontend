@@ -130,7 +130,7 @@ const Signup = () => {
       <InputGroup>
         <InputLabel>
           리그
-          <FiHelpCircle color="#999" />
+          <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem" }} />
         </InputLabel>
         <Dropdown
           onClick={() => setIsLeagueDropdownOpen(!isLeagueDropdownOpen)}
