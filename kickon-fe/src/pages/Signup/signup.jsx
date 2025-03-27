@@ -1,30 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {
-  SignupContainer,
-  SignupTitle,
-  SocialLoginWrapper,
-  SocialText,
-  InputGroup,
-  InputLabel,
-  InputField,
-  ErrorMessage,
-  Dropdown,
-  DropdownContent,
-  DropdownText,
-  CheckboxWrapper,
-  CheckboxLabel,
-  ViewTermsLink,
-  SignupButton,
-  NaverLogoIcon,
-  StyledRegCheckSquare,
-  StyledCheckSquare,
-} from "./signup.style";
+import * as S from "./signup.style";
 import { League } from "../../mocks/league";
 import naverLogo from "../../assets/naver.svg";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoChevronDownOutline } from "react-icons/io5";
 
 const Signup = () => {
+  // const [values, setValues] = useState({
+  //   nickname: "",
+  //   selectedLeague: "",
+  //   selectedTeam: "",
+  // });
+
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [selectedLeague, setSelectedLeague] = useState("");
@@ -109,39 +96,39 @@ const Signup = () => {
   };
 
   return (
-    <SignupContainer>
-      <SignupTitle>회원가입</SignupTitle>
+    <S.SignupContainer>
+      <S.SignupTitle>회원가입</S.SignupTitle>
 
-      <SocialLoginWrapper>
-        <NaverLogoIcon src={naverLogo} alt="네이버 로고" />
-        <SocialText>계정으로 가입을 진행하고 있어요.</SocialText>
-      </SocialLoginWrapper>
+      <S.SocialLoginWrapper>
+        <S.NaverLogoIcon src={naverLogo} alt="네이버 로고" />
+        <S.SocialText>계정으로 가입을 진행하고 있어요.</S.SocialText>
+      </S.SocialLoginWrapper>
 
-      <InputGroup>
-        <InputLabel>닉네임</InputLabel>
-        <InputField
+      <S.InputGroup>
+        <S.InputLabel>닉네임</S.InputLabel>
+        <S.InputField
           placeholder="닉네임은 최대 8글자"
           value={nickname}
           onChange={handleNicknameChange}
         />
-        {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
-      </InputGroup>
+        {nicknameError && <S.ErrorMessage>{nicknameError}</S.ErrorMessage>}
+      </S.InputGroup>
 
-      <InputGroup>
-        <InputLabel>
+      <S.InputGroup>
+        <S.InputLabel>
           리그
           <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem" }} />
-        </InputLabel>
-        <Dropdown
+        </S.InputLabel>
+        <S.Dropdown
           onClick={() => setIsLeagueDropdownOpen(!isLeagueDropdownOpen)}
         >
-          <DropdownContent>
-            <DropdownText>
+          <S.DropdownContent>
+            <S.DropdownText>
               {selectedLeague || "선택해 주세요"}
-            </DropdownText>
+            </S.DropdownText>
             <IoChevronDownOutline size={12} color="#8F8F8F"/>
-          </DropdownContent>
-        </Dropdown>
+          </S.DropdownContent>
+        </S.Dropdown>
         {isLeagueDropdownOpen && (
           <div>
             {leagues.map((league) => (
@@ -157,21 +144,21 @@ const Signup = () => {
             ))}
           </div>
         )}
-      </InputGroup>
+      </S.InputGroup>
 
-      <InputGroup>
-        <InputLabel>응원팀</InputLabel>
-        <Dropdown
+      <S.InputGroup>
+        <S.InputLabel>응원팀</S.InputLabel>
+        <S.Dropdown
           onClick={() => setIsTeamDropdownOpen(!isTeamDropdownOpen)}
           disabled={!selectedLeague}
         >
-          <DropdownContent>
-            <DropdownText>
+          <S.DropdownContent>
+            <S.DropdownText>
               {selectedTeam || "선택해 주세요"}
-            </DropdownText>
+            </S.DropdownText>
             <IoChevronDownOutline size={12} color="#8F8F8F"/>
-          </DropdownContent>
-        </Dropdown>
+          </S.DropdownContent>
+        </S.Dropdown>
         {isTeamDropdownOpen && (
           <div>
             {teamOptions.map((team) => (
@@ -187,54 +174,54 @@ const Signup = () => {
             ))}
           </div>
         )}
-      </InputGroup>
+      </S.InputGroup>
 
-      <CheckboxWrapper onClick={handleAllAgreementToggle}>
-        {isAllAgreed ? <StyledCheckSquare /> : <StyledRegCheckSquare />}
-        <CheckboxLabel>모두 동의</CheckboxLabel>
-      </CheckboxWrapper>
+      <S.CheckboxWrapper onClick={handleAllAgreementToggle}>
+        {isAllAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
+        <S.CheckboxLabel>모두 동의</S.CheckboxLabel>
+      </S.CheckboxWrapper>
 
-      <CheckboxWrapper onClick={() => setIsAgeAgreed(!isAgeAgreed)}>
-        {isAgeAgreed ? <StyledCheckSquare /> : <StyledRegCheckSquare />}
-        <CheckboxLabel>만 14세 이상 가입 동의 (필수)</CheckboxLabel>
-      </CheckboxWrapper>
+      <S.CheckboxWrapper onClick={() => setIsAgeAgreed(!isAgeAgreed)}>
+        {isAgeAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
+        <S.CheckboxLabel>만 14세 이상 가입 동의 (필수)</S.CheckboxLabel>
+      </S.CheckboxWrapper>
 
-      <CheckboxWrapper
+      <S.CheckboxWrapper
         onClick={() => setIsServiceTermsAgreed(!isServiceTermsAgreed)}
       >
         {isServiceTermsAgreed ? (
-          <StyledCheckSquare />
+          <S.StyledCheckSquare />
         ) : (
-          <StyledRegCheckSquare />
+          <S.StyledRegCheckSquare />
         )}
-        <CheckboxLabel>
+        <S.CheckboxLabel>
           서비스 이용약관 동의 (필수)
-          <ViewTermsLink>약관 보기</ViewTermsLink>
-        </CheckboxLabel>
-      </CheckboxWrapper>
+          <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
+        </S.CheckboxLabel>
+      </S.CheckboxWrapper>
 
-      <CheckboxWrapper
+      <S.CheckboxWrapper
         onClick={() => setIsPrivacyPolicyAgreed(!isPrivacyPolicyAgreed)}
       >
         {isPrivacyPolicyAgreed ? (
-          <StyledCheckSquare />
+          <S.StyledCheckSquare />
         ) : (
-          <StyledRegCheckSquare />
+          <S.StyledRegCheckSquare />
         )}
-        <CheckboxLabel>
+        <S.CheckboxLabel>
           개인정보처리방침 동의 (필수)
-          <ViewTermsLink>약관 보기</ViewTermsLink>
-        </CheckboxLabel>
-      </CheckboxWrapper>
+          <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
+        </S.CheckboxLabel>
+      </S.CheckboxWrapper>
 
-      <CheckboxWrapper onClick={() => setIsMarketingAgreed(!isMarketingAgreed)}>
-        {isMarketingAgreed ? <StyledCheckSquare /> : <StyledRegCheckSquare />}
-        <CheckboxLabel>
-          마케팅 정보 수신 동의 (선택) <ViewTermsLink>약관 보기</ViewTermsLink>{" "}
-        </CheckboxLabel>
-      </CheckboxWrapper>
+      <S.CheckboxWrapper onClick={() => setIsMarketingAgreed(!isMarketingAgreed)}>
+        {isMarketingAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
+        <S.CheckboxLabel>
+          마케팅 정보 수신 동의 (선택) <S.ViewTermsLink>약관 보기</S.ViewTermsLink>{" "}
+        </S.CheckboxLabel>
+      </S.CheckboxWrapper>
 
-      <SignupButton
+      <S.SignupButton
         onClick={handleSignup}
         disabled={
           !nickname ||
@@ -246,8 +233,8 @@ const Signup = () => {
         }
       >
         회원가입
-      </SignupButton>
-    </SignupContainer>
+      </S.SignupButton>
+    </S.SignupContainer>
   );
 };
 
