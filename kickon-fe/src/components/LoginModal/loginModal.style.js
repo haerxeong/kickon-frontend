@@ -15,8 +15,8 @@ export const ModalOverlay = styled.div`
 
 export const ModalContainer = styled.div`
     position: relative;
-    width: 30rem;
-    height: 30rem;
+    width: 26.33rem;
+    height: 26.5rem;
     flex-shrink: 0;
     border-radius: 0.625rem;
     background: #FFF;
@@ -25,15 +25,15 @@ export const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 3rem;
 `;
 
 export const CloseButton = styled.button`
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 1.5rem;
-    height: 1.5rem;
+    top: 0.67rem;
+    right: 0.67rem;
+    width: 2rem;
+    height: 2rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -43,67 +43,65 @@ export const CloseButton = styled.button`
 
     &::before {
         content: '✕';
-        font-size: 1.5rem;
+        font-size: 1rem;
         color: #8F8F8F;
     }
 `;
 
 export const LogoImage = styled.img`
-    width: 17.5rem;
-    height: 3.875rem;
+    width: 14rem;
+    height: 3.1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    margin-bottom: 1.88rem;
+    margin-bottom: 1.5rem;
 `;
 
 export const DescriptionText = styled.p`
     color: #000;
     text-align: center;
-    //font-family: Pretendard;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 2.25rem;
-    margin-bottom: 6.62rem;
+    line-height: 1.8rem;
+    margin-bottom: 6rem;
 `;
 
 export const KakaoLoginButton = styled.button`
     display: flex;
-    height: 3.125rem;
-    padding: 0.6875rem 5.8125rem 0.6875rem 5.5rem;
+    height: 2.5rem;
+    padding: 0.6rem 4.5rem;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     border-radius: 0.5rem;
     background: #FDE500;
     border: none;
     cursor: pointer;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 `;
 
 export const KakaoLogo = styled.img`
-    width: 1.125rem;
-    height: 1rem;
+    width: 1rem;
+    height: 0.9rem;
     flex-shrink: 0;
 `;
 
 export const KakaoLoginText = styled.span`
     color: #363636;
     text-align: center;
-    //font-family: Pretendard;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 1.75rem;
+    line-height: 1.4rem;
 `;
 
 export const NaverLoginButton = styled.button`
     display: flex;
-    height: 3.125rem;
-    padding: 0.6875rem 5.8125rem 0.6875rem 5.5rem;
+    height: 2.5rem;
+    padding: 0.6rem 4.5rem;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     border-radius: 0.5rem;
     background: #00C73C;
     border: none;
@@ -111,16 +109,15 @@ export const NaverLoginButton = styled.button`
 `;
 
 export const NaverLogo = styled.img`
-    width: 1.625rem;
-    height: 1.625rem;
+    width: 1.3rem;
+    height: 1.3rem;
 `;
 
 export const NaverLoginText = styled.span`
-  color: #FFF;
-  text-align: center;
-  //font-family: Pretendard;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 1.75rem;
+    color: #FFF;
+    text-align: center;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.4rem;
 `;
