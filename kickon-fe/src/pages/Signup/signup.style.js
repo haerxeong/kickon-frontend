@@ -1,186 +1,164 @@
 import styled from 'styled-components';
-import { FaRegQuestionCircle as HelpCircleIcon, FaChevronDown as ChevronIcon, FaCheck as CheckIcon } from 'react-icons/fa';
 
-// Container
 export const SignupContainer = styled.div`
     display: flex;
-    width: 31.3125rem;
-    padding: 4.6875rem 7.59375rem;
-    align-items: center;
-    gap: 0.46875rem;
-    border-radius: 0.46875rem;
-    border: 1px solid #DCDCDC;
-    background: #FFF;
+    width: 28rem;
+    height: 42rem;
+    padding: 5rem 6rem 2rem 6rem;
+    box-sizing: border-box;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    border: 1px solid #E0E0E0;
+    background: #FFFFFF;
+    margin-bottom: 5rem;
 `;
 
-// Title
 export const SignupTitle = styled.h1`
-    align-self: stretch;
     color: #000;
     text-align: center;
-    //font-family: Pretendard;
-    font-size: 1.3125rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    line-height: 1.6875rem;
-    margin-bottom: 1.5rem;
 `;
 
-// Social Login Section
 export const SocialLoginWrapper = styled.div`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-`;
-
-export const SocialIcon = styled.div`
-    display: flex;
-    width: 1.125rem;
-    height: 1.125rem;
     justify-content: center;
-    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 `;
 
 export const SocialText = styled.span`
     color: #000;
-    //font-family: Pretendard;
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1.125rem;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
 `;
 
-// Input Label
+export const InputGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+`;
+
 export const InputLabel = styled.label`
     color: #000;
-    //font-family: Pretendard;
-    font-size: 0.65625rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    line-height: 0.75rem;
     margin-bottom: 0.5rem;
 `;
 
-// Input Field
 export const InputField = styled.input`
-    display: flex;
-    width: 16.125rem;
-    height: 2.25rem;
-    padding: 0.5625rem 0.75rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.46875rem;
-    border-radius: 0.46875rem;
-    border: 1px solid #DCDCDC;
-    background: #FFF;
-    margin-bottom: 0.5rem;
+    width: 90%;
+    height: 2rem;
+    padding: 0 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 0.4rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+        border-color: #C00C0B;
+    }
+
+    &::placeholder {
+        color: #8F8F8F;
+    }
 `;
 
-// Error Message
 export const ErrorMessage = styled.span`
     color: #FF0005;
-    //font-family: Pretendard;
-    font-size: 0.5625rem;
-    font-weight: 400;
-    line-height: 0.75rem;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
 `;
 
-// Dropdown
 export const Dropdown = styled.div`
+    width: 90%;
+    height: 2rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 0.5rem;
     display: flex;
-    height: 2.25rem;
-    padding: 0.5625rem 0.75rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.46875rem;
-    align-self: stretch;
-    border-radius: 0.46875rem;
-    border: 1px solid #DCDCDC;
-    margin-bottom: 0.5rem;
+    align-items: center;
+    padding: 0 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+        border-color: #C00C0B;
+    }
 `;
 
 export const DropdownContent = styled.div`
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
 `;
 
 export const DropdownText = styled.span`
-    color: #000;
-    //font-family: Pretendard;
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1.125rem;
+    color: #333;
+    font-size: 0.7rem;
 `;
 
-// Checkbox Section
 export const CheckboxWrapper = styled.div`
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    cursor: pointer;
 `;
 
 export const CheckboxLabel = styled.label`
-    color: #000;
-    //font-family: Pretendard;
-    font-size: 0.65625rem;
-    font-weight: 400;
-    line-height: 0.75rem;
+    color: #333;
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    justify-content: flex-start;
 `;
 
 export const ViewTermsLink = styled.span`
-    color: #676767;
-    //font-family: Pretendard;
-    font-size: 0.5625rem;
-    font-weight: 400;
-    line-height: 0.75rem;
+    color: #666;
+    font-size: 0.65rem;
     text-decoration: underline;
     cursor: pointer;
+    margin-left: auto;
 `;
 
-// Signup Button
 export const SignupButton = styled.button`
-    display: flex;
-    padding: 0.46875rem 0.75rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.46875rem;
-    align-self: stretch;
-    border-radius: 0.375rem;
-    background: #C00C0B;
+    width: 100%;
+    height: 1.8rem;
+    background-color: #C00C0B;
+    color: #FFFFFF;
     border: none;
-    color: #FFF;
-    //font-family: Pretendard;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1.3125rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 400;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+
+    &:hover {
+        background-color: #A00A09;
+    }
+
+    &:disabled {
+        background-color: #E0E0E0;
+        cursor: not-allowed;
+    }
 `;
 
-// Icons
 export const NaverLogoIcon = styled.img`
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1rem;
+    height: 1rem;
 `;
 
 export const KakaoLogoIcon = styled.img`
-    width: 1.125rem;
-    height: 1.125rem;
-`;
-
-export const HelpIcon = styled(HelpCircleIcon)`
-    width: 0.5625rem;
-    height: 0.5625rem;
-`;
-
-export const ChevronDownIcon = styled(ChevronIcon)`
-    width: 0.84375rem;
-    height: 0.84375rem;
-    transform: rotate(90deg);
-`;
-
-export const CheckmarkIcon = styled(CheckIcon)`
-    width: 0.65625rem;
-    height: 0.65625rem;
+    width: 1rem;
+    height: 1rem;
 `;
