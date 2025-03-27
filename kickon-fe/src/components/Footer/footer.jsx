@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FooterContainer, FooterContent, FooterLogo, FooterTextWrapper, FooterMenu, FooterTextRow } from './footer.style';
-import LogoImage from "../../assets/logo_text.png"; // 로고 이미지 경로 변경
+import LogoImage from "../../assets/logo_text_black.png"; // 로고 이미지 경로 변경
 
 class Footer extends Component {
   render() {
