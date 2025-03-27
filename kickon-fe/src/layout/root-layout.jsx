@@ -62,23 +62,29 @@ const RootLayout = () => {
             {isHomePage && <MainBanner />}
 
             <MainContainer>
-                <ContentWrapper>
-                    {/* 왼쪽: 랭킹 테이블 */}
-                    <LeftColumn>
-                        <RankingTable title="이번 시즌 순위" rankings={currentSeasonRankings} type="season" />
-                        <RankingTable title="승부예측 순위" rankings={predictionRankings} type="prediction" />
-                    </LeftColumn>
-
-                    {/* 중앙: 페이지별 메인 콘텐츠 */}
+                {isSignupPage ? (
                     <MainContent>
                         <Outlet />
                     </MainContent>
+                ) : (
+                    <ContentWrapper>
+                        {/* 왼쪽: 랭킹 테이블 */}
+                        <LeftColumn>
+                            <RankingTable title="이번 시즌 순위" rankings={currentSeasonRankings} type="season" />
+                            <RankingTable title="승부예측 순위" rankings={predictionRankings} type="prediction" />
+                        </LeftColumn>
 
-                    {/* 오른쪽: 프로필 */}
-                    <RightColumn>
-                        <Profile />
-                    </RightColumn>
-                </ContentWrapper>
+                        {/* 중앙: 페이지별 메인 콘텐츠 */}
+                        <MainContent>
+                            <Outlet />
+                        </MainContent>
+
+                        {/* 오른쪽: 프로필 */}
+                        <RightColumn>
+                            <Profile />
+                        </RightColumn>
+                    </ContentWrapper>
+                )}
             </MainContainer>
 
             {/* 홈 또는 회원가입일 때 Footer 표시 */}
