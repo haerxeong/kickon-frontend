@@ -100,7 +100,7 @@ export const DropdownContent = styled.div`
 `;
 
 export const DropdownText = styled.span`
-  color: #333;
+  color: #8F8F8F;
   font-size: 0.7rem;
 `;
 

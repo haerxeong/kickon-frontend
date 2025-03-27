@@ -137,9 +137,9 @@ const Signup = () => {
         >
           <DropdownContent>
             <DropdownText>
-              {selectedLeague || "리그를 선택해주세요"}
+              {selectedLeague || "선택해 주세요"}
             </DropdownText>
-            <IoChevronDownOutline />
+            <IoChevronDownOutline size={12} color="#8F8F8F"/>
           </DropdownContent>
         </Dropdown>
         {isLeagueDropdownOpen && (
@@ -167,9 +167,9 @@ const Signup = () => {
         >
           <DropdownContent>
             <DropdownText>
-              {selectedTeam || "응원팀을 선택해주세요"}
+              {selectedTeam || "선택해 주세요"}
             </DropdownText>
-            <IoChevronDownOutline />
+            <IoChevronDownOutline size={12} color="#8F8F8F"/>
           </DropdownContent>
         </Dropdown>
         {isTeamDropdownOpen && (
