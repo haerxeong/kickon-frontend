@@ -51,10 +51,12 @@ const RightColumn = styled.div`
 const RootLayout = () => {
     const location = useLocation();
     const isHomePage = location.pathname === "/";
+    const isSignupPage = location.pathname === "/signup";
+    const isDark = !isHomePage; // 홈 이외의 페이지에서 다크 모드 적용
 
     return (
         <Layout isHomePage={isHomePage}>
-            <Header isHomePage={isHomePage} />
+            <Header isDark={isDark} />
 
             {/* 홈 화면일 때만 배너 표시 */}
             {isHomePage && <MainBanner />}
@@ -79,8 +81,8 @@ const RootLayout = () => {
                 </ContentWrapper>
             </MainContainer>
 
-            {/* 홈일 때만 Footer 표시 */}
-            {isHomePage && <Footer />}
+            {/* 홈 또는 회원가입일 때 Footer 표시 */}
+            {(isHomePage || isSignupPage) && <Footer isDark={isSignupPage} />}
         </Layout>
     );
 };

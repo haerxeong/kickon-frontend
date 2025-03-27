@@ -1,6 +1,5 @@
 // rankingTable.jsx
 import React, { useState } from "react";
-import sampleImage from "../../assets/sample_img.png";
 import {
     TableContainer,
     Table,

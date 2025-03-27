@@ -6,22 +6,23 @@ import {
     NavMenu,
     NavItem,
 } from "./header.style";
-import LogoImage from "../../assets/logo_black.svg"; // 로고 이미지 경로
+import DarkLogoImage from "../../assets/logo_black.svg"; // 로고 이미지 경로
+import LogoImage from "../../assets/logo_white.svg";
 
-const Header = () => {
+const Header = ({isDark}) => {
     return (
-        <HeaderWrapper>
+        <HeaderWrapper isDark={isDark}>
             {/* 로고 */}
             <Logo>
                 <Link to="/">
-                    <img src={LogoImage} alt="KICK-ON Logo" />
+                    <img src={isDark ? LogoImage : DarkLogoImage} alt="Logo" />
                 </Link>
             </Logo>
 
             {/* 네비게이션 메뉴 */}
             <NavMenu>
-                <NavItem to="/news">뉴스</NavItem>
-                <NavItem to="/community">클럽 커뮤니티</NavItem>
+                <NavItem to="/news" isDark={isDark}>뉴스</NavItem>
+                <NavItem to="/community" isDark={isDark}>클럽 커뮤니티</NavItem>
             </NavMenu>
         </HeaderWrapper>
     );
