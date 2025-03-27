@@ -2,17 +2,18 @@ import styled from "styled-components";
 import { FaCheckSquare, FaRegCheckSquare } from "react-icons/fa";
 
 export const SignupContainer = styled.div`
-  display: flex;
-  width: 28rem;
-  height: 42rem;
-  padding: 4rem 6rem 2rem 6rem;
-  box-sizing: border-box;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 0.75rem;
-  border: 1px solid #e0e0e0;
-  background: #ffffff;
-  margin-bottom: 5rem;
+    display: flex;
+    width: 28rem;
+    height: 42rem;
+    padding: 4rem 6rem 2rem 6rem;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0.75rem;
+    border: 1px solid #e0e0e0;
+    background: #ffffff;
+    /* Center horizontally and vertically */
+    margin: auto auto 5rem;
 `;
 
 export const SignupTitle = styled.h1`
