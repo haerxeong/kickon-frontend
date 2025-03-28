@@ -1,48 +1,49 @@
 import styled from "styled-components";
+import { FaAngleRight } from "react-icons/fa6";
 
 export const ProfileContainer = styled.div`
-    width: 20.125rem; /* 322px */
-    height: 9rem; /* 144px */
+    width: 14rem; /* 322px */
+    height: 7rem; /* 144px */
     flex-shrink: 0;
-    border-radius: 0.625rem;
+    border-radius: 0.4rem;
     border: 0.0625rem solid #DCDCDC; /* 직접 색상 적용 */
     background: #FFF; /* 직접 색상 적용 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center ;
     position: relative;
 `;
 
 export const LogoImage = styled.img`
-    width: 2.5rem;
+    width: 1.9rem;
     height: 2rem;
     flex-shrink: 0;
 
     position: absolute;
-    top: 1.8125rem;  /* 29px -> rem 변환 */
-    left: 8.8125rem;  /* 141px -> rem 변환 */
+    top: 1rem;  /* 29px -> rem 변환 */
 `;
 
 
 export const StyledButton = styled.button`
     display: inline-flex;
-    height: 2.375rem; /* 38px */
-    padding: 0.625rem 1.125rem; /* 10px 18px */
+    height: 1.7rem; /* 38px */
+    width: 8rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem; /* 10px */
     flex-shrink: 0;
 
-    border-radius: 1.25rem; /* 20px */
+    border-radius: 0.8rem; /* 20px */
     background: #C00C0B; /* 직접 색상 적용 */
     box-shadow: 0rem 0.25rem 0.5rem 0rem rgba(0, 0, 0, 0.2);
     color: white; /* 글자색 추가 */
-    font-size: 1rem; /* 16px */
-    font-weight: bold;
+    font-size: 0.8rem; /* 16px */
+    font-weight: 400;
     border: none;
     cursor: pointer;
 
     position: absolute;
-    left: 4.344rem; /* 69.5px */
-    right: 4.344rem; /* 69.5px */
-    bottom: 1.813rem; /* 29px */
+    margin-top: 2rem; /* 16px */
 `;
 
 export const CardContainer = styled.div`
@@ -205,4 +206,11 @@ export const LogoutButton = styled.button`
     position: absolute;
     top: 1rem;
     right: 1.625rem;
+`;
+
+export const RightArrowIcon = styled(FaAngleRight)`
+    font-size: 0.75rem;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
 `;

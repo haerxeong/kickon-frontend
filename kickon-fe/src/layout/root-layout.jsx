@@ -30,10 +30,11 @@ const ContentWrapper = styled.div`
 `;
 
 const LeftColumn = styled.div`
-    width: 23rem; /* 368px */
+    width: 15rem; /* 368px */
     display: flex;
     flex-direction: column;
     gap: 1rem; /* 16px */
+    margin-left: 2.5rem; 
 `;
 
 const MainContent = styled.main`
@@ -42,10 +43,16 @@ const MainContent = styled.main`
 `;
 
 const RightColumn = styled.div`
-    width: 23rem; /* 368px */
+    width: 15rem; /* 368px */
     display: flex;
     flex-direction: column;
     gap: 1rem; /* 16px */
+    margin-right: 2.5rem;
+    align-items: flex-end;
+`;
+
+const StyledMainBanner = styled(MainBanner)`
+    max-width: 100%;
 `;
 
 const RootLayout = () => {
@@ -59,7 +66,7 @@ const RootLayout = () => {
             <Header isDark={isDark} />
 
             {/* 홈 화면일 때만 배너 표시 */}
-            {isHomePage && <MainBanner />}
+            {isHomePage && <StyledMainBanner />}
 
             <MainContainer>
                 {isSignupPage ? (
