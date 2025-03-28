@@ -1,5 +1,7 @@
+import MatchCard from "../../components/MatchCard/matchCard";
+
 const Home = () => {
-    return <h1>Home Page</h1>;
+    return <MatchCard/>;
 }
 
 export default Home;
