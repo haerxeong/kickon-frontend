@@ -6,17 +6,19 @@ import { ProfileContainer, StyledButton, LogoImage,  CardContainer, ProfileInfo,
 import Logo from "../../assets/logo_image_black.svg";
 import Image from "../../assets/profile_image.svg";
 import InfoIcon from "../../assets/question.svg";
-
+import { useDispatch } from "react-redux";
+import {openLoginModal} from "../../features/modal/modalSlice.js";
 
 const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const dispatch = useDispatch();
 
     return isLoggedIn ? (
         <UserCard onLogout={() => setIsLoggedIn(false)} />
     ) : (
         <ProfileContainer>
             <LogoImage src={Logo} alt="프로필 이미지" />
-            <StyledButton onClick={() => setIsLoggedIn(true)}>
+            <StyledButton onClick={() => dispatch(openLoginModal())}>
                 간편 로그인 하기
             </StyledButton>
         </ProfileContainer>
