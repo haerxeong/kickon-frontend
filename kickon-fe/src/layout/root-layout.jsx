@@ -7,6 +7,7 @@ import Profile from "../components/Profile/profile";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
 import { currentSeasonRankings, predictionRankings } from "../mocks/rankings.js";
+import CommunityBoard from "../components/CommunityBoard/communityBoard.jsx";
 
 const Layout = styled.div`
     display: flex;
@@ -69,6 +70,7 @@ const RootLayout = () => {
 
                     {/* 중앙: 페이지별 메인 콘텐츠 */}
                     <MainContent>
+                        <CommunityBoard />
                         <Outlet />
                     </MainContent>
 
