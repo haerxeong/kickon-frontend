@@ -70,7 +70,6 @@ const RootLayout = () => {
 
                     {/* 중앙: 페이지별 메인 콘텐츠 */}
                     <MainContent>
-                        <CommunityBoard />
                         <Outlet />
                     </MainContent>
 
