@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { ProfileContainer, StyledButton, LogoImage,  CardContainer, ProfileInfo, ProfileImage,
     UserDetails, Username, ProfileEdit,
     UserStats, StatBox, StatTitle, StatValue,
-    LogoutButton, Icon, handleIconClick, RightArrowIcon  } from "./Profile.style";
+    LogoutButton, Icon, handleIconClick } from "./Profile.style";
 import Logo from "../../assets/logo_image_black.svg";
 import Image from "../../assets/profile_image.svg";
 import InfoIcon from "../../assets/question.svg";
@@ -19,7 +19,7 @@ const Profile = () => {
         <ProfileContainer>
             <LogoImage src={Logo} alt="프로필 이미지" />
             <StyledButton onClick={() => dispatch(openLoginModal())}>
-                간편 로그인 하기 <RightArrowIcon />
+                간편 로그인 하기
             </StyledButton>
         </ProfileContainer>
     );
