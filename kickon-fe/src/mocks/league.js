@@ -1,7 +1,4 @@
-export const League = [{
-    "code": "GET_SUCCESS",
-    "message": "성공",
-    "data": [
+export const League = [
         {
             "pk": 1,
             "enName": "Premier League",
@@ -51,6 +48,4 @@ export const League = [{
             "logoUrl": "https://media.api-sports.io/football/leagues/140.png",
             "leagueType": "League"
         }
-    ],
-    "meta": null
-}]
+    ]
