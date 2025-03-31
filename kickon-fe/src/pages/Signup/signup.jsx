@@ -4,14 +4,9 @@ import { League } from "../../mocks/league";
 import naverLogo from "../../assets/naver.svg";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoChevronDownOutline } from "react-icons/io5";
+import { BsBan } from "react-icons/bs";
 
 const Signup = () => {
-  // const [values, setValues] = useState({
-  //   nickname: "",
-  //   selectedLeague: "",
-  //   selectedTeam: "",
-  // });
-
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [selectedLeague, setSelectedLeague] = useState("");
@@ -31,22 +26,24 @@ const Signup = () => {
 
   useEffect(() => {
     // Update team options when league changes
-    if (selectedLeague) {
+    if (selectedLeague && selectedLeague !== "응원팀이 없어요.") {
       const teams =
-        leagues.find((league) => league.name === selectedLeague)?.teams || [];
+          leagues.find((league) => league.krName === selectedLeague)?.teams || [];
       setTeamOptions(teams);
+    } else {
+      setTeamOptions([]);
     }
   }, [selectedLeague, leagues]);
 
   useEffect(() => {
     // Check if all required checkboxes are checked
     const requiredAgreements =
-      isAgeAgreed && isServiceTermsAgreed && isPrivacyPolicyAgreed;
+        isAgeAgreed && isServiceTermsAgreed && isPrivacyPolicyAgreed;
     const isFormValid =
-      nickname.length >= 2 &&
-      selectedLeague &&
-      selectedTeam &&
-      requiredAgreements;
+        nickname.length >= 2 &&
+        selectedLeague &&
+        selectedTeam &&
+        requiredAgreements;
   }, [
     nickname,
     selectedLeague,
@@ -60,8 +57,8 @@ const Signup = () => {
     const value = e.target.value;
     setNickname(value);
 
-    if (value.length < 2) {
-      setNicknameError("닉네임은 최소 2자 이상이어야 합니다.");
+    if (!value.length) {
+      setNicknameError("닉네임을 입력해 주세요.");
     } else {
       setNicknameError("");
     }
@@ -95,146 +92,191 @@ const Signup = () => {
     });
   };
 
+  const selectedLeagueData = leagues.find(
+      (league) => league.krName === selectedLeague
+  );
+
   return (
-    <S.SignupContainer>
-      <S.SignupTitle>회원가입</S.SignupTitle>
+      <S.SignupContainer>
+        <S.SignupTitle>회원가입</S.SignupTitle>
 
-      <S.SocialLoginWrapper>
-        <S.NaverLogoIcon src={naverLogo} alt="네이버 로고" />
-        <S.SocialText>계정으로 가입을 진행하고 있어요.</S.SocialText>
-      </S.SocialLoginWrapper>
+        <S.SocialLoginWrapper>
+          <S.NaverLogoIcon src={naverLogo} alt="네이버 로고" />
+          <S.SocialText>계정으로 가입을 진행하고 있어요.</S.SocialText>
+        </S.SocialLoginWrapper>
 
-      <S.InputGroup>
-        <S.InputLabel>닉네임</S.InputLabel>
-        <S.InputField
-          placeholder="닉네임은 최대 8글자"
-          value={nickname}
-          onChange={handleNicknameChange}
-        />
-        {nicknameError && <S.ErrorMessage>{nicknameError}</S.ErrorMessage>}
-      </S.InputGroup>
+        <S.InputGroup>
+          <S.InputLabel>닉네임</S.InputLabel>
+          <S.InputField
+              placeholder="닉네임은 최대 8글자"
+              value={nickname}
+              onChange={handleNicknameChange}
+              hasError={!!nicknameError}
+          />
+          {nicknameError && <S.ErrorMessage>{nicknameError}</S.ErrorMessage>}
+        </S.InputGroup>
 
-      <S.InputGroup>
-        <S.InputLabel>
-          리그
-          <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem" }} />
-        </S.InputLabel>
-        <S.Dropdown
-          onClick={() => setIsLeagueDropdownOpen(!isLeagueDropdownOpen)}
+        <S.InputGroup>
+          <S.InputLabel>
+            리그
+            <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem" }} />
+          </S.InputLabel>
+          <S.Dropdown
+              onClick={() => setIsLeagueDropdownOpen(!isLeagueDropdownOpen)}
+          >
+            <S.DropdownContent>
+              <S.LeftContent>
+                {selectedLeagueData ? (
+                    <>
+                      <S.SelectedImage
+                          src={selectedLeagueData.logoUrl}
+                          alt={selectedLeagueData.krName}
+                      />
+                      <S.SelectedName>{selectedLeagueData.krName}</S.SelectedName>
+                    </>
+                ) : null}
+              </S.LeftContent>
+
+              {selectedLeagueData ? (
+                  <IoChevronDownOutline size={12} color="#8F8F8F" />
+              ) : (
+                  <S.DropdownText>선택해 주세요</S.DropdownText>
+              )}
+            </S.DropdownContent>
+          </S.Dropdown>
+          {isLeagueDropdownOpen && (
+              <S.DropdownList>
+                {leagues.map((league) => (
+                    <S.DropdownItem
+                        key={league.pk}
+                        onClick={() => {
+                          setSelectedLeague(league.krName);
+                          setSelectedTeam(""); // Reset team selection
+                          setIsLeagueDropdownOpen(false);
+                        }}
+                    >
+                      <S.LeagueImage src={league.logoUrl} alt={league.krName} />
+                      <S.LeagueName>{league.krName}</S.LeagueName>
+                    </S.DropdownItem>
+                ))}
+                <S.DropdownItem
+                    onClick={() => {
+                      setSelectedLeague("응원팀이 없어요.");
+                      setSelectedTeam("응원팀이 없어요.");
+                      setIsLeagueDropdownOpen(false);
+                    }}
+                >
+                  <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
+                  <S.LeagueName>응원팀이 없어요.</S.LeagueName>
+                </S.DropdownItem>
+              </S.DropdownList>
+          )}
+        </S.InputGroup>
+
+        <S.InputGroup>
+          <S.InputLabel>응원팀</S.InputLabel>
+          <S.Dropdown
+              onClick={() => setIsTeamDropdownOpen(!isTeamDropdownOpen)}
+              // disabled={!selectedLeague || selectedLeague === "응원팀이 없어요."}
+          >
+            <S.DropdownContent>
+              {selectedTeam ? (
+                  <S.SelectedName>{selectedTeam}</S.SelectedName>
+              ) : (
+                  <S.DropdownText>선택해 주세요</S.DropdownText>
+              )}
+              <IoChevronDownOutline size={12} color="#8F8F8F" />
+            </S.DropdownContent>
+          </S.Dropdown>
+          {isTeamDropdownOpen && (
+              <S.DropdownList>
+                {teamOptions.map((team) => (
+                    <S.DropdownItem
+                        key={team.id}
+                        onClick={() => {
+                          setSelectedTeam(team.name);
+                          setIsTeamDropdownOpen(false);
+                        }}
+                    >
+                      <S.LeagueName>{team.name}</S.LeagueName>
+                    </S.DropdownItem>
+                ))}
+                <S.NoTeamText>
+                  <BsBan size={12} />
+                  응원팀이 없어요.
+                </S.NoTeamText>
+              </S.DropdownList>
+          )}
+        </S.InputGroup>
+
+        <S.CheckboxContainer>
+          <S.CheckboxWrapper onClick={handleAllAgreementToggle}>
+            {isAllAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
+            <S.CheckboxLabel>모두 동의</S.CheckboxLabel>
+          </S.CheckboxWrapper>
+
+          <S.CheckboxWrapper onClick={() => setIsAgeAgreed(!isAgeAgreed)}>
+            {isAgeAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
+            <S.CheckboxLabel>만 14세 이상 가입 동의 (필수)</S.CheckboxLabel>
+          </S.CheckboxWrapper>
+
+          <S.CheckboxWrapper
+              onClick={() => setIsServiceTermsAgreed(!isServiceTermsAgreed)}
+          >
+            {isServiceTermsAgreed ? (
+                <S.StyledCheckSquare />
+            ) : (
+                <S.StyledRegCheckSquare />
+            )}
+            <S.CheckboxLabel>
+              서비스 이용약관 동의 (필수)
+              <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
+            </S.CheckboxLabel>
+          </S.CheckboxWrapper>
+
+          <S.CheckboxWrapper
+              onClick={() => setIsPrivacyPolicyAgreed(!isPrivacyPolicyAgreed)}
+          >
+            {isPrivacyPolicyAgreed ? (
+                <S.StyledCheckSquare />
+            ) : (
+                <S.StyledRegCheckSquare />
+            )}
+            <S.CheckboxLabel>
+              개인정보처리방침 동의 (필수)
+              <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
+            </S.CheckboxLabel>
+          </S.CheckboxWrapper>
+
+          <S.CheckboxWrapper
+              onClick={() => setIsMarketingAgreed(!isMarketingAgreed)}
+          >
+            {isMarketingAgreed ? (
+                <S.StyledCheckSquare />
+            ) : (
+                <S.StyledRegCheckSquare />
+            )}
+            <S.CheckboxLabel>
+              마케팅 정보 수신 동의 (선택){" "}
+              <S.ViewTermsLink>약관 보기</S.ViewTermsLink>{" "}
+            </S.CheckboxLabel>
+          </S.CheckboxWrapper>
+        </S.CheckboxContainer>
+
+        <S.SignupButton
+            onClick={handleSignup}
+            disabled={
+                !nickname ||
+                !selectedLeague ||
+                !selectedTeam ||
+                !isAgeAgreed ||
+                !isServiceTermsAgreed ||
+                !isPrivacyPolicyAgreed
+            }
         >
-          <S.DropdownContent>
-            <S.DropdownText>
-              {selectedLeague || "선택해 주세요"}
-            </S.DropdownText>
-            <IoChevronDownOutline size={12} color="#8F8F8F"/>
-          </S.DropdownContent>
-        </S.Dropdown>
-        {isLeagueDropdownOpen && (
-          <div>
-            {leagues.map((league) => (
-              <div
-                key={league.id}
-                onClick={() => {
-                  setSelectedLeague(league.name);
-                  setIsLeagueDropdownOpen(false);
-                }}
-              >
-                {league.name}
-              </div>
-            ))}
-          </div>
-        )}
-      </S.InputGroup>
-
-      <S.InputGroup>
-        <S.InputLabel>응원팀</S.InputLabel>
-        <S.Dropdown
-          onClick={() => setIsTeamDropdownOpen(!isTeamDropdownOpen)}
-          disabled={!selectedLeague}
-        >
-          <S.DropdownContent>
-            <S.DropdownText>
-              {selectedTeam || "선택해 주세요"}
-            </S.DropdownText>
-            <IoChevronDownOutline size={12} color="#8F8F8F"/>
-          </S.DropdownContent>
-        </S.Dropdown>
-        {isTeamDropdownOpen && (
-          <div>
-            {teamOptions.map((team) => (
-              <div
-                key={team.id}
-                onClick={() => {
-                  setSelectedTeam(team.name);
-                  setIsTeamDropdownOpen(false);
-                }}
-              >
-                {team.name}
-              </div>
-            ))}
-          </div>
-        )}
-      </S.InputGroup>
-
-      <S.CheckboxWrapper onClick={handleAllAgreementToggle}>
-        {isAllAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
-        <S.CheckboxLabel>모두 동의</S.CheckboxLabel>
-      </S.CheckboxWrapper>
-
-      <S.CheckboxWrapper onClick={() => setIsAgeAgreed(!isAgeAgreed)}>
-        {isAgeAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
-        <S.CheckboxLabel>만 14세 이상 가입 동의 (필수)</S.CheckboxLabel>
-      </S.CheckboxWrapper>
-
-      <S.CheckboxWrapper
-        onClick={() => setIsServiceTermsAgreed(!isServiceTermsAgreed)}
-      >
-        {isServiceTermsAgreed ? (
-          <S.StyledCheckSquare />
-        ) : (
-          <S.StyledRegCheckSquare />
-        )}
-        <S.CheckboxLabel>
-          서비스 이용약관 동의 (필수)
-          <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
-        </S.CheckboxLabel>
-      </S.CheckboxWrapper>
-
-      <S.CheckboxWrapper
-        onClick={() => setIsPrivacyPolicyAgreed(!isPrivacyPolicyAgreed)}
-      >
-        {isPrivacyPolicyAgreed ? (
-          <S.StyledCheckSquare />
-        ) : (
-          <S.StyledRegCheckSquare />
-        )}
-        <S.CheckboxLabel>
-          개인정보처리방침 동의 (필수)
-          <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
-        </S.CheckboxLabel>
-      </S.CheckboxWrapper>
-
-      <S.CheckboxWrapper onClick={() => setIsMarketingAgreed(!isMarketingAgreed)}>
-        {isMarketingAgreed ? <S.StyledCheckSquare /> : <S.StyledRegCheckSquare />}
-        <S.CheckboxLabel>
-          마케팅 정보 수신 동의 (선택) <S.ViewTermsLink>약관 보기</S.ViewTermsLink>{" "}
-        </S.CheckboxLabel>
-      </S.CheckboxWrapper>
-
-      <S.SignupButton
-        onClick={handleSignup}
-        disabled={
-          !nickname ||
-          !selectedLeague ||
-          !selectedTeam ||
-          !isAgeAgreed ||
-          !isServiceTermsAgreed ||
-          !isPrivacyPolicyAgreed
-        }
-      >
-        회원가입
-      </S.SignupButton>
-    </S.SignupContainer>
+          회원가입
+        </S.SignupButton>
+      </S.SignupContainer>
   );
 };
 
