@@ -7,6 +7,7 @@ import Community from "./pages/Community/community.jsx";
 import News from "./pages/News/news.jsx";
 import NotFound from "./pages/not-found";
 import LoginModal from "./components/LoginModal/loginModal.jsx";
+import Signup from "./pages/Signup/signup.jsx";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                         <Route index element={<Home />} />
                         <Route path="community" element={<Community />} />
                         <Route path="news" element={<News />} />
+                        <Route path="signup" element={<Signup />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
