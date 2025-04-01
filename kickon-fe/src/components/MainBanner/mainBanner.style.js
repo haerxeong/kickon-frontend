@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const BannerContainer = styled.div`
     position: relative;
-    width: 100%;
     height: 25rem; /* 400px -> 25rem */
     background-size: cover;
     background-position: center;

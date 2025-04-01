@@ -7,6 +7,7 @@ import Profile from "../components/Profile/profile";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
 import { currentSeasonRankings, predictionRankings } from "../mocks/rankings.js";
+import CommunityBoard from "../components/CommunityBoard/communityBoard.jsx";
 
 const Layout = styled.div`
     display: flex;
@@ -19,35 +20,37 @@ const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.25rem; /* 20px */
+    padding: 1rem; /* 20px */
 `;
 
 const ContentWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    width: 75rem; /* 1200px */
-    gap: 1rem; /* 16px */
+    //width: 59rem; /* 전체 콘텐츠 너비 */
+    gap: 1rem; /* 컬럼 간 여백 */
 `;
 
 const LeftColumn = styled.div`
-    width: 15rem; /* 368px */
+    //width: 13.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* 16px */
-    margin-left: 2.5rem; 
+    gap: 1rem;
+    margin-left: 12rem; /* 왼쪽 여백 */
 `;
 
 const MainContent = styled.main`
-    flex: 1;
-    width: 37.5rem; /* 600px */
+    display: flex;
+    flex-direction: column;
+    width: 30rem; /* 메인 콘텐츠 너비 */
+    gap: 1rem;
 `;
 
 const RightColumn = styled.div`
-    width: 15rem; /* 368px */
+    //width: 13.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* 16px */
-    margin-right: 2.5rem;
+    gap: 1rem;
+    margin-right: 12rem; /* 오른쪽 여백 */
     align-items: flex-end;
 `;
 
