@@ -37,7 +37,7 @@ export const SearchAndTabSection = styled.div`
 export const TeamSearchInput = styled.div`
     display: flex;
     width: 13.13rem;
-    height: 1.166rem;
+    //height: 1.166rem;
     padding: 0.416rem 0.74rem;
     flex-direction: column;
     align-items: flex-start;
@@ -70,12 +70,14 @@ export const TabSectionWrapper = styled.div`
     display: flex;
     align-items: center;
     position: relative;
+    margin-bottom: 3rem;
 `;
 
 export const TabSelector = styled.div`
     display: flex;
+    width: 6.75rem;
     padding: 0.416rem 0.74rem;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
     gap: 1.48rem;
     align-self: stretch;
@@ -84,15 +86,20 @@ export const TabSelector = styled.div`
     background: #FFF;
     font-size: 0.65rem;
     cursor: pointer;
+
+    span {
+        color: ${props => (props.selected ? "#000" : "#8F8F8F")};
+    }
 `;
 
 export const NewsTabDropdown = styled.div`
     position: absolute;
+    width: 6.75rem;
     top: 100%;
     left: 0;
     display: flex;
     padding: 0.462rem 0.74rem;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.462rem;
     align-self: stretch;
     flex-direction: column;
@@ -100,12 +107,14 @@ export const NewsTabDropdown = styled.div`
     border: 1px solid #DCDCDC;
     background: #FFF;
     z-index: 10;
+    margin-top: 0.185rem;
 `;
 
 export const CommunityTabSelector = styled.div`
     display: flex;
+    width: 6.75rem;
     padding: 0.416rem 0.7rem;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
     gap: 1.48rem;
     align-self: stretch;
@@ -114,10 +123,15 @@ export const CommunityTabSelector = styled.div`
     background: #FFF;
     font-size: 0.65rem;
     cursor: pointer;
+
+    span {
+        color: ${props => (props.selected ? "#000" : "#8F8F8F")};
+    }
 `;
 
 export const CommunityTabDropdown = styled.div`
     position: absolute;
+    width: 6.75rem;
     top: 100%;
     left: 0;
     display: flex;
@@ -131,6 +145,7 @@ export const CommunityTabDropdown = styled.div`
     border: 1px solid #DCDCDC;
     background: #FFF;
     z-index: 10;
+    margin-top: 0.185rem;
 `;
 
 export const TabOption = styled.div`
@@ -145,7 +160,7 @@ export const TabOption = styled.div`
 `;
 
 export const HelpIcon = styled.div`
-    margin-left: 0.5rem;
+    margin-left: 1.2rem;
     cursor: pointer;
 `;
 
@@ -153,7 +168,7 @@ export const TitleInput = styled.input`
     display: flex;
     height: 2.6rem;
     padding: 0.7rem 0.74rem;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.462rem;
     align-self: stretch;
     border-radius: 0.37rem;
@@ -161,7 +176,10 @@ export const TitleInput = styled.input`
     background: #FFF;
     width: 100%;
     outline: none;
-    font-size: 0.7rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.2rem;
+    font-style: normal;
 `;
 
 export const EditorToolbar = styled.div`
@@ -181,7 +199,12 @@ export const FormatDropdown = styled.div`
     border: 1px solid #D9D9D9;
     background: #FFF;
     font-size: 0.65rem;
+    font-weight: 300;
     cursor: pointer;
+
+    span {
+        color: #8F8F8F;
+    }
 `;
 
 export const Divider = styled.div`
@@ -222,7 +245,7 @@ export const ToolIcon = styled.div`
 
 export const ContentTextarea = styled.textarea`
     display: flex;
-    width: 30rem;
+    width: 100%;
     height: 21.275rem;
     padding: 1.1rem 0.7rem;
     justify-content: center;
@@ -236,6 +259,7 @@ export const ContentTextarea = styled.textarea`
     color: #000;
     font-size: 0.6rem;
     font-weight: 300;
+    line-height: 0.68rem;
 `;
 
 export const ButtonContainer = styled.div`
@@ -259,6 +283,7 @@ export const CancelButton = styled.button`
     border: none;
     cursor: pointer;
     font-size: 0.7rem;
+    font-weight: 500;
 `;
 
 export const SubmitButton = styled.button`
@@ -275,4 +300,5 @@ export const SubmitButton = styled.button`
     border: none;
     cursor: pointer;
     font-size: 0.7rem;
+    font-weight: 500;
 `;
