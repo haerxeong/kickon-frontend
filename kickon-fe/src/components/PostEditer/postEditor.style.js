@@ -184,6 +184,7 @@ export const TitleInput = styled.input`
 export const EditorToolbar = styled.div`
     display: flex;
     align-items: center;
+    gap: 0.2rem;
 `;
 
 export const FormatDropdown = styled.div`
@@ -209,7 +210,7 @@ export const FormatDropdown = styled.div`
 export const Divider = styled.div`
     width: 1px;
     height: 0.83rem;
-    margin: 0 0.7rem;
+    margin: 0 0.5rem;
     background-color: #D9D9D9;
 `;
 
