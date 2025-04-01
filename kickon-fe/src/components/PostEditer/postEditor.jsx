@@ -63,33 +63,34 @@ const PostEditor = ({ type = "news" }) => {
                                 </S.ClearButton>
                             )}
                         </S.TeamSearchInput>
+
+                        <S.TabSectionWrapper>
+                            <S.TabSelector onClick={() => setShowDropdown(!showDropdown)} selected={!!selectedTab}>
+                                <span>{selectedTab || "탭 선택하기"}</span>
+                                <FaChevronDown size="0.6rem" color="#8F8F8F" />
+                            </S.TabSelector>
+
+                            {showDropdown && (
+                                <S.NewsTabDropdown>
+                                    {newsTabs.map((tab) => (
+                                        <S.TabOption key={tab} onClick={() => handleTabSelect(tab)}>
+                                            {tab}
+                                        </S.TabOption>
+                                    ))}
+                                </S.NewsTabDropdown>
+                            )}
+
+                            <S.HelpIcon>
+                                <FiHelpCircle size="0.9rem" color="#8F8F8F" />
+                            </S.HelpIcon>
+                        </S.TabSectionWrapper>
+
                     </S.SearchAndTabSection>
                 </>
             )}
 
             {/* 탭 선택 영역 */}
-            {isNews ? (
-                <S.TabSectionWrapper>
-                    <S.TabSelector onClick={() => setShowDropdown(!showDropdown)} selected={!!selectedTab}>
-                        <span>{selectedTab || "탭 선택하기"}</span>
-                        <FaChevronDown size="0.6rem" color="#8F8F8F" />
-                    </S.TabSelector>
-
-                    {showDropdown && (
-                        <S.NewsTabDropdown>
-                            {newsTabs.map((tab) => (
-                                <S.TabOption key={tab} onClick={() => handleTabSelect(tab)}>
-                                    {tab}
-                                </S.TabOption>
-                            ))}
-                        </S.NewsTabDropdown>
-                    )}
-
-                    <S.HelpIcon>
-                        <FiHelpCircle size="0.9rem" color="#8F8F8F" />
-                    </S.HelpIcon>
-                </S.TabSectionWrapper>
-            ) : (
+            {!isNews && (
                 <S.TabSectionWrapper>
                     <S.CommunityTabSelector onClick={() => setShowDropdown(!showDropdown)} selected={!!selectedTab}>
                         <span>{selectedTab || "전체"}</span>

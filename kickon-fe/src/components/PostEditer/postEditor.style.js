@@ -70,7 +70,6 @@ export const TabSectionWrapper = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    margin-bottom: 3rem;
 `;
 
 export const TabSelector = styled.div`
