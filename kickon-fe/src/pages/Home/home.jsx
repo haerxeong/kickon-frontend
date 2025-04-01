@@ -10,8 +10,8 @@ const Home = () => {
             gap: "1rem",
             alignSelf: "stretch"
         }}>
-            <CommunityBoard/>
             <MatchCard/>
+            <CommunityBoard/>
         </div>
     );
 }
