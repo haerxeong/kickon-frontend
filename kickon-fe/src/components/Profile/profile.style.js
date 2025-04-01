@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ProfileContainer = styled.div`
-    width: 16.1rem; /* 322px * 0.8 */
+    width: 15rem; /* 322px * 0.8 */
     height: 7.2rem; /* 144px * 0.8 */
     flex-shrink: 0;
     border-radius: 0.5rem; /* 0.625rem * 0.8 */

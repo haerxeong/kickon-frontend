@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const TableContainer = styled.div`
-    width: 13.5rem; 
+    width: 15rem; 
     margin-left: 3rem; 
     background-color: #ffffff;
     border-radius: 0.4rem;

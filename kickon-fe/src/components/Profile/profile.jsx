@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { ProfileContainer, StyledButton, LogoImage,  CardContainer, ProfileInfo, ProfileImage,
     UserDetails, Username, ProfileEdit,
     UserStats, StatBox, StatTitle, StatValue,
-    LogoutButton, Icon, handleIconClick  } from "./Profile.style";
+    LogoutButton, Icon, handleIconClick } from "./Profile.style";
 import Logo from "../../assets/logo_image_black.svg";
 import Image from "../../assets/profile_image.svg";
 import InfoIcon from "../../assets/question.svg";
