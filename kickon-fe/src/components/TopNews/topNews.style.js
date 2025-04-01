@@ -35,6 +35,21 @@ export const TNews = styled.div`
     gap: 1rem;  /* TNews 간의 간격을 설정 */
     width: 100%;  /* 폭을 100%로 설정하여 균등하게 나열 */
     position: relative;
+    /* 구분선 추가 */
+    &::before {
+        content: "";
+        position: absolute;
+        top: -0.8rem; /* TNews보다 1rem 위 */
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #F0F0F0;
+    }
+
+    /* 첫 번째 항목에는 구분선이 없도록 처리 */
+    &:first-child::before {
+        display: none;
+    }
 `;
 
 export const NewsImage = styled.img`
