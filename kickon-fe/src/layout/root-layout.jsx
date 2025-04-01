@@ -39,7 +39,10 @@ const LeftColumn = styled.div`
 `;
 
 const MainContent = styled.main`
+    display: flex;
+    flex-direction: column;
     width: 30rem; /* 메인 콘텐츠 너비 */
+    gap: 1rem;
 `;
 
 const RightColumn = styled.div`
