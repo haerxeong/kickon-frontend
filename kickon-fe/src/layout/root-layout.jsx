@@ -63,6 +63,7 @@ const RootLayout = () => {
     const isHomePage = location.pathname === "/";
     const isSignupPage = location.pathname === "/signup";
     const isDark = !isHomePage; // 홈 이외의 페이지에서 다크 모드 적용
+    const isWritePage = location.pathname === "/news/write" || location.pathname === "/community/write";
 
     return (
         <Layout isHomePage={isHomePage}>
@@ -72,7 +73,7 @@ const RootLayout = () => {
             {isHomePage && <StyledMainBanner />}
 
             <MainContainer>
-                {isSignupPage ? (
+                {isSignupPage || isWritePage ? (
                     <MainContent>
                         <Outlet />
                     </MainContent>
