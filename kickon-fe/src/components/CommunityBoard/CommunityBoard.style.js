@@ -6,12 +6,12 @@ export const CommunityBoardContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 30rem;
-  padding: 1.875rem 1rem 1rem 1rem;
+  padding: 1.3rem 0.7rem 0.7rem 0.7rem;
   justify-content: flex-start;
   align-items: center;
   align-self: stretch;
   border-radius: 0.625rem;
-  border: 0.0625rem solid var(--Black-black_300, #DCDCDC);
+  border: 0.0425rem solid var(--Black-black_300, #DCDCDC);
   background: var(--sub1, #FFF);
 `;
 
@@ -21,11 +21,11 @@ export const CommunityHeader = styled.div`
   align-items: center;
   align-self: stretch;
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-family: "Pretendard";
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 0.85rem;
   color: black;
   
   .title {
@@ -39,7 +39,7 @@ export const MoreLink = styled.a`
   color: var(--Black-black_700, #676767);
   text-align: right;
   font-family: Pretendard;
-  font-size: 0.875rem;
+  font-size: 0.6rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1rem;
@@ -54,8 +54,8 @@ export const MoreLink = styled.a`
 `;
 
 export const MoreIcon = styled.div`
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 0.75rem;
+  height: 0.75rem;
   background-image: url(${MoreSvg});
   background-size: contain;
   background-repeat: no-repeat;
@@ -71,9 +71,9 @@ export const TableHeader = styled.div`
   color: #000;
   text-align: center;
   font-family: Pretendard;
-  font-size: 13px;
+  font-size: 0.6rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1rem; /* 138.462% */
   
   .title {
@@ -127,7 +127,7 @@ export const PostItem = styled.div`
 
 export const PostTitle = styled.div`
   flex: 5;
-  font-size: 0.875rem;
+  font-size: 0.65rem;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -138,45 +138,46 @@ export const PostTitle = styled.div`
   align-items: center;
 
   img {
-    width: 16px;
-    height: 16px;
-    margin-left: 4px;
-    margin-right: 4px;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-left: 0.25rem;
   }
 
   .reply-count {
-    color: #8c8c8c;
+    color: #000;
     font-weight: normal;
+    margin-left: 0.25rem
   }
 `;
 
 export const PostAuthor = styled.div`
   flex: 2;
-  font-size: 0.75rem;
-  color: #8c8c8c;
+  font-size: 0.6rem;
+  color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
+  font-weight: 350;
 `;
 
 export const PostDate = styled.div`
   flex: 2;
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   color: #8c8c8c;
   text-align: center;
 `;
 
 export const PostLikes = styled.div`
   flex: 1;
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   color: #8f8f8f;
   text-align: center;
 `;
 
 export const PostViews = styled.div`
   flex: 1;
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   color: #8f8f8f;
   text-align: center;
 `;
@@ -185,16 +186,17 @@ export const ProfileIcon = styled.img.attrs({
   src: ProfileSvg,
   alt: "프로필"
 })`
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-right: 0.3rem;
 `;
 
 export const GoodIcon = styled.img.attrs({
   src: "/src/assets/good.png",
   alt: "좋아요"
 })`
-  width: 1rem;
-  height: 1rem;
+  width: 0.7rem;
+  height: 0.7rem;
   margin-right: 0.25rem;
 `;
 
