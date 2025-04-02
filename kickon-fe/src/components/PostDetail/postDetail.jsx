@@ -24,9 +24,9 @@ import {
     Pagination,
     PageButton,
     NavButton
-} from './newsDetail.style';
+} from './postDetail.style.js';
 
-const newsDetail = () => {
+const postDetail = () => {
     const [activeComments, setActiveComments] = useState([]);
 
     const toggleLike = (commentId) => {
@@ -49,7 +49,6 @@ const newsDetail = () => {
 
     return (
         <ArticleContainer>
-            {/* 게시글 헤더 */}
             <ArticleHeader>
                 <ArticleTitle>(속보) 손흥민 부상 ㄷㄷ</ArticleTitle>
                 <ArticleInfo>
@@ -66,22 +65,7 @@ const newsDetail = () => {
             <ArticleContent>
                 <ArticleImage src="/api/placeholder/400/250" alt="경기장 이미지" />
                 <ArticleText>
-                    전북현대와의 경기가 거기서도 졌다 우리는 문제다.
-
-                    전북은 3경기 경기 4골 반면 이건아마도영등은 홈에 보신만, 구제불, 창닫불, 바보팀, 게닫불을 좀 봐도되
-                    불 자신한 축출안지도좀 유치 도가틀시.
-
-                    기존 노베로 밀리 이휘손 에니시 차진산이면서 고는 2012년 수렴차 우슈관로드는 PKdusj 코로 미진현 삼천
-                    미 20만년 프로경비년 ㅈ두억 여연좌의 콩칩을 영어틀.
-
-                    국세 파므좀 몸오 고는 2007년 언차락미스느지 홈액 수모도후 애역이 골림만돼 쿨게 심자어캄 에디스
-                    질 대부누는 질므불 작야다말지만 이제 그는 2010시포 포포 후 장폭적 작싹골덴 영나 작품 울리말.
-
-                    만족봄서 골여진만 방족 상걸영단 관저 살마 사봄올 파크미녀 대부날 박싹 문바닝 방야미녀 업인 불체
-                    닝 타닥울 카다진다. 자니 시속 롤역는 가네에 머니지 악양니.
-
-                    스딧 자텔는 뇨더가나 지암기에 율가에개 좀 쇳도날얼 가체어만 수추바는 다만 디영 울진만 남재배줄어간
-                    고 고자 차이 형생냥 카이선 기봉을 검각냄 먹 만누스어트 동라재 어노재녀는 분액니.
+                    전북현대와의 경기가 거기서도 졌다 우리는 문제다...
                 </ArticleText>
             </ArticleContent>
 
@@ -101,9 +85,7 @@ const newsDetail = () => {
                     Lorem ipsum ipsum futrues...
                     <InfoButton>전문</InfoButton>
                 </AdditionalInfoHeader>
-                Lorem ipsum suspinme futrues, eisi pinstulat pikstadpt ful nakregastdi maltbonk!
-                koresalptil dt gigadok. Trup torulaspetri koventrulastep norkedip siptrusal latkni
-                uselptrik sorlowspetri venlorit di eisliptrin koventrulastip...
+                Lorem ipsum suspinme futrues, eisi pinstulat pikstadpt...
             </AdditionalInfoBox>
 
             {/* 댓글 섹션 */}
@@ -155,4 +137,4 @@ const newsDetail = () => {
     );
 };
 
-export default newsDetail;
+export default postDetail;
