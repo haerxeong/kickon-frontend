@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import ProfileSvg from "../../assets/profile.svg";
+import { FaRegComment } from "react-icons/fa";
+import { PiSoccerBallFill } from "react-icons/pi";
+import { FaCheckCircle } from "react-icons/fa";
 
 export const NewsItemContainer = styled.div`
   display: flex;
@@ -93,14 +96,14 @@ export const ProfileIcon = styled.img.attrs({
   margin-right: 0.25rem;
 `;
 
-export const ProfileCheckIcon = styled.img.attrs({
-  src: "/src/assets/profile_check.svg",
-  alt: "인증된 프로필"
-})`
+export const ProfileCheckIcon = styled(FaCheckCircle)`
   width: 0.5rem;
   height: 0.5rem;
   margin-left: 0.25rem;
   margin-right: 0.7rem;
+  
+  & path:last-child {
+    fill: #8f8f8f; 
 `;
 
 export const Divider = styled.div`
@@ -140,22 +143,17 @@ export const RightInfo = styled.div`
   font-size: 0.63rem;
 `;
 
-export const GoodIcon = styled.img.attrs({
-  src: "/src/assets/good.png",
-  alt: "좋아요"
-})`
+export const GoodIcon = styled(PiSoccerBallFill)`
   width: 0.8rem;
   height: 0.8rem;
-  //margin-right: 0.25rem;
+  color: #8f8f8f; 
 `;
 
-export const CommentIcon = styled.img.attrs({
-  src: "/src/assets/comment.png",
-  alt: "댓글"
-})`
+export const CommentIcon = styled(FaRegComment)`
   width: 0.8rem;
   height: 0.8rem;
   margin-left: 0.2rem;
+  color: #8f8f8f;
 `;
 
 export const TopSection = styled.div`
