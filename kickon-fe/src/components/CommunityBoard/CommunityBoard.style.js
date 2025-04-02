@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import MoreSvg from "../../assets/more.png";
 import ProfileSvg from "../../assets/profile.svg";
+import { PiSoccerBallFill } from "react-icons/pi";
 
 export const CommunityBoardContainer = styled.div`
   display: flex;
@@ -191,13 +192,10 @@ export const ProfileIcon = styled.img.attrs({
   margin-right: 0.3rem;
 `;
 
-export const GoodIcon = styled.img.attrs({
-  src: "/src/assets/good.png",
-  alt: "좋아요"
-})`
-  width: 0.7rem;
-  height: 0.7rem;
-  margin-right: 0.25rem;
+export const GoodIcon = styled(PiSoccerBallFill)`
+  width: 0.8rem;
+  height: 0.8rem;
+  color: #8f8f8f; 
 `;
 
 export const TableHeaderSeparator = styled.div`
