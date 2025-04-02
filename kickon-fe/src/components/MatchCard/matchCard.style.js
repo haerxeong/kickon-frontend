@@ -2,121 +2,121 @@ import styled from "styled-components";
 
 export const MatchCardContainer = styled.div`
     display: flex;
-    width: 33.4rem; /* 41.75rem * 0.8 */
-    padding: 1.1rem 0.8rem; /* 1.375rem * 0.8, 1rem * 0.8 */
+    width: 30rem;
+    padding: 1.0rem 0.7rem;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem; /* 0.625rem * 0.8 */
-    border-radius: 0.5rem; /* 0.625rem * 0.8 */
+    gap: 0.5rem;
+    border-radius: 0.5rem;
     background: #FFF;
-    box-shadow: 0px 0px 12.8px 0px rgba(0, 0, 0, 0.10); /* 16px * 0.8 */
+    box-shadow: 0px 0px 12.8px 0px rgba(0, 0, 0, 0.10);
     position: relative;
 `;
 
 export const StyledTopContainer = styled.div`
     position: absolute;
-    top: 1.1rem; /* 1.38rem * 0.8 */
-    left: 0.8rem; /* 1rem * 0.8 */
+    top: 1.0rem;
+    left: 0.7rem;
     display: flex;
     align-items: center;
-    gap: 0.4rem; /* 0.5rem * 0.8 */
+    gap: 0.4rem;
 `;
 
 export const LeftText = styled.span`
     color: #000;
     font-family: Pretendard;
-    font-size: 0.7rem; /* 0.875rem * 0.8 */
+    font-size: 0.7rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 0.8rem; /* 1rem * 0.8 */
+    line-height: 0.8rem;
 `;
 
 export const RightBadge = styled.div`
     display: flex;
-    height: 1rem; /* 1.25rem * 0.8 */
-    padding: 0.1rem 0.4rem; /* 0.125rem * 0.8, 0.5rem * 0.8 */
+    height: 0.9rem;
+    padding: 0.1rem 0.4rem;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem; /* 0.625rem * 0.8 */
-    border-radius: 1rem; /* 1.25rem * 0.8 */
+    gap: 0.45rem;
+    border-radius: 1rem;
     background: #000;
     color: white;
-    font-size: 0.6rem; /* 0.75rem * 0.8 */
+    font-size: 0.54rem;
     font-weight: 600;
 `;
 
 export const RightText = styled.span`
     position: absolute;
-    left: 29.5rem; /* 36.87rem * 0.8 */
-    top: 1.2rem; /* 1.5rem * 0.8 */
+    left: 26.6rem;
+    top: 1.1rem;
     color: #676767;
     text-align: right;
     font-family: Pretendard;
-    font-size: 0.6rem; /* 0.75rem * 0.8 */
+    font-size: 0.54rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 0.8rem; /* 1rem * 0.8 */
+    line-height: 0.8rem;
 `;
 
 export const TimeGuide = styled.div`
     display: flex;
-    width: 2.7rem; /* 3.375rem * 0.8 */
-    height: 3.7rem; /* 4.625rem * 0.8 */
+    width: 2.4rem;
+    height: 3.3rem;
     align-items: center;
-    gap: 0.5rem; /* 0.625rem * 0.8 */
+    gap: 0.45rem;
     flex-shrink: 0;
-    border-radius: 0.4rem; /* 0.5rem * 0.8 */
+    border-radius: 0.4rem;
     border: 1px solid #F0F0F0;
     background: #FFF;
 
     position: absolute;
-    left: 0.8rem; /* 1rem * 0.8 */
-    top: 3rem; /* 3.8rem * 0.8 */
+    left: 0.7rem;
+    top: 2.7rem;
 `;
 
 export const TimeTitle = styled.span`
-    width: 2.7rem; /* 3.375rem * 0.8 */
+    width: 2.4rem;
     position: absolute;
-    top: 0.6rem; /* 0.75rem * 0.8 */
+    top: 0.5rem;
     left: 50%;
     transform: translateX(-50%);
     align-self: stretch;
     color: #000;
     text-align: center;
     font-family: Pretendard;
-    font-size: 0.6rem; /* 0.75rem * 0.8 */
+    font-size: 0.54rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 0.8rem; /* 1rem * 0.8 */
+    line-height: 0.8rem;
 `;
 
 export const TimeText = styled.span`
-    width: 2.7rem; /* 3.375rem * 0.8 */
+    width: 2.4rem;
     position: absolute;
-    top: 1.5rem; /* 1.87rem * 0.8 */
+    top: 1.4rem;
     left: 50%;
     transform: translateX(-50%);
     align-self: stretch;
     color: #000;
     text-align: center;
     font-family: Pretendard;
-    font-size: 0.5rem; /* 0.625rem * 0.8 */
+    font-size: 0.45rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 0.8rem; /* 1rem * 0.8 */
+    line-height: 0.8rem;
 `;
 
 export const MatchButtonContainer = styled.div`
     display: flex;
-    width: 28.8rem; /* 36rem * 0.8 */
-    height: 3.7rem; /* 4.625rem * 0.8 */
+    width: 25.9rem;
+    height: 3.3rem;
     flex-shrink: 0;
-    border-radius: 0.4rem; /* 0.5rem * 0.8 */
+    border-radius: 0.4rem;
     border: 1px solid #F0F0F0;
     background: #FFF;
-    box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10); /* 10px * 0.8 */
-    margin-top: 2rem; /* 2.5rem * 0.8 */
-    margin-left: 1.8rem; /* 2.3rem * 0.8 */
+    box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10);
+    margin-top: 1.8rem;
+    margin-left: 1.6rem;
 `;
 
 export const MatchButton = styled.button`
@@ -124,7 +124,7 @@ export const MatchButton = styled.button`
     height: 100%;
     border: none;
     background: #FFF;
-    font-size: 0.8rem; /* 1rem * 0.8 */
+    font-size: 0.72rem;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -135,20 +135,20 @@ export const MatchButton = styled.button`
 
     &:hover {
         background: rgba(192, 12, 11, 0.05);
-        box-shadow: 0px 1.6px 8px 0px rgba(217, 25, 32, 0.40); /* 10px * 0.8 */
+        box-shadow: 0px 1.44px 7.2px 0px rgba(217, 25, 32, 0.40);
     }
 
     &[aria-selected="true"] {
         background: rgba(192, 12, 11, 0.30);
-        box-shadow: 0px 1.6px 8px 0px rgba(217, 25, 32, 0.40); /* 10px * 0.8 */
+        box-shadow: 0px 1.44px 7.2px 0px rgba(217, 25, 32, 0.40);
     }
 
     &:first-child {
-        border-radius: 0.4rem 0rem 0rem 0.4rem; /* 0.5rem * 0.8 */
+        border-radius: 0.4rem 0rem 0rem 0.4rem;
     }
 
     &:last-child {
-        border-radius: 0rem 0.4rem 0.4rem 0rem; /* 0.5rem * 0.8 */
+        border-radius: 0rem 0.4rem 0.4rem 0rem;
     }
 
     &:not(:first-child):not(:last-child) {
@@ -158,11 +158,11 @@ export const MatchButton = styled.button`
 
 export const ExtraContentRight = styled.div`
     position: absolute;
-    top: 0.7rem; /* 0.92rem * 0.8 */
-    right: 1.4rem; /* 1.7rem * 0.8 */
+    top: 0.6rem;
+    right: 1.3rem;
     display: flex;
-    width: 0.8rem; /* 1rem * 0.8 */
-    height: 1.9rem; /* 2.375rem * 0.8 */
+    width: 0.7rem;
+    height: 1.7rem;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -171,11 +171,11 @@ export const ExtraContentRight = styled.div`
 
 export const ExtraContentLeft = styled.div`
     position: absolute;
-    top: 0.7rem; /* 0.92rem * 0.8 */
-    left: 0.8rem; /* 1rem * 0.8 */
+    top: 0.6rem;
+    left: 0.7rem;
     display: flex;
-    width: 0.8rem; /* 1rem * 0.8 */
-    height: 1.9rem; /* 2.375rem * 0.8 */
+    width: 0.7rem;
+    height: 1.7rem;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -183,72 +183,72 @@ export const ExtraContentLeft = styled.div`
 `;
 
 export const CountButton = styled.button`
-    width: 0.8rem; /* 1rem * 0.8 */
-    height: 0.8rem; /* 1rem * 0.8 */
+    width: 0.7rem;
+    height: 0.7rem;
     flex-shrink: 0;
     border: none;
     background: none;
     cursor: pointer;
     padding: 0;
-    filter: drop-shadow(0px 0px 3.2px rgba(0, 0, 0, 0.10)); /* 4px * 0.8 */
+    filter: drop-shadow(0px 0px 2.9px rgba(0, 0, 0, 0.10));
 `;
 
 export const CountDisplay = styled.div`
     position: absolute;
     top: 50%;
-    ${({ isLeft }) => (isLeft ? "left: -0.4rem;" : "right: -0.25rem;")} /* -0.5rem * 0.8, -0.3rem * 0.8 */
-    transform: translate(${({ isLeft }) => (isLeft ? "-8px" : "8px")}, -50%); /* -10px * 0.8, 10px * 0.8 */
+    ${({ isLeft }) => (isLeft ? "left: -0.4rem;" : "right: -0.2rem;")}
+    transform: translate(${({ isLeft }) => (isLeft ? "-7px" : "7px")}, -50%);
     display: flex;
-    width: 1.6rem; /* 2rem * 0.8 */
-    height: 1.6rem; /* 2rem * 0.8 */
+    width: 1.4rem;
+    height: 1.4rem;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem; /* 0.625rem * 0.8 */
+    gap: 0.45rem;
     flex-shrink: 0;
-    border-radius: 0.4rem; /* 0.5rem * 0.8 */
+    border-radius: 0.4rem;
     background: ${({ isZero }) => (isZero ? "#AFAFAF" : "#C00C0B")};
     color: white;
     font-weight: bold;
-    font-size: 0.8rem; /* 1rem * 0.8 */
+    font-size: 0.72rem;
     visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
     z-index: 10;
 `;
 
 export const ConfirmButton = styled.button`
     display: flex;
-    width: 28.8rem; /* 36rem * 0.8 */
-    height: 1.5rem; /* 1.875rem * 0.8 */
-    padding: 0.6rem 1.2rem; /* 0.75rem * 0.8, 1.5rem * 0.8 */
+    width: 25.9rem;
+    height: 1.4rem;
+    padding: 0.5rem 1.1rem;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem; /* 0.625rem * 0.8 */
-    margin-left: 1.8rem; /* 2.3rem * 0.8 */
+    gap: 0.45rem;
+    margin-left: 1.6rem;
 
-    border-radius: 0.3rem; /* 0.375rem * 0.8 */
+    border-radius: 0.3rem;
     border: 1px solid #F0F0F0;
-    background:  #FFF;
-    box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10); /* 10px * 0.8 */
+    background: #FFF;
+    box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10);
     cursor: pointer;
 
     color: #000;
     text-align: right;
     font-family: Pretendard;
-    font-size: 0.6rem; /* 0.75rem * 0.8 */
+    font-size: 0.54rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 0.8rem; /* 1rem * 0.8 */
+    line-height: 0.8rem;
 `;
 
 export const JoinedText = styled.p`
     color: #676767;
     text-align: right;
     font-family: Pretendard;
-    font-size: 0.6rem; /* 0.75rem * 0.8 */
+    font-size: 0.54rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 0.8rem; /* 1rem * 0.8 */
-    right: 0.8rem; /* 1rem * 0.8 */
-    top: 0.55rem; /* 0.69rem * 0.8 */
+    line-height: 0.8rem;
+    right: 0.7rem;
+    top: 0.5rem;
     margin: 0;
 `;
