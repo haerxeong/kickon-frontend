@@ -5,7 +5,6 @@ import {
   NewsTitle,
   NewsContent,
   NewsInfo,
-  UserInfo,
   Nickname,
   Time,
   Reads,
@@ -19,38 +18,45 @@ import {
   Divider,
   ContentWrapper,
   TextContentWrapper,
+  LeftInfo,
+  RightInfo,
+  TopSection
 } from "./NewsItem.style";
 
 const NewsItem = ({ badge, title, content, nickname, time, reads, comments, likes, thumbnail }) => {
   return (
-    <NewsItemContainer>
-      <ContentWrapper>
-        <TextContentWrapper>
-          <NewsBadge>{badge}</NewsBadge>
-          <NewsTitle>{title}</NewsTitle>
-          <NewsContent>{content}</NewsContent>
-          <NewsInfo>
-            <UserInfo>
-              <ProfileIcon />
-              <Nickname>{nickname}</Nickname>
-              <ProfileCheckIcon />
-              <Time>{time}</Time>
-              <Divider>
-                <svg xmlns="http://www.w3.org/2000/svg" width="2" height="12" viewBox="0 0 2 12" fill="none">
-                  <path d="M1 0V12" stroke="#8C8C8C" strokeLinejoin="round"/>
-                </svg>
-              </Divider>
-              <Reads>읽음 {reads}</Reads>
+      <NewsItemContainer>
+        <ContentWrapper>
+          <TextContentWrapper>
+            <TopSection>
+              <div>
+                <NewsBadge>{badge}</NewsBadge>
+                <NewsTitle>{title}</NewsTitle>
+                <NewsContent>{content}</NewsContent>
+                <LeftInfo>
+                  <ProfileIcon />
+                  <Nickname>{nickname}</Nickname>
+                  <ProfileCheckIcon />
+                  <Time>{time}</Time>
+                  <Divider>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2" height="12" viewBox="0 0 2 12" fill="none">
+                      <path d="M1 0V12" stroke="#8C8C8C" strokeLinejoin="round"/>
+                    </svg>
+                  </Divider>
+                  <Reads>읽음 {reads}</Reads>
+                </LeftInfo>
+              </div>
+              {thumbnail && <Thumbnail src={thumbnail} alt="Thumbnail" />}
+            </TopSection>
+            <RightInfo>
               <GoodIcon />
               <Likes>{likes}</Likes>
               <CommentIcon />
               <Comments>{comments}</Comments>
-            </UserInfo>
-          </NewsInfo>
-        </TextContentWrapper>
-        {thumbnail && <Thumbnail src={thumbnail} alt="Thumbnail" />}
-      </ContentWrapper>
-    </NewsItemContainer>
+            </RightInfo>
+          </TextContentWrapper>
+        </ContentWrapper>
+      </NewsItemContainer>
   );
 };
 

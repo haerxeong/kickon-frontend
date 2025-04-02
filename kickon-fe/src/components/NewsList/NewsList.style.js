@@ -7,10 +7,10 @@ export const NewsListContainer = styled.div`
   align-items: flex-start;
   align-self: stretch;
   width: 30rem;
-  padding: 1.875rem 1rem 1.5rem 1rem;
+  padding: 1.35rem 0.71rem 1rem 0.71rem;
   border-radius: 0.625rem;
-  border: 0.0625rem solid var(--Black-black_300, #DCDCDC);
-  background: var(--sub1, #FFF);
+  border: 0.0625rem solid #DCDCDC;
+  background: #FFF;
 `;
 
 export const NewsItemsWrapper = styled.div`
@@ -18,7 +18,7 @@ export const NewsItemsWrapper = styled.div`
   
   /* 첫 번째 아이템을 제외한 모든 아이템에 상단 간격 추가 */
   & > div + div {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
   
   /* 마지막 아이템의 하단 테두리 제거 */
@@ -32,10 +32,10 @@ export const NewsHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.63rem;
   font-family: "Pretendard";
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 500;
   line-height: 1.25rem;
   color: black;
   .title {
@@ -49,10 +49,10 @@ export const NewsHeader = styled.div`
 `;
 
 export const MoreLink = styled.a`
-  color: var(--Black-black_700, #676767);
+  color: #676767;
   text-align: right;
   font-family: Pretendard;
-  font-size: 0.875rem;
+  font-size: 0.628rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1rem;
@@ -66,8 +66,8 @@ export const MoreLink = styled.a`
 `;
 
 export const MoreIcon = styled.div`
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 0.8rem;
+  height: 0.8rem;
   background-image: url(${MoreSvg});
   background-size: contain;
   background-repeat: no-repeat;
