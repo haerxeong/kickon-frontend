@@ -1,72 +1,72 @@
 import styled from 'styled-components';
 
-// 게시글 상세 페이지 컨테이너
 export const ArticleContainer = styled.div`
-  width: 30rem;
-  border-radius: 0.45rem;
-  border: 1px solid #DCDCDC;
-  background: #FFF;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    max-width: 600px; /* 가독성을 위해 너비 제한 */
+    margin: 0 auto;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
-// 게시글 헤더 (제목, 작성자 정보)
 export const ArticleHeader = styled.div`
-  padding: 1rem;
-  border-bottom: 1px solid #F0F0F0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
 `;
 
 export const ArticleTitle = styled.h1`
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
 `;
 
 export const ArticleInfo = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 0.75rem;
-  color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
 `;
 
 export const AuthorIcon = styled.div`
-  width: 1.25rem;
-  height: 1.25rem;
-  background-color: #f0f0f0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  margin-right: 0.3rem;
+    background: #ddd;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
 `;
 
 export const ArticleMeta = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  gap: 0.5rem;
-  font-size: 0.7rem;
-  color: #888;
+    margin-left: auto;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
 `;
 
-// 게시글 내용
 export const ArticleContent = styled.div`
-  padding: 1rem;
-  border-bottom: 1px solid #F0F0F0;
+    margin-top: 1rem;
 `;
 
 export const ArticleImage = styled.img`
-  width: 100%;
-  border-radius: 0.3rem;
-  margin-bottom: 1rem;
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
 `;
 
 export const ArticleText = styled.p`
-  font-size: 0.85rem;
-  line-height: 1.5;
-  margin: 0;
-  white-space: pre-wrap;
+    margin-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
 `;
 
 // 게시글 액션 (좋아요 등)
@@ -124,8 +124,6 @@ export const InfoButton = styled.button`
 
 // 댓글 섹션
 export const CommentsSection = styled.div`
-  max-height: 30rem;
-  overflow-y: auto;
   padding: 0 1rem;
 `;
 

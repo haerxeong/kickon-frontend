@@ -8,21 +8,24 @@ import News from "./pages/News/news.jsx";
 import NotFound from "./pages/not-found";
 import LoginModal from "./components/LoginModal/loginModal.jsx";
 import Signup from "./pages/Signup/signup.jsx";
+import NewsDetail from "./components/PostDetail/postDetail.jsx";
 
 function App() {
     return (
         <Provider store={store}>
             <Router>
                 <Routes>
-                    <Route path="/" element={<RootLayout />}>
-                        <Route index element={<Home />} />
-                        <Route path="community" element={<Community />} />
-                        <Route path="news" element={<News />} />
-                        <Route path="signup" element={<Signup />} />
+                    <Route path="/" element={<RootLayout/>}>
+                        <Route index element={<Home/>}/>
+                        <Route path="community" element={<Community/>}/>
+                        <Route path="news" element={<News/>}/>
+                        <Route path="signup" element={<Signup/>}/>
+                        <Route path="news/detail" element={<NewsDetail type="news" />} />
+                        <Route path="community/detail" element={<NewsDetail type="community" />} />
                     </Route>
-                    <Route path="*" element={<NotFound />} />
+                    <Route path="*" element={<NotFound/>}/>
                 </Routes>
-                <LoginModal />
+                <LoginModal/>
             </Router>
         </Provider>
     );
