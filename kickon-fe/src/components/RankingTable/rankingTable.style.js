@@ -75,6 +75,7 @@ export const TableData = styled.td`
     text-align: ${props => props.align || 'left'};
     font-size: 0.7rem; 
     width: ${props => props.width || 'auto'};
+    color: #000;
 `;
 
 export const TeamCell = styled.td`
@@ -92,4 +93,5 @@ export const TeamLogo = styled.img`
 
 export const TeamName = styled.span`
     font-size: 0.7rem;
+    color: #000;
 `;
