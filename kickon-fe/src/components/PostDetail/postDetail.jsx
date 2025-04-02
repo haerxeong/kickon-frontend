@@ -1,45 +1,27 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-    ArticleContainer,
-    ArticleHeader,
-    ArticleTitle,
-    ArticleInfo,
-    VerifiedIcon,
-    ArticleMeta,
-    ArticleContent,
-    ArticleImage,
-    ArticleText,
-    ArticleActions,
-    LikeButton,
-    TimeLabel,
-    ViewLabel,
-    CommentInputBox,
-    CommentInputLabel,
-    CommentInput,
-    SubmitButton,
-    CommentsSection,
-    CommentItem,
-    CommentHeader,
-    CommentContent,
-    CommentActions,
-    CommentLikes,
-    ReplyButton,
-    Pagination,
-    PageButton,
-    NavButton, CommentInputContainer, MoreMenu, CommentsSectionTitle
+    ArticleContainer, ArticleHeader, ArticleTitle, ArticleInfo,
+    VerifiedIcon, ArticleMeta, ArticleContent, ArticleImage,
+    ArticleText, ArticleActions, LikeButton, TimeLabel, ViewLabel,
+    CommentInputBox, CommentInputLabel, CommentInput, SubmitButton,
+    CommentsSection, CommentItem, CommentHeader, CommentContent,
+    CommentActions, CommentLikes, ReplyButton, PaginationWrapper,
+    PageButton, NavButton, CommentInputContainer, CommentsSectionTitle, CommentHeaderWrapper, MoreButton
 } from './postDetail.style.js';
+import RKickIcon from "../../assets/good_red.svg"
 import BKickIcon from "../../assets/good_black.svg"
 import KickIcon from "../../assets/good.png"
 import ProfileIcon from "../../assets/profile.svg"
 import { FaRegComment } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
-import { MdIosShare } from "react-icons/md";
+import { MdExpandMore } from "react-icons/md";
 
 
 const PostDetail = () => {
-    const [activeComments, setActiveComments] = useState([]);
     const [commentText, setCommentText] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activePage, setActivePage] = useState(1);
+    const [likedComments, setLikedComments] = useState({});
     const menuRef = useRef(null);
 
     const handleClickOutside = (e) => {
@@ -59,11 +41,10 @@ const PostDetail = () => {
     }, []);
 
     const toggleLike = (commentId) => {
-        if (activeComments.includes(commentId)) {
-            setActiveComments(activeComments.filter(id => id !== commentId));
-        } else {
-            setActiveComments([...activeComments, commentId]);
-        }
+        setLikedComments((prev) => ({
+            ...prev,
+            [commentId]: !prev[commentId], // 클릭한 댓글만 토글
+        }));
     };
 
     // 댓글 데이터
@@ -138,47 +119,57 @@ const PostDetail = () => {
                 <CommentsSectionTitle>댓글 14개</CommentsSectionTitle>
                 {comments.map((comment, index) => (
                     <CommentItem key={index}>
-                        <CommentHeader>
-                            <img src={ProfileIcon} alt="프로필 아이콘" width={24} height={24} />
-                            <span style={{ fontSize: '0.75rem', marginRight: '0.3rem', color: '#000' }}>닉네임</span>
-                            <span style={{ fontSize: '0.7rem', color: '#888' }}>{comment.date}</span>
-                        </CommentHeader>
+                        <CommentHeaderWrapper>
+                            <CommentHeader>
+                                <img src={ProfileIcon} alt="프로필 아이콘" width={24} height={24} />
+                                <span style={{ fontSize: '0.75rem', marginRight: '0.3rem', color: '#000' }}>닉네임</span>
+                                <span style={{ fontSize: '0.7rem', color: '#888' }}>{comment.date}</span>
+                            </CommentHeader>
+                            <CommentLikes
+                                key={comment.id}
+                                active={likedComments[comment.id] || false} // 개별적으로 관리
+                                onClick={() => toggleLike(comment.id)}
+                            >
+                                <img
+                                    src={likedComments[comment.id] ? RKickIcon : KickIcon} // 개별 상태 반영
+                                    alt="좋아요 아이콘"
+                                    width={12}
+                                    height={12}
+                                    style={{ cursor: "pointer" }}
+                                />
+                                {comment.likes}
+                            </CommentLikes>
+                        </CommentHeaderWrapper>
                         <CommentContent>
                             {comment.content}
                         </CommentContent>
                         <CommentActions>
-                            <CommentLikes
-                                active={activeComments.includes(comment.id)}
-                                onClick={() => toggleLike(comment.id)}
-                            >
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor" />
-                                </svg>
-                                {comment.likes}
-                            </CommentLikes>
                             <ReplyButton>답글</ReplyButton>
                             {index % 4 === 0 && (
-                                <ReplyButton>더보기 ⌵</ReplyButton>
+                                <MoreButton> <MdExpandMore width={20} height={20}/>  답글 2개</MoreButton>
                             )}
                         </CommentActions>
                     </CommentItem>
                 ))}
             </CommentsSection>
 
-            {/* 페이지네이션 */}
-            <Pagination>
-                <PageButton active>1</PageButton>
-                <PageButton>2</PageButton>
-                <PageButton>3</PageButton>
-                <PageButton>4</PageButton>
-                <PageButton>5</PageButton>
-                <PageButton>6</PageButton>
-                <PageButton>7</PageButton>
-                <PageButton>8</PageButton>
-                <PageButton>9</PageButton>
-                <PageButton>10</PageButton>
-                <NavButton>10+ ▶</NavButton>
-            </Pagination>
+            <PaginationWrapper>
+                <NavButton onClick={() => setActivePage(prev => Math.max(prev - 1, 1))}>
+                    {'<'} 이전
+                </NavButton>
+                {Array.from({ length: 10 }, (_, i) => (
+                    <PageButton
+                        key={i + 1}
+                        active={activePage === i + 1}
+                        onClick={() => setActivePage(i + 1)}
+                    >
+                        {i + 1}
+                    </PageButton>
+                ))}
+                <NavButton onClick={() => setActivePage(prev => Math.min(prev + 1, 10))}>
+                    다음 {'>'}
+                </NavButton>
+            </PaginationWrapper>
         </ArticleContainer>
     );
 };

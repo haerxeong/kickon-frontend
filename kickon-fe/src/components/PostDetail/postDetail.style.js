@@ -211,28 +211,19 @@ export const CommentItem = styled.div`
     padding: 12px 0;
 `;
 
+export const CommentHeaderWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+`
+
 export const CommentHeader = styled.div`
     display: flex;
     align-items: center;
     gap: 6px;
     margin-bottom: 6px;
 `;
-
-export const CommentContent = styled.div`
-    font-size: 0.628rem;
-    margin-left: 30px;
-    margin-bottom: 8px;
-    line-height: 1.4;
-    color: #000
-`;
-
-export const CommentActions = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: 30px;
-`;
-
 export const CommentLikes = styled.button`
     display: flex;
     align-items: center;
@@ -245,45 +236,106 @@ export const CommentLikes = styled.button`
     padding: 0;
 `;
 
+export const CommentContent = styled.div`
+    font-size: 0.628rem;
+    margin-left: 30px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    color: #000
+`;
+
+export const CommentActions = styled.div`
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 30px;
+`;
+
+
 export const ReplyButton = styled.button`
+    display: flex;
+    height: 1.077rem;
+    padding: 0.25rem 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.448rem;
+    border: none;
+
+    color: var(--Black-black_700, #676767);
+    /* Button/btn5_Pre_r_12px */
+    font-family: Pretendard;
+    font-size: 0.538rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem; /* 133.333% */
+    
+    border-radius: 0.25rem;
+    background: var(--Black-black_200, #F0F0F0);
+`;
+
+export const MoreButton = styled.button`
     background: none;
     border: none;
     font-size: 0.75rem;
     color: #888;
     cursor: pointer;
     padding: 0;
-`;
 
-export const Pagination = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    margin: 20px 0;
+    color: var(--Black-black_700, #676767);
+    /* Button/btn5_Pre_r_12px */
+    font-family: Pretendard;
+    font-size: 0.538rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem; /* 133.333% */
 `;
 
 export const PageButton = styled.button`
-    width: 24px;
-    height: 24px;
+    width: 1.2rem; /* 기존의 0.8배 */
+    height: 1.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
-    background-color: ${props => props.active ? '#E74C3C' : '#f0f0f0'};
-    color: ${props => props.active ? 'white' : '#333'};
-    font-size: 0.75rem;
-    border-radius: 4px;
+    background: transparent;
+    font-size: 0.56rem; /* 기존의 0.8배 */
+    color: ${props => (props.active ? '#000' : '#8F8F8F')};
     cursor: pointer;
+    position: relative;
+
+    &:hover {
+        color: #000;
+    }
+
+    /* 활성화된 페이지에 밑줄 추가 */
+    &::after {
+        content: "";
+        display: ${props => (props.active ? 'block' : 'none')};
+        width: 50%;
+        height: 1.6px; /* 기존의 0.8배 */
+        background-color: #000;
+        position: absolute;
+        bottom: -1.6px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 `;
 
 export const NavButton = styled.button`
     border: none;
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 0.75rem;
-    border-radius: 4px;
-    padding: 0 8px;
+    background: transparent;
+    font-size: 0.56rem; /* 기존의 0.8배 */
+    color: #676767;
     cursor: pointer;
     display: flex;
     align-items: center;
+`;
+
+export const PaginationWrapper = styled.div`
+    display: flex;
     justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.8rem; // PostsWrapper와의 간격 조정
+    margin-bottom: 1.8rem;
 `;
