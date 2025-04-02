@@ -8,6 +8,7 @@ import News from "./pages/News/news.jsx";
 import NotFound from "./pages/not-found";
 import LoginModal from "./components/LoginModal/loginModal.jsx";
 import Signup from "./pages/Signup/signup.jsx";
+import PostEditor from "./components/PostEditer/postEditor.jsx";
 
 function App() {
     return (
@@ -19,6 +20,8 @@ function App() {
                         <Route path="community" element={<Community />} />
                         <Route path="news" element={<News />} />
                         <Route path="signup" element={<Signup />} />
+                        <Route path="news/write" element={<PostEditor type="news" />} />
+                        <Route path="community/write" element={<PostEditor type="community" />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
