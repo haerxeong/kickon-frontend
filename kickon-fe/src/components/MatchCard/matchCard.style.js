@@ -5,7 +5,6 @@ export const MatchCardContainer = styled.div`
     width: 30rem;
     padding: 1.0rem 0.7rem;
     flex-direction: column;
-    align-items: center;
     gap: 0.5rem;
     border-radius: 0.5rem;
     background: #FFF;
@@ -109,14 +108,14 @@ export const TimeText = styled.span`
 export const MatchButtonContainer = styled.div`
     display: flex;
     width: 25.9rem;
-    height: 3.3rem;
+    height: 3.1rem;
     flex-shrink: 0;
     border-radius: 0.4rem;
     border: 1px solid #F0F0F0;
     background: #FFF;
     box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10);
     margin-top: 1.8rem;
-    margin-left: 1.6rem;
+    margin-left: 2.5rem;
 `;
 
 export const MatchButton = styled.button`
@@ -223,7 +222,7 @@ export const ConfirmButton = styled.button`
     justify-content: center;
     align-items: center;
     gap: 0.45rem;
-    margin-left: 1.6rem;
+    margin-left: 2.5rem;
 
     border-radius: 0.3rem;
     border: 1px solid #F0F0F0;
@@ -248,7 +247,5 @@ export const JoinedText = styled.p`
     font-style: normal;
     font-weight: 400;
     line-height: 0.8rem;
-    right: 0.7rem;
-    top: 0.5rem;
     margin: 0;
 `;
