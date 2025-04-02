@@ -5,21 +5,21 @@ export const Pagination = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 1.88rem;
-    margin-bottom: 1.88rem;
-    gap: 0.5rem;
+    margin-top: 1.5rem; /* 기존의 0.8배 */
+    margin-bottom: 1.5rem;
+    gap: 0.4rem; /* 간격도 0.8배 */
 `;
 
 export const PageButton = styled.button`
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.2rem; /* 기존의 0.8배 */
+    height: 1.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     background: transparent;
-    font-size: 0.7rem;
-    color: ${props => (props.active ? '#000' : '#676767')};
+    font-size: 0.56rem; /* 기존의 0.8배 */
+    color: ${props => (props.active ? '#000' : '#8F8F8F')};
     cursor: pointer;
     position: relative;
 
@@ -31,19 +31,20 @@ export const PageButton = styled.button`
     &::after {
         content: "";
         display: ${props => (props.active ? 'block' : 'none')};
-        width: 100%;
-        height: 2px;
+        width: 50%;
+        height: 1.6px; /* 기존의 0.8배 */
         background-color: #000;
         position: absolute;
-        bottom: -2px;
-        left: 0;
+        bottom: -1.6px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 `;
 
 export const NavButton = styled.button`
     border: none;
     background: transparent;
-    font-size: 0.7rem;
+    font-size: 0.56rem; /* 기존의 0.8배 */
     color: #676767;
     cursor: pointer;
     display: flex;
@@ -145,16 +146,17 @@ export const PostItem = styled.div`
 `;
 
 export const PostTitle = styled.div`
-  flex: 4;
-  font-size: 0.65rem;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-left: 0.5rem;
-  color: black;
-  display: flex;
-  align-items: center;
+    flex: 4;
+    font-size: 0.65rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 0.5rem;
+    color: black;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
+    -webkit-box-orient: vertical;
+    word-break: break-word;
 
   img {
     width: 0.6rem;
@@ -206,5 +208,5 @@ export const PaginationWrapper = styled.div`
     justify-content: center;
     gap: 0.5rem;
     margin-top: 1.8rem; // PostsWrapper와의 간격 조정
-    margin-bottom: 1.8rem;
+    margin-bottom: 0.9rem;
 `;
