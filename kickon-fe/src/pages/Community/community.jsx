@@ -1,13 +1,13 @@
 // 임시 커뮤니티 페이지
-import React from 'react';
-import {NavButton, NewsContainer, PageButton, Pagination, Tab, TabContainer, TableHeader} from "./community.style.js";
-import GoodIcon from "../../assets/good.png"
+import React, {useState} from 'react';
 import {
-    PostAuthor, PostDate,
+    NavButton, NewsContainer, PageButton, Pagination, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
     PostItem, PostLikes,
     PostsWrapper,
-    PostTitle, PostViews
-} from "../../components/CommunityBoard/CommunityBoard.style.js";
+    PostTitle, PostViews, PaginationWrapper
+} from "./community.style.js";
+import GoodIcon from "../../assets/good_black.svg"
+import ProfileIcon from "../../assets/profile.svg";
 
 function AuthorIcon(props) {
     return null;
@@ -36,13 +36,21 @@ const Community = () => {
         { title: "(속보) 손흥민 더비 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
         { title: "(속보) 손흥민 더비 부상 ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
     ];
+    const [activeTab, setActiveTab] = useState("전체");
+    const [activePage, setActivePage] = useState(1);
 
     return (
         <NewsContainer>
             <TabContainer>
-                <Tab active>전체</Tab>
-                <Tab>인기</Tab>
-                <Tab>FC서울</Tab>
+                {["전체", "인기", "FC서울"].map((tab) => (
+                    <Tab
+                        key={tab}
+                        active={activeTab === tab}
+                        onClick={() => setActiveTab(tab)} // 클릭하면 활성화 변경
+                    >
+                        {tab}
+                    </Tab>
+                ))}
             </TabContainer>
 
             <TableHeader>
@@ -64,7 +72,7 @@ const Community = () => {
                             {post.replyCount && <span className="reply-count">({post.replyCount})</span>}
                         </PostTitle>
                         <PostAuthor>
-                            <AuthorIcon>프</AuthorIcon>
+                            <img src={ProfileIcon} alt="프로필 아이콘" width={14} height={14} />
                             {post.author}
                         </PostAuthor>
                         <PostDate>{post.date}</PostDate>
@@ -74,20 +82,24 @@ const Community = () => {
                 ))}
             </PostsWrapper>
 
-            <Pagination>
-                <NavButton>{'<'} 이전</NavButton>
-                <PageButton active>1</PageButton>
-                <PageButton>2</PageButton>
-                <PageButton>3</PageButton>
-                <PageButton>4</PageButton>
-                <PageButton>5</PageButton>
-                <PageButton>6</PageButton>
-                <PageButton>7</PageButton>
-                <PageButton>8</PageButton>
-                <PageButton>9</PageButton>
-                <PageButton>10</PageButton>
-                <NavButton>다음 {'>'}</NavButton>
-            </Pagination>
+            {/* ✅ Pagination을 컨테이너 내부에 위치시키기 */}
+            <PaginationWrapper>
+                <NavButton onClick={() => setActivePage(prev => Math.max(prev - 1, 1))}>
+                    {'<'} 이전
+                </NavButton>
+                {Array.from({ length: 10 }, (_, i) => (
+                    <PageButton
+                        key={i + 1}
+                        active={activePage === i + 1}
+                        onClick={() => setActivePage(i + 1)}
+                    >
+                        {i + 1}
+                    </PageButton>
+                ))}
+                <NavButton onClick={() => setActivePage(prev => Math.min(prev + 1, 10))}>
+                    다음 {'>'}
+                </NavButton>
+            </PaginationWrapper>
         </NewsContainer>
     );
 }

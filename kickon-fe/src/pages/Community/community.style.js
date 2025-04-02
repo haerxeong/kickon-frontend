@@ -4,9 +4,10 @@ import styled from "styled-components";
 export const Pagination = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
-    gap: 0.5rem;
     align-items: center;
+    margin-top: 1.88rem;
+    margin-bottom: 1.88rem;
+    gap: 0.5rem;
 `;
 
 export const PageButton = styled.button`
@@ -16,14 +17,26 @@ export const PageButton = styled.button`
     align-items: center;
     justify-content: center;
     border: none;
-    background: ${props => props.active ? '#f0f0f0' : 'transparent'};
-    border-radius: 0.2rem;
+    background: transparent;
     font-size: 0.7rem;
-    color: ${props => props.active ? '#000' : '#676767'};
+    color: ${props => (props.active ? '#000' : '#676767')};
     cursor: pointer;
-    
+    position: relative;
+
     &:hover {
-        background: ${props => props.active ? '#f0f0f0' : '#f8f8f8'};
+        color: #000;
+    }
+
+    /* 활성화된 페이지에 밑줄 추가 */
+    &::after {
+        content: "";
+        display: ${props => (props.active ? 'block' : 'none')};
+        width: 100%;
+        height: 2px;
+        background-color: #000;
+        position: absolute;
+        bottom: -2px;
+        left: 0;
     }
 `;
 
@@ -39,7 +52,7 @@ export const NavButton = styled.button`
 
 export const NewsContainer = styled.div`
     width: 30rem;
-    height: 55.625rem;
+    min-height: 55.625rem;
     flex-shrink: 0;
     border-radius: 0.45rem;
     border: 1px solid #DCDCDC;
@@ -56,7 +69,7 @@ export const TabContainer = styled.div`
 `;
 
 export const Tab = styled.div`
-    color: ${props => props.active ? '#000' : '#676767'};
+    color: ${props => props.active ? '#C00C0B' : '#676767'};
     font-family: Pretendard;
     font-size: 0.85rem;
     font-weight: ${props => props.active ? '600' : '400'};
@@ -70,7 +83,7 @@ export const Tab = styled.div`
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: ${props => props.active ? '#E74C3C' : 'transparent'};
+        background-color: ${props => props.active ? '#C00C0B' : 'transparent'};
     }
 `;
 
@@ -84,8 +97,8 @@ export const TableHeader = styled.div`
     font-size: 0.7rem;
     font-weight: 400;
     .title {
-        flex: 5;
-        padding-left: 0.5rem;
+        flex: 4;
+        text-align: center;
     }
     
     .author {
@@ -109,4 +122,89 @@ export const TableHeader = styled.div`
         align-items: center;
         justify-content: center;
     }
+`;
+
+export const PostsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+`;
+
+export const PostItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 0;
+  border-bottom: 0.0625rem solid #f0f0f0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const PostTitle = styled.div`
+  flex: 4;
+  font-size: 0.65rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 0.5rem;
+  color: black;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-left: 0.25rem;
+  }
+
+  .reply-count {
+    color: #000;
+    font-weight: normal;
+    margin-left: 0.25rem
+  }
+`;
+
+export const PostAuthor = styled.div`
+  flex: 2;
+  font-size: 0.6rem;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-weight: 350;
+`;
+
+export const PostDate = styled.div`
+  flex: 2;
+  font-size: 0.6rem;
+  color: #8c8c8c;
+  text-align: center;
+`;
+
+export const PostLikes = styled.div`
+  flex: 1;
+  font-size: 0.6rem;
+  color: #8f8f8f;
+  text-align: center;
+`;
+
+export const PostViews = styled.div`
+  flex: 1;
+  font-size: 0.6rem;
+  color: #8f8f8f;
+  text-align: center;
+`;
+
+export const PaginationWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.8rem; // PostsWrapper와의 간격 조정
+    margin-bottom: 1.8rem;
 `;
