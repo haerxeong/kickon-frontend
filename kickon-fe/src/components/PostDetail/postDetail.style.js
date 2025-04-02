@@ -2,209 +2,288 @@ import styled from 'styled-components';
 
 export const ArticleContainer = styled.div`
     width: 100%;
-    max-width: 600px; /* 가독성을 위해 너비 제한 */
-    margin: 0 auto;
-    padding: 1rem;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0.625rem;
+    border: 1px solid #DCDCDC;
+    position: relative;
 `;
 
 export const ArticleHeader = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 1rem;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
 `;
 
 export const ArticleTitle = styled.h1`
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
-    margin: 0;
+    margin: 0 0 12px 0;
+    color: black;
 `;
 
 export const ArticleInfo = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #666;
 `;
 
-export const AuthorIcon = styled.div`
-    background: #ddd;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
+export const VerifiedIcon = styled.span`
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem;
-    font-weight: bold;
+    color: #1da1f2;
+    margin-left: 2px;
 `;
 
 export const ArticleMeta = styled.div`
     margin-left: auto;
     display: flex;
     gap: 1rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: #777;
 `;
 
 export const ArticleContent = styled.div`
-    margin-top: 1rem;
+    padding: 0;
 `;
 
 export const ArticleImage = styled.img`
     width: 100%;
-    max-height: 250px;
+    max-height: 300px;
     object-fit: cover;
-    border-radius: 8px;
 `;
 
 export const ArticleText = styled.p`
-    margin-top: 1rem;
-    font-size: 1rem;
+    padding: 16px;
+    margin: 0;
+    font-size: 0.718rem;
     line-height: 1.6;
     color: #333;
 `;
 
-// 게시글 액션 (좋아요 등)
 export const ArticleActions = styled.div`
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #F0F0F0;
-  display: flex;
-  align-items: center;
+    padding: 0 16px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 `;
 
 export const LikeButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #E74C3C;
-  color: white;
-  border: none;
-  border-radius: 1rem;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  cursor: pointer;
+    display: flex;
+    width: 4.308rem;
+    height: 1.68rem;
+    padding: 0.125rem 0.75rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 0.5rem;
+    background: rgba(192, 12, 11, 0.90);
+    /* Button/킥_레드_20% */
+    box-shadow: 0px 2px 10px 0px rgba(217, 25, 32, 0.20);
+    font-size: 0.7rem;
+    color: white;
 
-  & svg {
-    margin-right: 0.25rem;
-  }
+    & svg {
+        margin-right: 6px;
+    }
 `;
 
-// 게시글 추가 정보 박스
-export const AdditionalInfoBox = styled.div`
-  background-color: #f9f9f9;
-  padding: 1rem;
-  margin: 0 1rem 1rem 1rem;
-  border-radius: 0.3rem;
-  font-size: 0.75rem;
-  color: #666;
-  line-height: 1.5;
+export const TimeLabel = styled.span`
+    font-size: 0.8rem;
+    color: #888;
+    margin-right: 5px;
 `;
 
-export const AdditionalInfoHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
+export const ViewLabel = styled.span`
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 5px;
 `;
 
-export const InfoButton = styled.button`
-  background-color: #E74C3C;
-  color: white;
-  border: none;
-  border-radius: 0.2rem;
-  font-size: 0.7rem;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
+export const MoreMenu = styled.ul`
+    display: flex;
+    padding: 0.625rem 1.25rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.25rem;
+
+    border-radius: 0.5rem;
+    border: 1px solid #DCDCDC;
+    background: #FFF;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.16);
+    position: absolute; /* 버튼 옆에 위치하도록 설정 */
+    top: 100%; /* 버튼 바로 아래로 위치 */
+    left: 0;
+    z-index: 100; /* 다른 요소들보다 위에 표시되도록 */
+`
+
+export const CommentInputBox = styled.div`
+    position: absolute;
+    left: 0.8rem;
+    display: flex;
+    width: 28rem;
+    padding: 0.8rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    border-radius: 0.625rem;
+    background: #F0F0F0;
+    color: black;
 `;
 
-// 댓글 섹션
+export const CommentInputLabel = styled.div`
+    font-size: 0.628rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+`;
+
+export const CommentInputContainer = styled.div`
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    align-items: flex-start;
+    overflow: hidden;
+`;
+
+export const CommentInput = styled.textarea`
+    width: 22.5rem;
+    flex: 1;
+    border: none;
+    padding: 14px; /* 기존 12px -> 14px */
+    font-size: 0.583rem;
+    background: transparent;
+    min-height: 4rem; /* 기존 50px -> 64px */
+    max-height: 10rem; /* 기존 150px -> 160px */
+    overflow-y: auto;
+    resize: none;
+
+    &:focus {
+        outline: none;
+    }
+`;
+
+export const SubmitButton = styled.button`
+    background: rgba(192, 12, 11, 0.90);
+    color: white;
+    border: none;
+    height: 64px; /* 기존 50px -> 64px (입력란과 동일) */
+    font-size: 0.85rem; /* 기존 0.8rem -> 0.85rem */
+    padding: 0 18px; /* 기존 16px -> 18px */
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 export const CommentsSection = styled.div`
-  padding: 0 1rem;
+    padding: 0 16px;
+    margin-top: 10rem;
 `;
+
+export const CommentsSectionTitle = styled.div`
+    width: 30rem;
+    stroke-width: 1px;
+    stroke: #DCDCDC;
+    color: #000;
+    font-family: Pretendard;
+    font-size: 0.628rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1rem;
+`
 
 export const CommentItem = styled.div`
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #F0F0F0;
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
 `;
 
 export const CommentHeader = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
 `;
 
 export const CommentContent = styled.div`
-  font-size: 0.8rem;
-  margin-left: 1.5rem;
-  margin-bottom: 0.3rem;
+    font-size: 0.628rem;
+    margin-left: 30px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    color: #000
 `;
 
 export const CommentActions = styled.div`
-  display: flex;
-  margin-left: 1.5rem;
-  font-size: 0.7rem;
-  color: #888;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 30px;
 `;
 
-export const CommentLikes = styled.div`
-  display: flex;
-  align-items: center;
-  color: ${props => props.active ? '#E74C3C' : '#888'};
-  cursor: pointer;
-  
-  & svg {
-    margin-right: 0.15rem;
-  }
+export const CommentLikes = styled.button`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    color: ${props => props.active ? '#E74C3C' : '#888'};
+    cursor: pointer;
+    padding: 0;
 `;
 
 export const ReplyButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 0.7rem;
-  color: #888;
-  padding: 0;
-  cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
 `;
 
-// 페이지네이션
 export const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-  gap: 0.5rem;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin: 20px 0;
 `;
 
 export const PageButton = styled.button`
-  width: 1.5rem;
-  height: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: ${props => props.active ? '#f0f0f0' : 'transparent'};
-  border-radius: 0.2rem;
-  font-size: 0.7rem;
-  color: ${props => props.active ? '#000' : '#676767'};
-  cursor: pointer;
-
-  &:hover {
-    background: ${props => props.active ? '#f0f0f0' : '#f8f8f8'};
-  }
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: ${props => props.active ? '#E74C3C' : '#f0f0f0'};
+    color: ${props => props.active ? 'white' : '#333'};
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
 `;
 
 export const NavButton = styled.button`
-  border: none;
-  background: transparent;
-  font-size: 0.7rem;
-  color: #676767;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+    border: none;
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    padding: 0 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
