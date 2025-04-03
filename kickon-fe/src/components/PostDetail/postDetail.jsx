@@ -5,8 +5,8 @@ import {
     ArticleText, ArticleActions, LikeButton, TimeLabel, ViewLabel,
     CommentInputBox, CommentInputLabel, CommentInput, SubmitButton,
     CommentsSection, CommentItem, CommentHeader, CommentContent,
-    CommentActions, CommentLikes, ReplyButton, PaginationWrapper,
-    PageButton, NavButton, CommentInputContainer, CommentsSectionTitle, CommentHeaderWrapper, MoreButton
+    CommentActions, CommentLikes, ReplyButton,
+    CommentInputContainer, CommentsSectionTitle, CommentHeaderWrapper, MoreButton
 } from './postDetail.style.js';
 import RKickIcon from "../../assets/good_red.svg"
 import BKickIcon from "../../assets/good_black.svg"
@@ -15,6 +15,7 @@ import ProfileIcon from "../../assets/profile.svg"
 import { FaRegComment } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { MdExpandMore } from "react-icons/md";
+import Pagination from "../Pagination/pagination"
 
 
 const PostDetail = () => {
@@ -153,23 +154,7 @@ const PostDetail = () => {
                 ))}
             </CommentsSection>
 
-            <PaginationWrapper>
-                <NavButton onClick={() => setActivePage(prev => Math.max(prev - 1, 1))}>
-                    {'<'} 이전
-                </NavButton>
-                {Array.from({ length: 10 }, (_, i) => (
-                    <PageButton
-                        key={i + 1}
-                        active={activePage === i + 1}
-                        onClick={() => setActivePage(i + 1)}
-                    >
-                        {i + 1}
-                    </PageButton>
-                ))}
-                <NavButton onClick={() => setActivePage(prev => Math.min(prev + 1, 10))}>
-                    다음 {'>'}
-                </NavButton>
-            </PaginationWrapper>
+            <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={10}/>
         </ArticleContainer>
     );
 };

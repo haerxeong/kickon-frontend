@@ -1,13 +1,14 @@
 // 임시 커뮤니티 페이지
 import React, {useState} from 'react';
 import {
-    NavButton, NewsContainer, PageButton, Pagination, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
+    NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
     PostItem, PostLikes,
     PostsWrapper,
-    PostTitle, PostViews, PaginationWrapper
+    PostTitle, PostViews
 } from "./community.style.js";
 import GoodIcon from "../../assets/good_black.svg"
 import ProfileIcon from "../../assets/profile.svg";
+import Pagination from "../../components/Pagination/pagination"
 
 function AuthorIcon(props) {
     return null;
@@ -83,23 +84,7 @@ const Community = () => {
             </PostsWrapper>
 
             {/* ✅ Pagination을 컨테이너 내부에 위치시키기 */}
-            <PaginationWrapper>
-                <NavButton onClick={() => setActivePage(prev => Math.max(prev - 1, 1))}>
-                    {'<'} 이전
-                </NavButton>
-                {Array.from({ length: 10 }, (_, i) => (
-                    <PageButton
-                        key={i + 1}
-                        active={activePage === i + 1}
-                        onClick={() => setActivePage(i + 1)}
-                    >
-                        {i + 1}
-                    </PageButton>
-                ))}
-                <NavButton onClick={() => setActivePage(prev => Math.min(prev + 1, 10))}>
-                    다음 {'>'}
-                </NavButton>
-            </PaginationWrapper>
+            <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={10}/>
         </NewsContainer>
     );
 }
