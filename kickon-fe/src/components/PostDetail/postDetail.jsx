@@ -10,7 +10,7 @@ import {
 } from './postDetail.style.js';
 import RKickIcon from "../../assets/good_red.svg"
 import BKickIcon from "../../assets/good_black.svg"
-import KickIcon from "../../assets/good.png"
+import KickIcon from "../../assets/good.svg"
 import ProfileIcon from "../../assets/profile.svg"
 import { FaRegComment, FaCheckCircle } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
