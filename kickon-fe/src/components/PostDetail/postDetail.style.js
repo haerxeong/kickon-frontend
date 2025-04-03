@@ -29,7 +29,7 @@ export const ArticleInfo = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.583rem;
     color: #666;
 `;
 
@@ -44,8 +44,8 @@ export const VerifiedIcon = styled.span`
 export const ArticleMeta = styled.div`
     margin-left: auto;
     display: flex;
-    gap: 1rem;
-    font-size: 0.85rem;
+    gap: 0.5rem;
+    font-size: 0.583rem;
     color: #777;
 `;
 
@@ -98,13 +98,13 @@ export const LikeButton = styled.button`
 `;
 
 export const TimeLabel = styled.span`
-    font-size: 0.8rem;
+    font-size: 0.583rem;
     color: #888;
     margin-right: 5px;
 `;
 
 export const ViewLabel = styled.span`
-    font-size: 0.8rem;
+    font-size: 0.583rem;
     color: #888;
     margin-left: 5px;
 `;
