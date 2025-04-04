@@ -14,12 +14,6 @@ const NewsMainPage = () => {
     const tabs = ["전체", "인기", "FC서울"];
     const leagues = League;
 
-    const dummyNews = Array(10).fill().map((_, i) => ({
-        id: i + 1,
-        title: `뉴스 제목 ${i + 1}`,
-        date: "2025.04.02"
-    }));
-
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -28,13 +22,7 @@ const NewsMainPage = () => {
         setActiveTab(tab);
     };
 
-    const handlePageChange = (page) => {
-        if (page < 1 || page > totalPages) return;
-        setActivePage(page);
-    };
-
     const totalPages = 10;
-    const pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
 
     return (
         <S.Container>
@@ -81,7 +69,7 @@ const NewsMainPage = () => {
                     ))}
                 </S.NewsList>
 
-                <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={10} />
+                <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={totalPages} />
             </S.NewsContainer>
         </S.Container>
     );
