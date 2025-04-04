@@ -10,6 +10,7 @@ const NewsMainPage = () => {
     const [activeTab, setActiveTab] = useState("전체");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [activePage, setActivePage] = useState(1);
+    const [selectedLeague, setSelectedLeague] = useState("리그 선택");
 
     const tabs = ["전체", "인기", "FC서울"];
     const leagues = League;
@@ -20,6 +21,11 @@ const NewsMainPage = () => {
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
+    };
+
+    const handleLeagueSelect = (league) => {
+        setSelectedLeague(league.krName);
+        setIsDropdownOpen(false);
     };
 
     const totalPages = 10;
@@ -40,14 +46,14 @@ const NewsMainPage = () => {
 
                     <S.DropdownContainer>
                         <S.TabSelector onClick={toggleDropdown} selected={isDropdownOpen}>
-                            <span>리그 선택</span>
+                            <span>{selectedLeague}</span>
                             <IoIosArrowDown size="0.7rem" color="#8F8F8F" />
                         </S.TabSelector>
 
                         {isDropdownOpen && (
                             <S.DropdownMenu>
                                 {leagues.map(league => (
-                                    <S.TabOption key={league.pk}>
+                                    <S.TabOption key={league.pk} onClick={() => handleLeagueSelect(league)}>
                                         <S.LeagueImage src={league.logoUrl} alt={league.krName} />
                                         <S.LeagueName>{league.krName}</S.LeagueName>
                                     </S.TabOption>

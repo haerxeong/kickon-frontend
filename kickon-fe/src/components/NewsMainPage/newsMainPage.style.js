@@ -44,7 +44,7 @@ export const DropdownContainer = styled.div`
 export const TabSelector = styled.div`
     // 리그 선택 탭
     display: flex;
-    width: 3.5rem;
+    width: auto;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
@@ -59,6 +59,7 @@ export const TabSelector = styled.div`
         font-size: 0.7rem;
         font-style: normal;
         line-height: 0.7rem;
+        margin-right: 0.2rem;
     }
 `;
 
