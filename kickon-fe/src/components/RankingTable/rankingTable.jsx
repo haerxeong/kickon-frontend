@@ -1,4 +1,3 @@
-// rankingTable.jsx
 import React, { useState } from "react";
 import {
     TableContainer,
@@ -52,16 +51,16 @@ const RankingTable = ({ title, rankings, type = "season" }) => {
                 </HeaderRow>
                 </thead>
                 <tbody>
-                {rankings.map((item, index) => (
+                {rankings.slice(0, 10).map((item, index) => (
                     <TableRow key={index}>
-                        <TableData>{item.rank}</TableData>
+                        <TableData>{item.rankOrder}</TableData>
                         <TeamCell>
-                            <TeamLogo src="../../assets/sample_img.png" alt={`${item.team} logo`} />
-                            <TeamName>{item.team}</TeamName>
+                            <TeamLogo src={item.teamLogoUrl} alt={`${item.teamName} logo`} />
+                            <TeamName>{item.teamName}</TeamName>
                         </TeamCell>
-                        <TableData>{item.games}</TableData>
+                        <TableData>{item.gameNum}</TableData>
                         <TableData>{item.points}</TableData>
-                        {type === "season" && <TableData>{item.goals}</TableData>}
+                        {type === "season" && <TableData>{item.wonScores}</TableData>}
                     </TableRow>
                 ))}
                 </tbody>

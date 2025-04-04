@@ -7,7 +7,7 @@ import Profile from "../components/Profile/profile";
 import TopNews from "../components/TopNews/topNews";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
-import { currentSeasonRankings, predictionRankings } from "../mocks/rankings.js";
+import {rankings} from "../mocks/rankings.js";
 import CommunityBoard from "../components/CommunityBoard/communityBoard.jsx";
 
 const Layout = styled.div`
@@ -52,7 +52,7 @@ const RightColumn = styled.div`
     flex-direction: column;
     gap: 1rem;
     margin-right: 12rem; /* 오른쪽 여백 */
-    align-items: flex-end;
+    //align-items: flex-end;
 `;
 
 const StyledMainBanner = styled(MainBanner)`
@@ -82,8 +82,8 @@ const RootLayout = () => {
                     <ContentWrapper>
                         {/* 왼쪽: 랭킹 테이블 */}
                         <LeftColumn>
-                            <RankingTable title="이번 시즌 순위" rankings={currentSeasonRankings} type="season" />
-                            <RankingTable title="승부예측 순위" rankings={predictionRankings} type="prediction" />
+                            <RankingTable title="이번 시즌 순위" rankings={rankings} type="season" />
+                            <RankingTable title="승부예측 순위" rankings={rankings} type="prediction" />
                         </LeftColumn>
 
                         {/* 중앙: 페이지별 메인 콘텐츠 */}

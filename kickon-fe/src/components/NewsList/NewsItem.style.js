@@ -62,7 +62,7 @@ export const Nickname = styled.span`
   color: black;
 `;
 
-export const Time = styled.span`
+export const StyledTime = styled.span`
   color: #8c8c8c;
 `;
 

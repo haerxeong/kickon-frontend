@@ -1,6 +1,7 @@
 import MatchCard from "../../components/MatchCard/matchCard";
 import CommunityBoard from "../../components/CommunityBoard/communityBoard";
 import NewsList from "../../components/NewsList/NewsList";
+import * as S from "./home.style";
 
 const Home = () => {
     return (
@@ -8,6 +9,7 @@ const Home = () => {
             <MatchCard/>
             <NewsList/>
             <CommunityBoard/>
+            <S.Spacer />
         </>
     );
 }
