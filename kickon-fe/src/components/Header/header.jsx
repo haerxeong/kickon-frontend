@@ -1,31 +1,48 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import {
-    HeaderWrapper,
-    Logo,
-    NavMenu,
-    NavItem,
-} from "./header.style";
+import {Link, useLocation} from "react-router-dom";
+import * as S from "./header.style";
 import DarkLogoImage from "../../assets/logo_black.svg"; // 로고 이미지 경로
 import LogoImage from "../../assets/logo_white.svg";
 
 const Header = ({isDark}) => {
+    const location = useLocation();
+    const currentPath = location.pathname;
+
     return (
-        <HeaderWrapper isDark={isDark}>
-            {/* 로고 */}
-            <Logo>
+        <S.HeaderWrapper isDark={isDark}>
+            <S.Logo>
                 <Link to="/">
                     <img src={isDark ? LogoImage : DarkLogoImage} alt="Logo" />
                 </Link>
-            </Logo>
+            </S.Logo>
 
-            {/* 네비게이션 메뉴 */}
-            <NavMenu>
-                <NavItem to="/news" isDark={isDark}>뉴스</NavItem>
-                <NavItem to="/community" isDark={isDark}>클럽 커뮤니티</NavItem>
-            </NavMenu>
-        </HeaderWrapper>
+            <S.NavItem
+                to="/news"
+                isDark={isDark}
+                currentPath={currentPath}
+                itemPath="/news"
+            >
+                뉴스
+            </S.NavItem>
+
+            <S.NavItem
+                to="/community"
+                isDark={isDark}
+                currentPath={currentPath}
+                itemPath="/community"
+            >
+                클럽 커뮤니티
+            </S.NavItem>
+
+            <S.LoginButton
+                to="/login"
+                currentPath={currentPath}
+            >
+                로그인
+            </S.LoginButton>
+        </S.HeaderWrapper>
     );
 };
+
 
 export default Header;

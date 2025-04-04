@@ -3,30 +3,67 @@ import { Link } from "react-router-dom";
 
 export const HeaderWrapper = styled.header`
     display: flex;
+    height: 3.15rem;
     align-items: center;
     background-color: ${(props) => (props.isDark ? "#363636" : "#fff")};
-    padding: 0.4rem 10rem; /* 좌우 여백 */
-    border-bottom: 0.1rem solid #ddd; /* 하단 경계선 */
+    flex-shrink: 0;
 `;
 
 export const Logo = styled.div`
-    /* 로고가 왼쪽에 위치하도록 설정 */
-    margin-right: 4rem; /* 로고와 첫 번째 NavItem 사이 간격 */
+    margin: 0 4rem 0 12.25rem;
 
     a img {
-        height: 2.5rem; /* 로고 이미지 높이 */
+        height: 2.1rem; /* 로고 이미지 높이 */
         width: auto;
     }
 `;
 
-export const NavMenu = styled.nav`
-    display: flex;
+export const NavItem = styled(Link)`
+    margin-left: 4rem;
+    font-size: 0.85rem;
+    font-weight: 400;
+    text-decoration: none;
+    color: ${(props) => {
+    const { currentPath, itemPath } = props;
+
+    // Case 1: Home - both #000
+    if (currentPath === "/") return "#000";
+
+    // Case 2: News - News #FFF, Club Community #8F8F8F
+    if (currentPath.includes("/news")) {
+        return itemPath === "/news" ? "#FFF" : "#8F8F8F";
+    }
+
+    // Case 3: Club Community #FFF, News #8F8F8F
+    if (currentPath.includes("/community")) {
+        return itemPath === "/community" ? "#FFF" : "#8F8F8F";
+    }
+
+    // Case 4: Signup - same as profile settings (both #FFF)
+    if (currentPath === "/signup") return "#FFF";
+
+    // Default (fallback) using isDark prop
+    return props.isDark ? "#FFF" : "#000";
+}};
 `;
 
-export const NavItem = styled(Link)`
-    margin-left: 4rem; /* 네비게이션 아이템 간 간격 */
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none; /* 밑줄 제거 */
-    color: ${(props) => (props.isDark ? "#FFFFFF" : "#222")};
+export const LoginButton = styled(Link)`
+    display: ${(props) => (props.currentPath === "/signup" ? "flex" : "none")};
+    position: absolute;
+    right: 12.5rem;
+    height: 1.7rem;
+    padding: 0.4375rem 0.7875rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4375rem;
+    border-radius: 0.875rem;
+    border: 1px solid #DCDCDC;
+    background: #FFF;
+    color: #C00C0B;
+    text-align: right;
+    font-size: 0.7875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem; /* 133.333% */
+    text-decoration: none;
 `;
