@@ -11,6 +11,39 @@ export const ArticleContainer = styled.div`
     position: relative;
 `;
 
+export const ArticleLabel = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2.37rem;
+    margin-left: 1.3rem;
+`
+export const ArticleTeam = styled.img`
+    display: flex;    
+    width: 0.6rem;
+    justify-content: center;
+    align-items: center;
+`
+export const ArticleCategory = styled.div`
+    display: flex;
+    height: 1.07rem;
+    padding: 0.125rem 0.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    
+    border-radius: 1.25rem;
+    background: var(--Black-black_900, #000);
+
+    color: var(--sub1, #FFF);
+    /* Caption/cap1_Pre_m_12px */
+    font-family: Pretendard;
+    font-size: 0.53rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+`
+
 export const ArticleHeader = styled.div`
     display: flex;
     flex-direction: column;
@@ -33,14 +66,6 @@ export const ArticleInfo = styled.div`
     color: #666;
 `;
 
-export const VerifiedIcon = styled.span`
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #1da1f2;
-    margin-left: 2px;
-`;
-
 export const ArticleMeta = styled.div`
     margin-left: auto;
     display: flex;
@@ -54,14 +79,19 @@ export const ArticleContent = styled.div`
 `;
 
 export const ArticleImage = styled.img`
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+    width: 28.5rem;
+    height: 14.14rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 0.625rem;
+    margin: 0.7rem;
 `;
 
 export const ArticleText = styled.p`
-    padding: 16px;
-    margin: 0;
+    margin: 0.7rem;
+    margin-bottom: 5.38rem;
     font-size: 0.718rem;
     line-height: 1.6;
     color: #333;
@@ -77,20 +107,25 @@ export const ArticleActions = styled.div`
 
 export const LikeButton = styled.button`
     display: flex;
-    width: 4.308rem;
     height: 1.68rem;
     padding: 0.125rem 0.75rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.4rem;
     flex-shrink: 0;
     border: none;
     border-radius: 0.5rem;
-    background: rgba(192, 12, 11, 0.90);
-    /* Button/킥_레드_20% */
-    box-shadow: 0px 2px 10px 0px rgba(217, 25, 32, 0.20);
-    font-size: 0.7rem;
-    color: white;
+    background: ${({ isLiked }) => (isLiked ? 'rgba(192, 12, 11, 0.90)' : 'white')};
+    box-shadow: ${({ isLiked }) => (isLiked ? '0px 2px 10px 0px rgba(217, 25, 32, 0.20)' : '0px 2px 10px 0px rgba(0, 0, 0, 0.20)')};
+    font-size: 0.65rem;
+    color: ${({ isLiked }) => (isLiked ? 'white' : 'black')};
+    cursor: pointer;
+
+
+
+    &:hover .likes {
+        color: ${({ isLiked }) => (isLiked ? 'white' : 'var(--Primary-primary_900, #C00C0B)')};
+    }
 
     & svg {
         margin-right: 6px;
@@ -222,7 +257,7 @@ export const CommentHeader = styled.div`
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 6px;
+    margin-bottom: 0.1rem;
 `;
 export const CommentLikes = styled.button`
     display: flex;
