@@ -139,7 +139,16 @@ export const ActiveIndicator = styled.div`
 `;
 
 export const NewsList = styled.div`
-  margin-top: 2.65rem;
+  margin-top: 1rem;
+        /* 첫 번째 아이템을 제외한 모든 아이템에 상단 간격 추가 */
+        & > div + div {
+                margin-top: 1rem;
+        }
+
+        /* 마지막 아이템의 하단 테두리 제거 */
+        & > div:last-child {
+                border-bottom: none;
+        }
 `;
 
 export const NewsItem = styled.div`

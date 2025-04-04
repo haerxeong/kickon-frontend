@@ -3,6 +3,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import * as S from "./newsMainPage.style";
 import { League } from "../../mocks/league.js";
 import Pagination from "../Pagination/pagination.jsx";
+import {newsList} from "../../mocks/newsList.js";
+import NewsItem from "../NewsList/NewsItem.jsx";
 
 const NewsMainPage = () => {
     const [activeTab, setActiveTab] = useState("전체");
@@ -74,11 +76,8 @@ const NewsMainPage = () => {
                 </S.Divider>
 
                 <S.NewsList>
-                    {dummyNews.map(news => (
-                        <S.NewsItem key={news.id}>
-                            <S.NewsTitle>{news.title}</S.NewsTitle>
-                            <S.NewsDate>{news.date}</S.NewsDate>
-                        </S.NewsItem>
+                    {newsList.map((item, index) => (
+                        <NewsItem key={index} {...item} />
                     ))}
                 </S.NewsList>
 
