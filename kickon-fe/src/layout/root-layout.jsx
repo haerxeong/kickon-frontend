@@ -4,6 +4,7 @@ import Header from "../components/Header/header";
 import MainBanner from "../components/MainBanner/mainBanner";
 import RankingTable from "../components/RankingTable/rankingTable";
 import Profile from "../components/Profile/profile";
+import TopNews from "../components/TopNews/topNews";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
 import {rankings} from "../mocks/rankings.js";
@@ -93,6 +94,7 @@ const RootLayout = () => {
                         {/* 오른쪽: 프로필 */}
                         <RightColumn>
                             <Profile />
+                            <TopNews />
                         </RightColumn>
                     </ContentWrapper>
                 )}
