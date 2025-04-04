@@ -8,7 +8,7 @@ export const Container = styled.div`
 
 export const NewsContainer = styled.div`
   width: 30rem;
-  height: 116.2rem;
+  //height: 116.2rem;
   flex-shrink: 0;
   border-radius: 0.44rem;
   border: 1px solid #DCDCDC;
@@ -39,46 +39,42 @@ export const DropdownContainer = styled.div`
   position: relative;
 `;
 
-export const DropdownButton = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  font-size: 0.663rem;
-  font-style: normal;
-  line-height: 0.7rem;
-  font-weight: 400;
-  color: #000;
-  
-  span {
-    margin-right: 0.7rem;
-  }
+export const TabSelector = styled.div`
+    // 리그 선택 탭
+    display: flex;
+    width: 3.5rem;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 0.37rem;
+    background: #FFF;
+    font-size: 0.65rem;
+    cursor: pointer;
+
+    span {
+        color: #000;
+        font-weight: 400;
+        font-size: 0.7rem;
+        font-style: normal;
+        line-height: 0.7rem;
+    }
 `;
 
 export const DropdownMenu = styled.div`
-  width: 8.8rem;
-  position: absolute;
-  z-index: 10;
-  top: 0.44rem;
-  left: 0;
-  background: white;
-  border: 1px solid #DCDCDC;
-  border-radius: 0.2rem;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.20);
-  display: flex;
-  height: 10rem;
-  padding: 0.35rem 0rem;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0.35rem;
-  align-self: stretch;
-`;
-
-export const DropdownItem = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.35rem 0;
-  width: 100%;
+    // 드롭다운 컨테이너
+    position: absolute;
+    width: 8.8rem;
+    z-index: 10;
+    margin-top: 0.4rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.35rem;
+    align-self: stretch;
+    border-radius: 0.4375rem;
+    border: 0.7px solid #F0F0F0;
+    background: #FFF;
+    box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 0.20);
 `;
 
 export const LeagueImage = styled.img`
@@ -96,6 +92,28 @@ export const LeagueName = styled.span`
   line-height: 0.7rem;
 `;
 
+export const TabOption = styled.div`
+    // 드롭다운 각 리그
+    width: 100%;
+    color: #000;
+    font-size: 0.65rem;
+    padding: 0.3rem 0;
+    cursor: pointer;
+    align-items: center;
+
+    &:hover {
+        background-color: #F0F0F0;
+
+        ${LeagueName} {
+            font-weight: 400;
+        }
+    }
+
+    & + & {
+        border-top: 1px solid #F0F0F0;
+    }
+`;
+
 export const Divider = styled.div`
   width: 100%;
   height: 0rem;
@@ -111,7 +129,7 @@ export const ActiveIndicator = styled.div`
   position: absolute;
   top: -1px;
   width: 1.85rem;
-  height: 0rem;
+  height: 0;
   stroke-width: 2px;
   stroke: #C00C0B;
   border-bottom: 2px solid #C00C0B;
