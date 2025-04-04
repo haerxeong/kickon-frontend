@@ -69,7 +69,7 @@ const NewsMainPage = () => {
 
                 <S.Divider>
                     {tabs.indexOf(activeTab) >= 0 && (
-                        <S.ActiveIndicator style={{ left: `${tabs.indexOf(activeTab) * 28 + 14}px` }} />
+                        <S.ActiveIndicator left={`${tabs.indexOf(activeTab) * 3 + 0.7}rem`} />
                     )}
                 </S.Divider>
 

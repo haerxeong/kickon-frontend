@@ -26,6 +26,7 @@ export const NavContainer = styled.div`
 `;
 
 export const TabButton = styled.div`
+    // 전체, 인기 등 탭 버튼
   margin-right: 0.7rem;
   text-align: center;
   font-size: 0.7rem;
@@ -33,6 +34,7 @@ export const TabButton = styled.div`
   line-height: 0.7rem;
   font-weight: ${props => props.isActive ? '500' : '400'};
   color: ${props => props.isActive ? '#C00C0B' : '#000'};
+  cursor: pointer;
 `;
 
 export const DropdownContainer = styled.div`
@@ -126,13 +128,14 @@ export const Divider = styled.div`
 `;
 
 export const ActiveIndicator = styled.div`
-  position: absolute;
-  top: -1px;
-  width: 1.85rem;
-  height: 0;
-  stroke-width: 2px;
-  stroke: #C00C0B;
-  border-bottom: 2px solid #C00C0B;
+    position: absolute;
+    top: -1px;
+    width: 1.85rem;
+    height: 0;
+    stroke-width: 2px;
+    stroke: #C00C0B;
+    border-bottom: 2px solid #C00C0B;
+    left: ${props => props.left};
 `;
 
 export const NewsList = styled.div`
