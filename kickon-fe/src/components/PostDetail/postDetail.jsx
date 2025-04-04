@@ -58,6 +58,7 @@ const PostDetail = () => {
             "nameEn": "Jeonnam Dragons",
             "logoUrl": "https://media.api-sports.io/football/teams/40.png"
         },
+        badge: "부상",
         createdAt: "2025-04-03T15:11:07.010Z",
         views: 120,
         likes: 45,
@@ -84,7 +85,7 @@ const PostDetail = () => {
             {location.pathname === "/news/detail" &&
                 <ArticleLabel>
                     <ArticleTeam src={post.team.logoUrl}/>
-                    <ArticleCategory>부상</ArticleCategory>
+                    <ArticleCategory>{post.badge}</ArticleCategory>
                 </ArticleLabel>}
             <ArticleHeader>
                 <ArticleTitle>{post.title}</ArticleTitle>

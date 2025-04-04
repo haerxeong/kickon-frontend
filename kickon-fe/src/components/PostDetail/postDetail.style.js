@@ -26,7 +26,6 @@ export const ArticleTeam = styled.img`
 `
 export const ArticleCategory = styled.div`
     display: flex;
-    width: 1.83rem;
     height: 1.07rem;
     padding: 0.125rem 0.625rem;
     justify-content: center;
