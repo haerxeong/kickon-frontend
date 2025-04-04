@@ -51,7 +51,7 @@ const RightColumn = styled.div`
     flex-direction: column;
     gap: 1rem;
     margin-right: 12rem; /* 오른쪽 여백 */
-    align-items: flex-end;
+    //align-items: flex-end;
 `;
 
 const StyledMainBanner = styled(MainBanner)`
