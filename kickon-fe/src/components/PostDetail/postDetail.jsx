@@ -26,6 +26,7 @@ const PostDetail = () => {
     // const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activePage, setActivePage] = useState(1);
     const [likedComments, setLikedComments] = useState({});
+    const [isLiked, setIsLiked] = useState(false);
     // const menuRef = useRef(null);
 
     // const handleClickOutside = (e) => {
@@ -105,9 +106,10 @@ const PostDetail = () => {
             </ArticleContent>
 
             <ArticleActions>
-                <LikeButton>
+                <LikeButton isLiked={isLiked} onClick={() => setIsLiked(!isLiked)}>
                     <img src={BKickIcon} alt="킥 아이콘" width={14} height={14} />
-                    킥
+                    <span>킥</span>
+                    <span className="likes">{post.likes}</span>
                 </LikeButton>
             </ArticleActions>
 

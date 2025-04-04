@@ -108,20 +108,25 @@ export const ArticleActions = styled.div`
 
 export const LikeButton = styled.button`
     display: flex;
-    width: 4.308rem;
     height: 1.68rem;
     padding: 0.125rem 0.75rem;
     justify-content: center;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.4rem;
     flex-shrink: 0;
     border: none;
     border-radius: 0.5rem;
-    background: rgba(192, 12, 11, 0.90);
-    /* Button/킥_레드_20% */
-    box-shadow: 0px 2px 10px 0px rgba(217, 25, 32, 0.20);
-    font-size: 0.7rem;
-    color: white;
+    background: ${({ isLiked }) => (isLiked ? 'rgba(192, 12, 11, 0.90)' : 'white')};
+    box-shadow: ${({ isLiked }) => (isLiked ? '0px 2px 10px 0px rgba(217, 25, 32, 0.20)' : '0px 2px 10px 0px rgba(0, 0, 0, 0.20)')};
+    font-size: 0.65rem;
+    color: ${({ isLiked }) => (isLiked ? 'white' : 'black')};
+    cursor: pointer;
+
+
+
+    &:hover .likes {
+        color: ${({ isLiked }) => (isLiked ? 'white' : 'var(--Primary-primary_900, #C00C0B)')};
+    }
 
     & svg {
         margin-right: 6px;
@@ -253,7 +258,7 @@ export const CommentHeader = styled.div`
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 6px;
+    margin-bottom: 0.1rem;
 `;
 export const CommentLikes = styled.button`
     display: flex;
