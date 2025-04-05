@@ -8,56 +8,67 @@ import TopNews from "../components/TopNews/topNews";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
 import {rankings} from "../mocks/rankings.js";
-import CommunityBoard from "../components/CommunityBoard/communityBoard.jsx";
 
+// 전체 레이아웃 Wrapper
 const Layout = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: ${props => props.isHomePage ? "#363636" : "#F8F8F8"};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: ${props => props.isHomePage ? "#363636" : "#F8F8F8"};
 `;
 
+// 메인 영역
 const MainContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem; /* 20px */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem 1rem;
 `;
 
+// 좌/중앙/우측 컬럼 묶는 wrapper
 const ContentWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    //width: 59rem; /* 전체 콘텐츠 너비 */
-    gap: 1rem; /* 컬럼 간 여백 */
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: calc(15rem + 1rem + 30rem + 1rem + 15rem + 24.5rem); // 총 여백 포함
+  padding: 0 12.25rem;
+  box-sizing: border-box;
+
+  @media (max-width: 1200px) {
+    padding: 0 2rem;
+  }
 `;
 
+// 개별 컬럼 스타일
 const LeftColumn = styled.div`
-    //width: 13.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-left: 12rem; /* 왼쪽 여백 */
+  width: 15rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 `;
 
 const MainContent = styled.main`
-    display: flex;
-    flex-direction: column;
-    width: 30rem; /* 메인 콘텐츠 너비 */
-    gap: 1rem;
+  width: 30rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 `;
 
 const RightColumn = styled.div`
-    //width: 13.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-right: 12rem; /* 오른쪽 여백 */
-    //align-items: flex-end;
+  width: 15rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 `;
 
+// 메인 배너
 const StyledMainBanner = styled(MainBanner)`
+    width: 100%;
     max-width: 100%;
-`;
+`
 
 const RootLayout = () => {
     const location = useLocation();
@@ -70,7 +81,6 @@ const RootLayout = () => {
         <Layout isHomePage={isHomePage}>
             <Header isDark={isDark} />
 
-            {/* 홈 화면일 때만 배너 표시 */}
             {isHomePage && <StyledMainBanner />}
 
             <MainContainer>
@@ -80,18 +90,15 @@ const RootLayout = () => {
                     </MainContent>
                 ) : (
                     <ContentWrapper>
-                        {/* 왼쪽: 랭킹 테이블 */}
                         <LeftColumn>
                             <RankingTable title="이번 시즌 순위" rankings={rankings} type="season" />
                             <RankingTable title="승부예측 순위" rankings={rankings} type="prediction" />
                         </LeftColumn>
 
-                        {/* 중앙: 페이지별 메인 콘텐츠 */}
                         <MainContent>
                             <Outlet />
                         </MainContent>
 
-                        {/* 오른쪽: 프로필 */}
                         <RightColumn>
                             <Profile />
                             <TopNews />
@@ -100,7 +107,6 @@ const RootLayout = () => {
                 )}
             </MainContainer>
 
-            {/* 홈 또는 회원가입일 때 Footer 표시 */}
             {(isHomePage || isSignupPage) && <Footer isDark={isSignupPage} />}
         </Layout>
     );
