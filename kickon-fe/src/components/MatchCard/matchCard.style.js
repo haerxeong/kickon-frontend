@@ -127,6 +127,13 @@ export const MatchButton = styled.button`
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0.2rem;
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
 
     &:not(:last-child) {
         border-right: 1px solid #F0F0F0;
@@ -153,6 +160,63 @@ export const MatchButton = styled.button`
     &:not(:first-child):not(:last-child) {
         border-radius: 0;
     }
+`;
+
+export const TeamContainer = styled.div`
+    display: flex;
+    width: 100%;
+    align-items: center;
+`;
+
+export const TeamLeftContainer = styled(TeamContainer)`
+    justify-content: flex-start;
+    margin-left: 0.71rem;
+`;
+
+export const TeamCenterContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+`;
+
+export const TeamRightContainer = styled(TeamContainer)`
+    justify-content: flex-end;
+    margin-right: 0.71rem;
+`;
+
+export const TeamNameContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0.36rem;
+`;
+
+export const TeamRightNameContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 0.36rem;
+`;
+
+export const TeamLogo = styled.img`
+    width: 0.98rem;
+    height: 0.98rem;
+    object-fit: contain;
+    margin-bottom: 0.1rem;
+`;
+
+export const TeamName = styled.span`
+    font-size: ${props => props.small ? '0.62rem' : '0.673rem'};
+    font-weight: 500;
+    font-family: Pretendard;
+    text-align: center;
+`;
+
+export const ParticipationPercentage = styled.span`
+    font-size: 0.449rem;
+    font-weight: 400;
+    font-family: Pretendard;
 `;
 
 export const ExtraContentRight = styled.div`
