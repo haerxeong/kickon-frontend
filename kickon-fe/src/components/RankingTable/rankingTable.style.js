@@ -35,7 +35,7 @@ export const LeagueSelector = styled.div` // k리그
     color: #000;
     cursor: pointer;
     gap: 0.28rem;
-        padding: 0 0.75rem;
+    padding: 0 0.75rem;
 
     & > span {
         font-size: 0.6475rem;
@@ -101,43 +101,44 @@ export const TabOption = styled.div`
 
 export const Table = styled.table` // 각 행
     width: 100%;
-        display: flex;
+    display: flex;
     border-collapse: collapse;
-        flex-direction: column;
-        align-self: stretch;
-        padding: 0 0.75rem
+    flex-direction: column;
+    align-self: stretch;
+    padding: 0 0.75rem
 `;
 
 export const HeaderRow = styled.tr`
-        display: grid;
-        grid-template-columns: 1.66rem auto 1.2rem 1.2rem 1.2rem; // ✅ 데이터와 같은 너비
-        align-items: center;
-        padding: 0.25rem 0;
-        column-gap: 0.35rem;
+    display: grid;
+    grid-template-columns: 1.66rem auto 1.2rem 1.2rem 1.2rem; // ✅ 데이터와 같은 너비
+    align-items: center;
+    padding: 0.25rem 0;
+    column-gap: 0.35rem;
 `;
 
 export const TableHeader = styled.th`
     text-align: center;
     font-weight: normal;
     color: #676767;
-    font-size: 0.6rem;
+    font-size: 0.62rem;
+    padding-bottom: 0.75rem;
 `;
 
 export const TableRow = styled.tr`
     display: grid;
     grid-template-columns: 1.66rem auto 1.2rem 1.2rem 1.2rem;
     align-items: center;
-    padding: 0.25rem 0;
-        column-gap: 0.35rem;
+    padding: 0.2rem 0;
+    column-gap: 0.35rem;
 `;
 
 export const TableData = styled.td`
     color: #000;
-        font-size: 0.6rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 1.125rem;
-        text-align: center;
+    font-size: 0.65rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.125rem;
+    text-align: center;
 `;
 
 export const TeamCell = styled.td`
