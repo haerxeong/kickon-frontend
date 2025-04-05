@@ -22,11 +22,11 @@ const user = {
 
 
 const Profile = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
 
     return isLoggedIn ? (
-        <UserCard onLogout={() => setIsLoggedIn(true)} />
+        <UserCard onLogout={() => setIsLoggedIn(false)} />
     ) : (
         <ProfileContainer>
             <LogoImage src={Logo} alt="프로필 이미지" />
