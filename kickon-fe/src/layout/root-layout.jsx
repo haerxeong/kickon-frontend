@@ -22,7 +22,7 @@ const MainContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 0.7rem;
 `;
 
 // 좌/중앙/우측 컬럼 묶는 wrapper
