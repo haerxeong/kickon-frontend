@@ -50,7 +50,7 @@ export const DropdownMenu = styled.div`
     position: absolute;
     width: 8.8rem;
     z-index: 10;
-    margin-top: 0.4rem;
+    margin: 0.4rem 0 0 0.4rem;
     flex-direction: column;
     justify-content: center;
     align-items: center;
