@@ -6,7 +6,8 @@ import kakaoLogo from "../../assets/kakao.svg";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { BsBan } from "react-icons/bs";
-import ProfileCamera from "../../assets/profile_camera.png";
+import ProfileImageDefault from "../../assets/profile.png";
+import CameraIcon from "../../assets/camera.png";
 
 const ProfileSettings = () => {
   const [nickname, setNickname] = useState("");
@@ -16,7 +17,7 @@ const ProfileSettings = () => {
   const [teamOptions, setTeamOptions] = useState([]);
   const [isLeagueDropdownOpen, setIsLeagueDropdownOpen] = useState(false);
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(ProfileCamera);
+  const [profileImage, setProfileImage] = useState(ProfileImageDefault);
   const fileInputRef = React.useRef(null);
 
   const leagues = League;
@@ -45,7 +46,7 @@ const ProfileSettings = () => {
       reader.onload = (e) => {
         setProfileImage(e.target.result);
       };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
     }
   };
 
@@ -79,17 +80,24 @@ const ProfileSettings = () => {
   );
 
   return (
-      <S.ProfileSettingsContainer>
-        <S.ProfileImageWrapper onClick={handleImageClick}>
-          <S.ProfileImage src={profileImage} alt="Profile" isUpdated={profileImage !== ProfileCamera} />
-          <input
+    <S.ProfileSettingsContainer>
+      <S.ProfileImageWrapper>
+        <S.ProfileImageContainer>
+          <S.ProfileImage src={profileImage} alt="Profile" />
+          <S.CameraIcon 
+            src={CameraIcon} 
+            alt="Change profile picture"
+            onClick={handleImageClick}
+          />
+        </S.ProfileImageContainer>
+        <input
           type="file"
           ref={fileInputRef}
           onChange={handleImageChange}
+          style={{ display: "none" }}
           accept="image/*"
-          style={{ display: 'none' }}
-          />
-        </S.ProfileImageWrapper>
+        />
+      </S.ProfileImageWrapper>
 
         <S.InputGroup>
           <S.InputLabel>닉네임</S.InputLabel>

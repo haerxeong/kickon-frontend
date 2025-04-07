@@ -22,20 +22,6 @@ export const ProfileImageWrapper = styled.div`
   cursor: pointer;
 `;
 
-export const ProfileImage = styled.img`
-  width: 4rem;
-  height: 4rem;
-  transition: opacity 0.2s ease;
-  ${props => props.isUpdated && `
-    border-radius: 50%;
-    object-fit: cover;
-  `}
-  
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
 export const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -293,4 +279,31 @@ export const InputField = styled.input`
     css`
       border-color: #ff0005;
     `}
+`;
+
+export const ProfileImageContainer = styled.div`
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+`;
+
+export const ProfileImage = styled.img`
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const CameraIcon = styled.img`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  
+  &:hover {
+    opacity: 0.8;
+  }
 `;
