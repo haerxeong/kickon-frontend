@@ -17,7 +17,7 @@ export const FloatingButton = styled.button`
     width: 2.7rem;
     height: 2.7rem;
     overflow: hidden;
-    position: relative; /* Added position relative */
+    position: relative;
 
     &:hover {
         width: 15rem;
@@ -31,22 +31,22 @@ export const Icon = styled.div`
     font-size: 1.3rem;
     color: white;
     flex-shrink: 0;
-    transition: margin-right 0.3s ease;
+    transition: margin-right 0.5s ease; /* Match the button transition timing */
 
     ${FloatingButton}:hover & {
-        margin-right: 0.35rem;
+        margin-right: 0.6rem;
     }
 `;
 
 export const Text = styled.span`
     opacity: 0;
-    display: none;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    max-width: 0;
+    transition: opacity 0.3s ease, max-width 0.5s ease;
     white-space: nowrap;
+    overflow: hidden;
 
     ${FloatingButton}:hover & {
-        display: inline;
         opacity: 1;
-        visibility: visible;
+        max-width: 200px; /* Allow enough space for the text */
     }
 `;
