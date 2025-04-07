@@ -1,17 +1,18 @@
-import React, { useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as S from "./postDetail.style.js";
 import RKickIcon from "../../assets/good_red.svg";
 import BKickIcon from "../../assets/good_black.svg";
 import KickIcon from "../../assets/good.svg";
 import ProfileIcon from "../../assets/profile.svg";
+import SirenIcon from "../../assets/report.svg";
 import { FaRegComment, FaCheckCircle } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Pagination from "../Pagination/pagination";
-import { MdExpandMore, MdExpandLess } from "react-icons/md";
+import { MdExpandMore, MdExpandLess, MdIosShare } from "react-icons/md";
+
 
 const PostDetail = () => {
-  // const [commentText, setCommentText] = useState('');
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [likedComments, setLikedComments] = useState({});
   const [likedReplies, setLikedReplies] = useState({}); // 별도의 답글 좋아요 상태 관리
@@ -19,23 +20,27 @@ const PostDetail = () => {
   const [openReplyIds, setOpenReplyIds] = useState({}); // 답글 입력창이 열린 댓글 ID 관리
   const [showReplies, setShowReplies] = useState({}); // 답글 표시/숨김 상태 관리
   const [openReReplyIds, setOpenReReplyIds] = useState({});
-  // const menuRef = useRef(null);
+  const menuRef = useRef(null);
 
-  // const handleClickOutside = (e) => {
-  //     if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
-  //         setIsMenuOpen(false);
-  //     }
-  // };
+  const handleClickOutside = (e) => {
+    if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
+      setIsMenuOpen(false);
+    }
+  };
 
-  // useEffect(() => {
-  //     // 클릭했을 때 메뉴를 닫도록 이벤트 리스너 추가
-  //     document.addEventListener('click', handleClickOutside);
-  //
-  //     // 컴포넌트가 언마운트 될 때 이벤트 리스너 제거
-  //     return () => {
-  //         document.removeEventListener('click', handleClickOutside);
-  //     };
-  // }, []);
+  useEffect(() => {
+    // 메뉴 닫기 이벤트 리스너 추가
+    document.addEventListener('click', handleClickOutside);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
 
   // 답글 버튼 토글 함수
   const toggleReplyBox = (commentId) => {
@@ -169,7 +174,23 @@ const PostDetail = () => {
             <img src={KickIcon} alt="좋아요수 아이콘" width={10} height={10} />{" "}
             {post.likes}
             <FaRegComment alt="댓글수 아이콘" /> {post.replies}
-            <FiMoreHorizontal />
+            <FiMoreHorizontal
+                className="more-button"
+                alt="더보기 버튼"
+                onClick={toggleMenu}
+            />
+            {isMenuOpen && (
+                <S.MoreMenu ref={menuRef}>
+                  <S.MenuItem>
+                    <MdIosShare size={16} />
+                    공유하기
+                  </S.MenuItem>
+                  <S.MenuItem>
+                    <img src={SirenIcon} alt="신고 아이콘" width={16} height={16} />
+                    신고하기
+                  </S.MenuItem>
+                </S.MoreMenu>
+            )}
           </S.ArticleMeta>
         </S.ArticleInfo>
       </S.ArticleHeader>

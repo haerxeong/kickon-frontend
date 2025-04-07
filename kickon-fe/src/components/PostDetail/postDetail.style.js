@@ -67,11 +67,12 @@ export const ArticleInfo = styled.div`
 `;
 
 export const ArticleMeta = styled.div`
-  margin-left: auto;
-  display: flex;
-  gap: 0.5rem;
-  font-size: 0.583rem;
-  color: #777;
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.583rem;
+    color: #777;
+    position: relative;
 `;
 
 export const ArticleContent = styled.div`
@@ -151,22 +152,46 @@ export const ViewLabel = styled.span`
   margin-left: 0.3125rem;
 `;
 
-export const MoreMenu = styled.ul`
-  display: flex;
-  padding: 0.625rem 1.25rem;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 1.25rem;
+export const MoreMenu = styled.div`
+    width: 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid #dcdcdc;
+    background: #fff;
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.16);
 
-  border-radius: 0.5rem;
-  border: 0.0625rem solid #dcdcdc;
-  background: #fff;
-  box-shadow: 0 0.25rem 0.625rem 0 rgba(0, 0, 0, 0.16);
-  position: absolute; /* 버튼 옆에 위치하도록 설정 */
-  top: 100%; /* 버튼 바로 아래로 위치 */
-  left: 0;
-  z-index: 100; /* 다른 요소들보다 위에 표시되도록 */
+    position: absolute; /* 버튼 옆에 위치하도록 설정 */
+    top: calc(100% + 0.5rem); /* 버튼 바로 아래로 위치 */
+    left: calc(100%);
+    z-index: 100; /* 다른 요소들보다 위에 표시되도록 */
+`;
+
+export const MenuItem = styled.div`
+    width: 100%;
+    display: flex; /* 이모티콘과 텍스트를 수평 배치 */
+    align-items: center; /* 수직 정렬 */
+    padding: 0.42rem 0.89rem;
+    gap: 0.5rem; /* 이모티콘과 텍스트 간 간격 */
+    font-size: 0.56rem; /* 글자 크기 */
+    color: #333;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f9f9f9; /* 호버 시 배경색 변경 */
+        border-radius: 0.25rem;
+    }
+
+    img, svg {
+        display: block; /* 이미지와 아이콘이 올바르게 표시되도록 설정 */
+        width: auto;
+        height: auto;
+        vertical-align: middle; /* 텍스트와 아이콘 정렬 */
+        margin-right: auto;
+    }
 `;
 
 export const CommentInputBox = styled.div`
