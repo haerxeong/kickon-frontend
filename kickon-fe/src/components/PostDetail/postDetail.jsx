@@ -1,47 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {
-    ArticleContainer,
-    ArticleHeader,
-    ArticleTitle,
-    ArticleInfo,
-    ArticleMeta,
-    ArticleContent,
-    ArticleImage,
-    ArticleText,
-    ArticleActions,
-    LikeButton,
-    TimeLabel,
-    ViewLabel,
-    CommentInputBox,
-    CommentInputLabel,
-    CommentInput,
-    SubmitButton,
-    CommentsSection,
-    CommentItem,
-    CommentHeader,
-    CommentContent,
-    CommentActions,
-    CommentLikes,
-    ReplyButton,
-    CommentInputContainer,
-    CommentsSectionTitle,
-    CommentHeaderWrapper,
-    MoreButton,
-    ArticleLabel,
-    ArticleCategory,
-    ArticleTeam,
-    ReplyInputWrapper,
-    ReplyInput,
-    ReplySubmitButton,
-    RepliesContainer,
-    ReplyItem,
-    ReplyHeader,
-    ReplyContent,
-    ReplyLikes,
-    ReplyHeaderWrapper,
-    ReplyActions,
-    ReplyActionButton
-} from './postDetail.style.js';
+import * as S from './postDetail.style.js';
 import RKickIcon from "../../assets/good_red.svg"
 import BKickIcon from "../../assets/good_black.svg"
 import KickIcon from "../../assets/good.svg"
@@ -174,89 +132,89 @@ const PostDetail = () => {
 
 
     return (
-        <ArticleContainer>
-            {location.pathname === "/news/detail" && <ArticleImage src={post.image} />}
+        <S.ArticleContainer>
+            {location.pathname === "/news/detail" && <S.ArticleImage src={post.image} />}
             {location.pathname === "/news/detail" &&
-                <ArticleLabel>
-                    <ArticleTeam src={post.team.logoUrl}/>
-                    <ArticleCategory>{post.badge}</ArticleCategory>
-                </ArticleLabel>}
-            <ArticleHeader>
-                <ArticleTitle>{post.title}</ArticleTitle>
-                <ArticleInfo>
+                <S.ArticleLabel>
+                    <S.ArticleTeam src={post.team.logoUrl}/>
+                    <S.ArticleCategory>{post.badge}</S.ArticleCategory>
+                </S.ArticleLabel>}
+            <S.ArticleHeader>
+                <S.ArticleTitle>{post.title}</S.ArticleTitle>
+                <S.ArticleInfo>
                     <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" width={24} height={24} />
                     {post.user.nickname}
                     <FaCheckCircle />
-                    <TimeLabel>{new Date(post.createdAt).toLocaleString()}</TimeLabel> | <ViewLabel>읽음 {post.views}</ViewLabel>
-                    <ArticleMeta>
+                    <S.TimeLabel>{new Date(post.createdAt).toLocaleString()}</S.TimeLabel> | <S.ViewLabel>읽음 {post.views}</S.ViewLabel>
+                    <S.ArticleMeta>
                         <img src={KickIcon} alt="좋아요수 아이콘" width={10} height={10} /> {post.likes}
                         <FaRegComment alt="댓글수 아이콘" /> {post.replies}
                         <FiMoreHorizontal />
-                    </ArticleMeta>
-                </ArticleInfo>
-            </ArticleHeader>
+                    </S.ArticleMeta>
+                </S.ArticleInfo>
+            </S.ArticleHeader>
 
-            <ArticleContent>
-                {location.pathname !== "/news/detail" && <ArticleImage src={post.image} />}
-                <ArticleText>{post.content}</ArticleText>
-            </ArticleContent>
+            <S.ArticleContent>
+                {location.pathname !== "/news/detail" && <S.ArticleImage src={post.image} />}
+                <S.ArticleText>{post.content}</S.ArticleText>
+            </S.ArticleContent>
 
-            <ArticleActions>
-                <LikeButton isLiked={isLiked} onClick={() => setIsLiked(!isLiked)}>
+            <S.ArticleActions>
+                <S.LikeButton isLiked={isLiked} onClick={() => setIsLiked(!isLiked)}>
                     <img src={BKickIcon} alt="킥 아이콘" width={14} height={14} />
                     <span>킥</span>
                     <span className="likes">{post.likes}</span>
-                </LikeButton>
-            </ArticleActions>
+                </S.LikeButton>
+            </S.ArticleActions>
 
-            <CommentInputBox>
-                <CommentInputLabel>댓글 쓰기</CommentInputLabel>
-                <CommentInputContainer>
-                    <CommentInput placeholder="댓글을 입력하세요..." />
-                    <SubmitButton>등록</SubmitButton>
-                </CommentInputContainer>
-            </CommentInputBox>
+            <S.CommentInputBox>
+                <S.CommentInputLabel>댓글 쓰기</S.CommentInputLabel>
+                <S.CommentInputContainer>
+                    <S.CommentInput placeholder="댓글을 입력하세요..." />
+                    <S.SubmitButton>등록</S.SubmitButton>
+                </S.CommentInputContainer>
+            </S.CommentInputBox>
 
-            <CommentsSection>
-                <CommentsSectionTitle>댓글 {post.replies}개</CommentsSectionTitle>
+            <S.CommentsSection>
+                <S.CommentsSectionTitle>댓글 {post.replies}개</S.CommentsSectionTitle>
                 {comments && comments.map((comment) => (
-                    <CommentItem key={comment.id}>
-                        <CommentHeaderWrapper>
-                            <CommentHeader>
+                    <S.CommentItem key={comment.id}>
+                        <S.CommentHeaderWrapper>
+                            <S.CommentHeader>
                                 <img src={comment.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" width={24} height={24} className="rounded-full object-cover"/>
                                 <span style={{ fontSize: '0.75rem', marginRight: '0.3rem', color: '#000' }}>{comment.user.nickname}</span>
                                 <span style={{ fontSize: '0.7rem', color: '#888' }}>{new Date(comment.createdAt).toLocaleString()}</span>
-                            </CommentHeader>
-                            <CommentLikes
+                            </S.CommentHeader>
+                            <S.CommentLikes
                                 key={comment.id}
                                 active={likedComments[comment.id] || false}
                                 onClick={() => setLikedComments(prev => ({ ...prev, [comment.id]: !prev[comment.id] }))}
                             >
                                 <img src={likedComments[comment.id] ? RKickIcon : KickIcon} alt="좋아요 아이콘" width={12} height={12} />
                                 {comment.likes}
-                            </CommentLikes>
-                        </CommentHeaderWrapper>
-                        <CommentContent>{comment.content}</CommentContent>
-                        <CommentActions>
+                            </S.CommentLikes>
+                        </S.CommentHeaderWrapper>
+                        <S.CommentContent>{comment.content}</S.CommentContent>
+                        <S.CommentActions>
                             {location.pathname === "/community/detail" && (
-                                <ReplyButton
+                                <S.ReplyButton
                                     isActive={openReplyIds[comment.id]}
                                     onClick={() => toggleReplyBox(comment.id)}
                                 >
                                     답글
-                                </ReplyButton>
+                                </S.ReplyButton>
                             )}
                             {/* 답글 입력 박스 - 답글 버튼 클릭시 표시 */}
                             {openReplyIds[comment.id] && (
-                                <ReplyInputWrapper>
-                                    <ReplyInput
+                                <S.ReplyInputWrapper>
+                                    <S.ReplyInput
                                         placeholder="답글을 입력하세요..."
                                     />
-                                    <ReplySubmitButton>등록</ReplySubmitButton>
-                                </ReplyInputWrapper>
+                                    <S.ReplySubmitButton>등록</S.ReplySubmitButton>
+                                </S.ReplyInputWrapper>
                             )}
                             {(comment.replies?.length ?? 0) > 0 && (
-                                <MoreButton onClick={() => toggleReplies(comment.id)}>
+                                <S.MoreButton onClick={() => toggleReplies(comment.id)}>
                                     {showReplies[comment.id] ? (
                                         <>
                                             <MdExpandLess size={16} /> 답글 숨기기
@@ -266,61 +224,61 @@ const PostDetail = () => {
                                             <MdExpandMore size={16} /> 답글 {comment.replies.length}개
                                         </>
                                     )}
-                                </MoreButton>
+                                </S.MoreButton>
                             )}
-                        </CommentActions>
+                        </S.CommentActions>
 
 
                         {/* 답글 표시 - 토글 상태에 따라 표시 */}
                         {comment.replies && comment.replies.length > 0 && showReplies[comment.id] && (
-                            <RepliesContainer>
+                            <S.RepliesContainer>
                                 {comment.replies.map(reply => (
-                                    <ReplyItem key={reply.pk}>
-                                        <ReplyHeaderWrapper>
-                                            <ReplyHeader>
+                                    <S.ReplyItem key={reply.pk}>
+                                        <S.ReplyHeaderWrapper>
+                                            <S.ReplyHeader>
                                                 <img src={reply.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" width={24} height={24} style={{ borderRadius: '50%', objectFit: 'cover' }}/>
                                                 <span style={{ fontSize: '0.7rem', marginRight: '0.3rem', color: '#000' }}>{reply.user.nickname}</span>
                                                 <span style={{ fontSize: '0.65rem', color: '#888' }}>{new Date(reply.createdAt).toLocaleString()}</span>
-                                            </ReplyHeader>
-                                            <ReplyLikes
+                                            </S.ReplyHeader>
+                                            <S.ReplyLikes
                                                 key={reply.pk}
                                                 active={likedReplies[reply.pk] || false}
                                                 onClick={() => toggleReplyLike(reply.pk)}
                                             >
                                                 <img src={likedReplies[reply.pk] ? RKickIcon : KickIcon} alt="좋아요 아이콘" width={12} height={12} />
                                                 {reply.kickCount}
-                                            </ReplyLikes>
-                                        </ReplyHeaderWrapper>
-                                        <ReplyContent>{reply.contents}</ReplyContent>
+                                            </S.ReplyLikes>
+                                        </S.ReplyHeaderWrapper>
+                                        <S.ReplyContent>{reply.contents}</S.ReplyContent>
 
                                         {/* New ReplyActions component */}
-                                        <ReplyActions>
+                                        <S.ReplyActions>
                                             {location.pathname === "/community/detail" && (
-                                                <ReplyActionButton
+                                                <S.ReplyActionButton
                                                     isActive={openReReplyIds[reply.pk]}
                                                     onClick={() => toggleReReplyBox(reply.pk)}
                                                 >
                                                     답글
-                                                </ReplyActionButton>
+                                                </S.ReplyActionButton>
                                             )}
                                             {/* Re-reply input box */}
                                             {openReReplyIds[reply.pk] && (
-                                                <ReplyInputWrapper>
-                                                    <ReplyInput placeholder="답글을 입력하세요..." />
-                                                    <ReplySubmitButton>등록</ReplySubmitButton>
-                                                </ReplyInputWrapper>
+                                                <S.ReplyInputWrapper>
+                                                    <S.ReplyInput placeholder="답글을 입력하세요..." />
+                                                    <S.ReplySubmitButton>등록</S.ReplySubmitButton>
+                                                </S.ReplyInputWrapper>
                                             )}
-                                        </ReplyActions>
-                                    </ReplyItem>
+                                        </S.ReplyActions>
+                                    </S.ReplyItem>
                                 ))}
-                            </RepliesContainer>
+                            </S.RepliesContainer>
                         )}
-                    </CommentItem>
+                    </S.CommentItem>
                 ))}
-            </CommentsSection>
+            </S.CommentsSection>
 
             <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={10}/>
-        </ArticleContainer>
+        </S.ArticleContainer>
     );
 };
 
