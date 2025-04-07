@@ -164,9 +164,11 @@ export const MoreMenu = styled.div`
     box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.16);
 
     position: absolute; /* 버튼 옆에 위치하도록 설정 */
-    top: calc(100% + 0.5rem); /* 버튼 바로 아래로 위치 */
-    left: calc(100%);
+    top: calc(100% + 0.2rem);
+    left: calc(100% - 0.6rem);
     z-index: 100; /* 다른 요소들보다 위에 표시되도록 */
+    
+    cursor: pointer;
 `;
 
 export const MenuItem = styled.div`
@@ -181,11 +183,18 @@ export const MenuItem = styled.div`
 
     cursor: pointer;
 
+
     &:hover {
-        background-color: #f9f9f9; /* 호버 시 배경색 변경 */
-        border-radius: 0.25rem;
+        background-color: #f9f9f9;
     }
 
+    &:first-child:hover {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    &:last-child:hover {
+        border-radius: 0 0 0.5rem 0.5rem;
+    }
     img, svg {
         display: block; /* 이미지와 아이콘이 올바르게 표시되도록 설정 */
         width: auto;
