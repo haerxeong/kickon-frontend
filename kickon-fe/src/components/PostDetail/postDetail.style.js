@@ -246,7 +246,7 @@ export const CommentsSectionTitle = styled.div`
 
 export const CommentItem = styled.div`
     border-bottom: 0.0625rem solid #eee;
-    padding: 0.75rem 1rem;
+    //padding: 0.75rem 1rem;
 `;
 
 export const CommentHeaderWrapper = styled.div`
@@ -254,6 +254,7 @@ export const CommentHeaderWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.375rem;
+    padding: 0.75rem 1rem 0 1rem;
 `
 
 export const CommentHeader = styled.div`
@@ -271,7 +272,7 @@ export const CommentLikes = styled.button`
     font-size: 0.75rem;
     color: ${props => props.active ? '#000' : '#888'};
     cursor: pointer;
-    padding: 0;
+    padding: 0 1rem;
 `;
 
 export const CommentContent = styled.div`
@@ -280,6 +281,7 @@ export const CommentContent = styled.div`
     margin-bottom: 0.5rem;
     line-height: 1.4;
     color: #000;
+    padding: 0 1rem;
 `;
 
 export const CommentActions = styled.div`
@@ -288,6 +290,8 @@ export const CommentActions = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     margin-left: 1.875rem;
+    padding: 0 1rem;
+    margin-bottom: 0.5rem;
 `;
 
 export const ReplyButton = styled.button`
@@ -377,16 +381,19 @@ export const ReplySubmitButton = styled.button`
 `;
 
 export const RepliesContainer = styled.div`
-    margin-left: 1.875rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
 `;
 
 export const ReplyItem = styled.div`
-    padding: 0.5rem 0;
-    padding-left: 0.625rem;
-    margin-bottom: 0.5rem;
-    //border-bottom: 0.0625rem solid #eee;
+  padding: 1rem 1rem 1rem 2.875rem;
+  border-bottom: 0.0625rem solid #eee;
+
+  &:first-of-type {
+    border-top: 0.0625rem solid #eee;
+  }
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 `;
 
 export const ReplyHeader = styled.div`
@@ -412,7 +419,7 @@ export const ReplyLikes = styled.button`
     font-size: 0.75rem;
     color: ${props => props.active ? '#000' : '#888'};
     cursor: pointer;
-    padding: 0;
+    padding: 0 1rem;
 `;
 
 export const ReplyHeaderWrapper = styled.div`

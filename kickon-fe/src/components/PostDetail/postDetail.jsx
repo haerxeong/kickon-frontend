@@ -228,7 +228,6 @@ const PostDetail = () => {
                             )}
                         </S.CommentActions>
 
-
                         {/* 답글 표시 - 토글 상태에 따라 표시 */}
                         {comment.replies && comment.replies.length > 0 && showReplies[comment.id] && (
                             <S.RepliesContainer>
