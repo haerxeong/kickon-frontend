@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
+import dayjs from 'dayjs';
 import * as S from "./postDetail.style.js";
 import RKickIcon from "../../assets/good_red.svg";
 import BKickIcon from "../../assets/good_black.svg";
@@ -242,7 +243,7 @@ const PostDetail = () => {
                     {comment.user.nickname}
                   </span>
                   <span style={{ fontSize: "0.7rem", color: "#888" }}>
-                    {new Date(comment.createdAt).toLocaleString()}
+                    {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
                   </span>
                 </S.CommentHeader>
                 <S.CommentLikes
@@ -328,7 +329,7 @@ const PostDetail = () => {
                             <span
                               style={{ fontSize: "0.65rem", color: "#888" }}
                             >
-                              {new Date(reply.createdAt).toLocaleString()}
+                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
                             </span>
                           </S.ReplyHeader>
                           <S.ReplyLikes
