@@ -167,8 +167,6 @@ export const MoreMenu = styled.div`
     top: calc(100% + 0.2rem);
     left: calc(100% - 0.6rem);
     z-index: 100; /* 다른 요소들보다 위에 표시되도록 */
-    
-    cursor: pointer;
 `;
 
 export const MenuItem = styled.div`

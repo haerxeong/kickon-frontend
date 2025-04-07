@@ -179,6 +179,7 @@ const PostDetail = () => {
                 className="more-button"
                 alt="더보기 버튼"
                 onClick={toggleMenu}
+                style={{ cursor: "pointer" }}
             />
             {isMenuOpen && (
                 <S.MoreMenu ref={menuRef}>
