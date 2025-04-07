@@ -7,7 +7,7 @@ export const ArticleContainer = styled.div`
     padding: 0;
     background: #fff;
     border-radius: 0.625rem;
-    border: 1px solid #DCDCDC;
+    border: 0.0625rem solid #DCDCDC;
     position: relative;
 `;
 
@@ -19,7 +19,7 @@ export const ArticleLabel = styled.div`
     margin-left: 1.3rem;
 `
 export const ArticleTeam = styled.img`
-    display: flex;    
+    display: flex;
     width: 0.6rem;
     justify-content: center;
     align-items: center;
@@ -31,7 +31,7 @@ export const ArticleCategory = styled.div`
     justify-content: center;
     align-items: center;
     gap: 0.625rem;
-    
+
     border-radius: 1.25rem;
     background: var(--Black-black_900, #000);
 
@@ -47,14 +47,14 @@ export const ArticleCategory = styled.div`
 export const ArticleHeader = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 16px;
-    border-bottom: 1px solid #eee;
+    padding: 1rem;
+    border-bottom: 0.0625rem solid #eee;
 `;
 
 export const ArticleTitle = styled.h1`
     font-size: 1.25rem;
     font-weight: bold;
-    margin: 0 0 12px 0;
+    margin: 0 0 0.75rem 0;
     color: black;
 `;
 
@@ -98,11 +98,11 @@ export const ArticleText = styled.p`
 `;
 
 export const ArticleActions = styled.div`
-    padding: 0 16px 16px;
+    padding: 0 1rem 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0.625rem;
 `;
 
 export const LikeButton = styled.button`
@@ -116,32 +116,36 @@ export const LikeButton = styled.button`
     border: none;
     border-radius: 0.5rem;
     background: ${({ isLiked }) => (isLiked ? 'rgba(192, 12, 11, 0.90)' : 'white')};
-    box-shadow: ${({ isLiked }) => (isLiked ? '0px 2px 10px 0px rgba(217, 25, 32, 0.20)' : '0px 2px 10px 0px rgba(0, 0, 0, 0.20)')};
+    box-shadow: ${({ isLiked }) => (isLiked
+            ? '0 0.125rem 0.625rem 0 rgba(217, 25, 32, 0.20)'
+            : '0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.20)')};
     font-size: 0.65rem;
     color: ${({ isLiked }) => (isLiked ? 'white' : 'black')};
     cursor: pointer;
 
+    &:hover {
+        box-shadow: 0px 2px 10px 0px rgba(217, 25, 32, 0.20);
 
-
-    &:hover .likes {
-        color: ${({ isLiked }) => (isLiked ? 'white' : 'var(--Primary-primary_900, #C00C0B)')};
+        .likes {
+            color: ${({ isLiked }) => (isLiked ? 'white' : 'var(--Primary-primary_900, #C00C0B)')};
+        }
     }
 
     & svg {
-        margin-right: 6px;
+        margin-right: 0.375rem;
     }
 `;
 
 export const TimeLabel = styled.span`
     font-size: 0.583rem;
     color: #888;
-    margin-right: 5px;
+    margin-right: 0.3125rem;
 `;
 
 export const ViewLabel = styled.span`
     font-size: 0.583rem;
     color: #888;
-    margin-left: 5px;
+    margin-left: 0.3125rem;
 `;
 
 export const MoreMenu = styled.ul`
@@ -153,9 +157,9 @@ export const MoreMenu = styled.ul`
     gap: 1.25rem;
 
     border-radius: 0.5rem;
-    border: 1px solid #DCDCDC;
+    border: 0.0625rem solid #DCDCDC;
     background: #FFF;
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0.25rem 0.625rem 0 rgba(0, 0, 0, 0.16);
     position: absolute; /* 버튼 옆에 위치하도록 설정 */
     top: 100%; /* 버튼 바로 아래로 위치 */
     left: 0;
@@ -184,8 +188,8 @@ export const CommentInputLabel = styled.div`
 
 export const CommentInputContainer = styled.div`
     display: flex;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.5rem;
     background: #fff;
     align-items: flex-start;
     overflow: hidden;
@@ -195,7 +199,7 @@ export const CommentInput = styled.textarea`
     width: 22.5rem;
     flex: 1;
     border: none;
-    padding: 14px; /* 기존 12px -> 14px */
+    padding: 0.875rem; /* 기존 12px -> 14px */
     font-size: 0.583rem;
     background: transparent;
     min-height: 4rem; /* 기존 50px -> 64px */
@@ -212,9 +216,9 @@ export const SubmitButton = styled.button`
     background: rgba(192, 12, 11, 0.90);
     color: white;
     border: none;
-    height: 64px; /* 기존 50px -> 64px (입력란과 동일) */
+    height: 4rem; /* 기존 50px -> 64px (입력란과 동일) */
     font-size: 0.85rem; /* 기존 0.8rem -> 0.85rem */
-    padding: 0 18px; /* 기존 16px -> 18px */
+    padding: 0 1.125rem; /* 기존 16px -> 18px */
     cursor: pointer;
     font-weight: 500;
     white-space: nowrap;
@@ -225,68 +229,66 @@ export const SubmitButton = styled.button`
 `;
 
 export const CommentsSection = styled.div`
-    padding: 0 16px;
     margin-top: 10rem;
 `;
 
 export const CommentsSectionTitle = styled.div`
-    width: 30rem;
-    stroke-width: 1px;
-    stroke: #DCDCDC;
     color: #000;
     font-family: Pretendard;
     font-size: 0.628rem;
     font-style: normal;
     font-weight: 500;
     line-height: 1rem;
+    padding: 0.45rem 1rem;
+    border-top: 0.0625rem solid #eee;
+    border-bottom: 0.0625rem solid #eee;
 `
 
 export const CommentItem = styled.div`
-    border-bottom: 1px solid #eee;
-    padding: 12px 0;
+    border-bottom: 0.0625rem solid #eee;
+    padding: 0.75rem 1rem;
 `;
 
 export const CommentHeaderWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 6px;
+    margin-bottom: 0.375rem;
 `
 
 export const CommentHeader = styled.div`
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.375rem;
     margin-bottom: 0.1rem;
 `;
 export const CommentLikes = styled.button`
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.25rem;
     background: none;
     border: none;
     font-size: 0.75rem;
-    color: ${props => props.active ? '#E74C3C' : '#888'};
+    color: ${props => props.active ? '#000' : '#888'};
     cursor: pointer;
     padding: 0;
 `;
 
 export const CommentContent = styled.div`
     font-size: 0.628rem;
-    margin-left: 30px;
-    margin-bottom: 8px;
+    margin-left: 1.875rem;
+    margin-bottom: 0.5rem;
     line-height: 1.4;
-    color: #000
+    color: #000;
 `;
 
 export const CommentActions = styled.div`
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    gap: 8px;
-    margin-left: 30px;
+    gap: 0.5rem;
+    margin-left: 1.875rem;
 `;
-
 
 export const ReplyButton = styled.button`
     display: flex;
@@ -297,16 +299,16 @@ export const ReplyButton = styled.button`
     gap: 0.448rem;
     border: none;
 
-    color: var(--Black-black_700, #676767);
-    /* Button/btn5_Pre_r_12px */
+    color: ${props => props.isActive ? 'var(--Black-black_100, #F8F8F8)' : 'var(--Black-black_700, #676767)'};
     font-family: Pretendard;
     font-size: 0.538rem;
     font-style: normal;
     font-weight: 400;
     line-height: 1rem; /* 133.333% */
-    
+
     border-radius: 0.25rem;
-    background: var(--Black-black_200, #F0F0F0);
+    background: ${props => props.isActive ? 'var(--Black-black_500, #AFAFAF)' : 'var(--Black-black_200, #F0F0F0)'};
+    cursor: pointer;
 `;
 
 export const MoreButton = styled.button`
@@ -316,6 +318,9 @@ export const MoreButton = styled.button`
     color: #888;
     cursor: pointer;
     padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 
     color: var(--Black-black_700, #676767);
     /* Button/btn5_Pre_r_12px */
@@ -324,4 +329,125 @@ export const MoreButton = styled.button`
     font-style: normal;
     font-weight: 400;
     line-height: 1rem; /* 133.333% */
+`;
+
+// 새로 추가된 스타일 컴포넌트
+export const ReplyInputWrapper = styled.div`
+    display: flex;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 0.0625rem solid #ddd;
+    border-radius: 0.5rem;
+    background: #fff;
+    align-items: flex-start;
+    overflow: hidden;
+    width: calc(100%);
+`;
+
+export const ReplyInput = styled.textarea`
+    flex: 1;
+    border: none;
+    padding: 0.625rem;
+    font-size: 0.583rem;
+    background: transparent;
+    min-height: 2.5rem;
+    max-height: 5rem;
+    overflow-y: auto;
+    resize: none;
+    background: var(--Black-black_100, #F8F8F8);
+
+    &:focus {
+        outline: none;
+    }
+`;
+
+export const ReplySubmitButton = styled.button`
+    background: rgba(192, 12, 11, 0.90);
+    color: white;
+    border: none;
+    font-size: 0.75rem;
+    padding: 0 0.875rem;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const RepliesContainer = styled.div`
+    margin-left: 1.875rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+`;
+
+export const ReplyItem = styled.div`
+    padding: 0.5rem 0;
+    padding-left: 0.625rem;
+    margin-bottom: 0.5rem;
+    //border-bottom: 0.0625rem solid #eee;
+`;
+
+export const ReplyHeader = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+`;
+
+export const ReplyContent = styled.div`
+    font-size: 0.628rem;
+    margin-left: 1.625rem;
+    line-height: 1.4;
+    color: #000;
+    margin-bottom: 0.25rem;
+`;
+
+export const ReplyLikes = styled.button`
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    color: ${props => props.active ? '#000' : '#888'};
+    cursor: pointer;
+    padding: 0;
+`;
+
+export const ReplyHeaderWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+`
+
+export const ReplyActions = styled.div`
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-left: 1.625rem; // Aligned with ReplyContent's margin-left
+`;
+
+// Adding a ReplyActionButton styled component for buttons within ReplyActions
+export const ReplyActionButton = styled.button`
+    display: flex;
+    height: 1.077rem;
+    padding: 0.25rem 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.448rem;
+    border: none;
+
+    color: ${props => props.isActive ? 'var(--Black-black_100, #F8F8F8)' : 'var(--Black-black_700, #676767)'};
+    font-family: Pretendard;
+    font-size: 0.538rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem; /* 133.333% */
+
+    border-radius: 0.25rem;
+    background: ${props => props.isActive ? 'var(--Black-black_500, #AFAFAF)' : 'var(--Black-black_200, #F0F0F0)'};
+    cursor: pointer;
 `;
