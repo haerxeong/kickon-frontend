@@ -175,7 +175,8 @@ export const MenuItem = styled.div`
     align-items: center; /* 수직 정렬 */
     padding: 0.42rem 0.89rem;
     gap: 0.5rem; /* 이모티콘과 텍스트 간 간격 */
-    font-size: 0.56rem; /* 글자 크기 */
+    font-size: 0.7rem; /* 글자 크기 */
+    font-weight: 500;
     color: #333;
 
     cursor: pointer;
