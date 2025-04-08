@@ -1,6 +1,6 @@
 import MatchCard from "../../components/MatchCard/matchCard";
 import CommunityBoard from "../../components/CommunityBoard/communityBoard";
-import NewsList from "../../components/NewsList/NewsList";
+import NewsList from "../../components/NewsList/newsList";
 import * as S from "./home.style";
 
 const Home = () => {
