@@ -4,7 +4,7 @@ import {
     UserDetails, Username, ProfileEdit,
     UserStats, StatBox, StatTitle, StatValue,
     LogoutButton, handleIconClick, UsernameSuffix, MyTeam
-} from "./Profile.style";
+} from "./profile.style";
 import Logo from "../../assets/logo_image_black.svg";
 import Image from "../../assets/profile_image.svg";
 import { MdNavigateNext } from "react-icons/md";
