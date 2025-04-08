@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isLoginModalOpen: false, // 로그인 모달 열림/닫힘 상태
+    isReportModalOpen: false,
 };
 
 const loginModalSlice = createSlice({
@@ -22,7 +23,23 @@ const loginModalSlice = createSlice({
     },
 });
 
+const reportModalSlice = createSlice({
+    name: "reportModal",
+    initialState,
+    reducers: {
+        openReportModal: (state) => {
+            state.isReportModalOpen = true;
+        },
+        closeReportModal: (state) => {
+            state.isReportModalOpen = false;
+        },
+    },
+});
+
 export const { openLoginModal, closeLoginModal, toggleLoginModal } =
     loginModalSlice.actions;
+export const { openReportModal, closeReportModal } =
+    reportModalSlice.actions;
 
-export default loginModalSlice.reducer;
+export const loginModalReducer = loginModalSlice.reducer;
+export const reportModalReducer = reportModalSlice.reducer;
