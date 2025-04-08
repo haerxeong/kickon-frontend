@@ -10,6 +10,8 @@ import { FaRegComment, FaCheckCircle } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Pagination from "../Pagination/pagination";
 import { MdExpandMore, MdExpandLess, MdIosShare } from "react-icons/md";
+import { openReportModal } from "../../features/modal/modalSlice.js";
+import { useDispatch } from "react-redux";
 
 
 const PostDetail = () => {
@@ -22,6 +24,7 @@ const PostDetail = () => {
   const [showReplies, setShowReplies] = useState({}); // 답글 표시/숨김 상태 관리
   const [openReReplyIds, setOpenReReplyIds] = useState({});
   const menuRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleClickOutside = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
@@ -187,7 +190,7 @@ const PostDetail = () => {
                     <MdIosShare size={16} />
                     공유하기
                   </S.MenuItem>
-                  <S.MenuItem>
+                  <S.MenuItem onClick={() => dispatch(openReportModal())}>
                     <img src={SirenIcon} alt="신고 아이콘" width={16} height={16} />
                     신고하기
                   </S.MenuItem>
