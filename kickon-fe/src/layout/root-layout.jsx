@@ -8,6 +8,7 @@ import TopNews from "../components/TopNews/topNews";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
 import { rankings } from "../mocks/rankings.js";
+import WriteButton from "../components/WriteButton/writeButton.jsx";
 
 // 전체 레이아웃 Wrapper
 const Layout = styled.div`
@@ -81,7 +82,8 @@ const RootLayout = () => {
   const isWritePage =
     location.pathname === "/news/write" ||
     location.pathname === "/community/write";
-  
+  const isNewsPage = location.pathname.startsWith("/news");
+  const isCommunityPage = location.pathname.startsWith("/community");
 
   return (
     <Layout isHomePage={isHomePage}>
@@ -116,6 +118,7 @@ const RootLayout = () => {
             <RightColumn>
               <Profile />
               <TopNews />
+                {((isNewsPage || isCommunityPage) && !isWritePage) && <WriteButton />}
             </RightColumn>
           </ContentWrapper>
         )}
