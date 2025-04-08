@@ -6,7 +6,7 @@ import kakaoLogo from "../../assets/kakao.svg";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { BsBan } from "react-icons/bs";
-import ProfileImageDefault from "../../assets/profile.png";
+import ProfileImageDefault from "../../assets/profile.svg";
 import CameraIcon from "../../assets/camera.png";
 
 const ProfileSettings = () => {

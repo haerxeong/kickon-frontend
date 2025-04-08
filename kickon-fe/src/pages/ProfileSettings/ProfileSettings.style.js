@@ -198,8 +198,8 @@ export const ButtonGroup = styled.div`
 export const CancelButton = styled.button`
   width: 48%;
   height: 2rem;
-  background-color: #e0e0e0;
-  color: #000000;
+  background-color: #F0F0F0;
+  color: #676767;
   border: none;
   border-radius: 0.25rem;
   font-size: 0.7rem;
@@ -239,12 +239,12 @@ export const ClearIcon = styled.span`
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #8f8f8f;
+  color: #8F8F8F;
   font-size: 16px;
   cursor: pointer;
   
   &:hover {
-    color: #676767;
+    color: #C00C0B;
   }
 `;
 
@@ -277,7 +277,7 @@ export const InputField = styled.input`
   ${(props) =>
     props.hasError &&
     css`
-      border-color: #ff0005;
+      border-color: #000000;
     `}
 `;
 
