@@ -128,7 +128,6 @@ export const OtherInput = styled.textarea`
 
     &:focus {
         outline: none;
-        border-color: #666;
     }
 
     &::placeholder {
