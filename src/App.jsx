@@ -10,6 +10,7 @@ import LoginModal from "./components/LoginModal/loginModal.jsx";
 import Signup from "./pages/Signup/signup.jsx";
 import PostEditor from "./components/PostEditer/postEditor.jsx";
 import NewsDetail from "./components/PostDetail/postDetail.jsx";
+import ReportModal from "./components/ReportModal/reportModal.jsx";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <LoginModal />
+                <ReportModal />
             </Router>
         </Provider>
     );
