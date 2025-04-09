@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { closeReportModal } from "../../features/modal/modalSlice";
 import {
@@ -33,6 +33,7 @@ const ReportModal = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [otherText, setOtherText] = useState("");
     const [isSubmitActive, setIsSubmitActive] = useState(false);
+    const otherInputRef = useRef(null);
 
     useEffect(() => {
         // Button is active if any non-other option is selected OR if other is selected with text
@@ -44,6 +45,16 @@ const ReportModal = () => {
             setIsSubmitActive(true);
         }
     }, [selectedOption, otherText]);
+
+    const handleOtherTextChange = (e) => {
+        const value = e.target.value;
+        setOtherText(value);
+
+        if (otherInputRef.current) {
+            otherInputRef.current.style.height = "auto"; // 초기화
+            otherInputRef.current.style.height = `${otherInputRef.current.scrollHeight}px`; // 내용만큼 높이 조절
+        }
+    };
 
     const handleOptionChange = (optionId) => {
         setSelectedOption(optionId);
@@ -88,9 +99,10 @@ const ReportModal = () => {
 
                         {selectedOption === "other" && (
                             <OtherInput
+                                ref={otherInputRef}
                                 placeholder="사유를 작성해주세요"
                                 value={otherText}
-                                onChange={(e) => setOtherText(e.target.value)}
+                                onChange={handleOtherTextChange}
                             />
                         )}
                     </CheckboxContainer>

@@ -118,13 +118,14 @@ export const CheckboxInput = styled.input`
 
 export const OtherInput = styled.textarea`
     width: 100%;
-    height: 4rem;
+    min-height: 4rem;
     padding: 0.5rem;
     border: 1px solid #E0E0E0;
     border-radius: 0.125rem;
     resize: none;
     font-family: Pretendard;
-    font-size: 0.65rem;
+    font-size: 0.53rem;
+    overflow: hidden;
 
     &:focus {
         outline: none;
