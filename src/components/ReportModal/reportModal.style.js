@@ -17,7 +17,6 @@ export const ModalContainer = styled.div`
     position: relative;
     width: 15.75rem;
     height: auto;
-    min-height: 17.75rem;
     flex-shrink: 0;
     border-radius: 0.625rem;
     background: #FFF;
@@ -150,7 +149,6 @@ export const SubmitButton = styled.button`
     cursor: ${props => props.active ? 'pointer' : 'default'};
     transition: background-color 0.2s;
     margin-top: auto;
-    margin-bottom: 0.5rem;
 
     &:hover {
         background-color: ${props => props.active ? '#000' : '#DCDCDC'};
