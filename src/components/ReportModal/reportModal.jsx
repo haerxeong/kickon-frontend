@@ -88,7 +88,7 @@ const ReportModal = () => {
 
                         {selectedOption === "other" && (
                             <OtherInput
-                                placeholder="신고 사유를 입력해주세요"
+                                placeholder="사유를 작성해주세요"
                                 value={otherText}
                                 onChange={(e) => setOtherText(e.target.value)}
                             />
