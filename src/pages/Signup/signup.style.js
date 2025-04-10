@@ -5,16 +5,13 @@ import { FaCheckSquare, FaRegCheckSquare } from "react-icons/fa";
 export const SignupContainer = styled.div`
   display: flex;
   width: 31rem;
-  //height: 42rem;
-  padding: 4rem 8rem 2rem 8rem;
+  padding: 4rem 7rem 2rem 7rem;
   box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
   border-radius: 0.75rem;
   border: 1px solid #e0e0e0;
   background: #ffffff;
-  /* Center horizontally and vertically */
-  margin: auto auto 5rem;
 `;
 
 export const SignupTitle = styled.h1`
@@ -51,25 +48,26 @@ export const InputLabel = styled.label`
   font-size: 0.6rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
+  align-items: center;
 `;
 
 export const InputField = styled.input`
-  width: 90%;
-  height: 2.2rem;
+  height: 2.5rem;
   padding: 0 1rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #DCDCDC;
   border-radius: 0.4rem;
   font-size: 0.875rem;
   outline: none;
   transition: border-color 0.2s ease;
 
   &:focus {
-    border-color: #c00c0b;
+    border-color: #000;
   }
 
   &::placeholder {
     color: #8f8f8f;
     font-size: 0.7rem;
+    font-weight: 400;
   }
 
   ${(props) =>
@@ -86,9 +84,8 @@ export const ErrorMessage = styled.span`
 `;
 
 export const Dropdown = styled.div`
-  width: 90%;
-  height: 2.2rem;
-  border: 1px solid #e0e0e0;
+  height: 2.5rem;
+  border: 1px solid #DCDCDC;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -97,7 +94,7 @@ export const Dropdown = styled.div`
   transition: border-color 0.2s ease;
 
   &:hover {
-    border-color: #c00c0b;
+    border-color: #000;
   }
 `;
 
@@ -134,13 +131,11 @@ export const DropdownText = styled.span`
 `;
 
 export const DropdownList = styled.div`
-  width: 15.5rem;
+  position: absolute;
+  width: 17rem;
   border: 0.5px solid #e0e0e0;
   border-radius: 0.4rem;
   background-color: #ffffff;
-  overflow-y: auto;
-  position: absolute;
-  //z-index: 1000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 4rem; /* 드롭다운 박스 바로 아래에 위치 */
 `;
@@ -149,7 +144,6 @@ export const DropdownList = styled.div`
 export const DropdownItem = styled.div`
   display: flex;
   align-items: center;
-  //justify-content: space-between; /* 좌측: 리그 이미지/팀 이름, 우측: 아이콘 */
   padding: 0.4rem 1rem; /* Vertical padding 0.4rem */
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -224,11 +218,11 @@ export const ViewTermsLink = styled.span`
 
 export const SignupButton = styled.button`
   width: 100%;
-  height: 2rem;
+  height: 2.3rem;
   background-color: #c00c0b;
   color: #ffffff;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.35rem;
   font-size: 0.7rem;
   font-weight: 400;
   cursor: pointer;
@@ -236,12 +230,8 @@ export const SignupButton = styled.button`
   margin-top: 3rem;
   margin-bottom: 3rem;
 
-  &:hover {
-    background-color: #a00a09;
-  }
-
   &:disabled {
-    background-color: #e0e0e0;
+    background-color: #DCDCDC;
     cursor: not-allowed;
   }
 `;

@@ -119,7 +119,7 @@ const Signup = () => {
         <S.InputGroup>
           <S.InputLabel>
             리그
-            <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem" }} />
+            <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem", cursor: "pointer" }} />
           </S.InputLabel>
           <S.Dropdown
               onClick={() => setIsLeagueDropdownOpen(!isLeagueDropdownOpen)}
@@ -144,6 +144,7 @@ const Signup = () => {
               )}
             </S.DropdownContent>
           </S.Dropdown>
+
           {isLeagueDropdownOpen && (
               <S.DropdownList>
                 {leagues.map((league) => (
