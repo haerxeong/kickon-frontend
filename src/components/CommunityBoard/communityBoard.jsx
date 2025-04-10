@@ -17,6 +17,7 @@ import {
   GoodIcon,
 } from "./CommunityBoard.style";
 import ImageIcon from "../../assets/image.svg";
+import {Link} from "react-router-dom";
 
 const CommunityBoard = () => {
   const initialPosts = [
@@ -61,7 +62,7 @@ const CommunityBoard = () => {
     <CommunityBoardContainer>
       <CommunityHeader>
         <div className="title">클럽 커뮤니티</div>
-        <MoreLink>
+        <MoreLink as={Link} to="/community">
           더 보기
           <MoreIcon />
         </MoreLink>
