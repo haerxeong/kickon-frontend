@@ -8,6 +8,7 @@ import News from "./pages/News/news.jsx";
 import NotFound from "./pages/not-found";
 import LoginModal from "./components/LoginModal/loginModal.jsx";
 import Signup from "./pages/Signup/signup.jsx";
+import ProfileSettings from "./pages/ProfileSettings/ProfileSettings.jsx";
 import PostEditor from "./components/PostEditer/postEditor.jsx";
 import NewsDetail from "./components/PostDetail/postDetail.jsx";
 import ReportModal from "./components/ReportModal/reportModal.jsx";
@@ -22,6 +23,7 @@ function App() {
                         <Route path="community" element={<Community />} />
                         <Route path="news" element={<News />} />
                         <Route path="signup" element={<Signup />} />
+                        <Route path="profile" element={<ProfileSettings />} />
                         <Route path="news/write" element={<PostEditor type="news" />} />
                         <Route path="community/write" element={<PostEditor type="community" />} />
                         <Route path="news/detail" element={<NewsDetail type="news" />} />
