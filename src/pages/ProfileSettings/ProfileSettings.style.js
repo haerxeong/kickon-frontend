@@ -12,7 +12,7 @@ export const ProfileSettingsContainer = styled.div`
   border: 1px solid #e0e0e0;
   background: #ffffff;
   /* Center horizontally and vertically */
-  margin: auto auto 5rem;
+  margin: auto auto;
 `;
 
 export const ProfileImageWrapper = styled.div`
@@ -258,28 +258,23 @@ export const InputWrapper = styled.div`
 export const InputField = styled.input`
   width: 100%;
   height: 2.2rem;
-  padding: 0 2rem 0 1rem; // 오른쪽 패딩을 늘려 X 아이콘을 위한 공간 확보
-  border: 1px solid #e0e0e0;
+  padding: 0 2rem 0 1rem;
+  border: 1px solid ${props => props.hasError ? '#ff0005' : '#e0e0e0'};
   border-radius: 0.4rem;
   font-size: 0.875rem;
   outline: none;
   transition: border-color 0.2s ease;
-
+  
   &:focus {
-    border-color: #000000;
+    border-color: ${props => props.hasError ? '#ff0005' : '#000000'};
   }
-
+  
   &::placeholder {
     color: #8f8f8f;
     font-size: 0.7rem;
   }
-
-  ${(props) =>
-    props.hasError &&
-    css`
-      border-color: #c00c0b;
-    `}
 `;
+
 
 export const ProfileImageContainer = styled.div`
   position: relative;
