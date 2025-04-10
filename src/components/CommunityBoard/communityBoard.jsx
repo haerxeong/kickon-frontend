@@ -19,7 +19,7 @@ import {
 import ImageIcon from "../../assets/image.svg";
 import {Link} from "react-router-dom";
 
-const CommunityBoard = () => {
+const CommunityBoard = ({ type }) => {
   const initialPosts = [
     {
       title: "(속보) 손흥민 더비 부상 ㄷㄷ",
@@ -61,7 +61,9 @@ const CommunityBoard = () => {
   return (
     <CommunityBoardContainer>
       <CommunityHeader>
-        <div className="title">클럽 커뮤니티</div>
+        <div className="title">
+          {type === "communityDetail" ? "함께 볼 만한 게시글" : "클럽 커뮤니티"}
+        </div>
         <MoreLink as={Link} to="/community">
           더 보기
           <MoreIcon />

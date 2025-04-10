@@ -5,7 +5,7 @@ const CommunityDetailPage = () => {
     return (
         <>
             <NewsDetail type="community" />
-            <CommunityBoard/>
+            <CommunityBoard type="communityDetail"/>
         </>
     )
 }
