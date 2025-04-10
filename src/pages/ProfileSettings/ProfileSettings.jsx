@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import * as S from "./ProfileSettings.style";
 import { League } from "../../mocks/league";
 import naverLogo from "../../assets/naver.svg";
-import kakaoLogo from "../../assets/kakao.svg";
-import { FiHelpCircle } from "react-icons/fi";
-import { IoChevronDownOutline } from "react-icons/io5";
-import { BsBan } from "react-icons/bs";
 import ProfileImageDefault from "../../assets/profile.svg";
 import CameraIcon from "../../assets/camera.png";
+import { BsQuestionCircle } from "react-icons/bs";
+import {handleIconClick} from "../../components/Profile/profile.style.js";
 
 const ProfileSettings = () => {
   const [nickname, setNickname] = useState("");
@@ -59,6 +57,10 @@ const ProfileSettings = () => {
   // 이미지 클릭 시 파일 선택 창 열기
   const handleImageClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleIconClick = () => {
+    alert("아이콘이 클릭되었습니다");
   };
 
   // 이미지 변경 처리 함수
@@ -134,7 +136,10 @@ const ProfileSettings = () => {
       </S.InputGroup>
 
       <S.InputGroup>
-        <S.InputLabel>리그</S.InputLabel>
+        <S.InputLabel>
+          리그
+          <BsQuestionCircle onClick={handleIconClick}/>
+        </S.InputLabel>
         <S.AccountInfoContainer>
           <S.LeftContent>
             {selectedLeagueData && (
@@ -162,7 +167,7 @@ const ProfileSettings = () => {
       </S.InputGroup>
 
       <S.InputGroup>
-        <S.InputLabel>계정 관리</S.InputLabel>
+        <S.ManageTitle>계정 관리</S.ManageTitle>
         <S.AccountInfoContainer>
           {/* 네이버 또는 카카오 로고 표시 (예시로 네이버 사용) */}
           <S.AccountLogo src={naverLogo} alt="Naver" />
