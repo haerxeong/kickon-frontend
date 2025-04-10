@@ -5,14 +5,12 @@ import naverLogo from "../../assets/naver.svg";
 import ProfileImageDefault from "../../assets/profile.svg";
 import CameraIcon from "../../assets/camera.png";
 import { BsQuestionCircle } from "react-icons/bs";
-import {handleIconClick} from "../../components/Profile/profile.style.js";
 
 const ProfileSettings = () => {
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [selectedLeague, setSelectedLeague] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
-  const [teamOptions, setTeamOptions] = useState([]);
   const [profileImage, setProfileImage] = useState(ProfileImageDefault);
   const fileInputRef = React.useRef(null);
   const leagues = League;
@@ -42,17 +40,6 @@ const ProfileSettings = () => {
     
     fetchUserData();
   }, []);
-
-  useEffect(() => {
-    // Update team options when league changes
-    if (selectedLeague && selectedLeague !== "응원팀이 없어요.") {
-      const teams =
-        leagues.find((league) => league.krName === selectedLeague)?.teams || [];
-      setTeamOptions(teams);
-    } else {
-      setTeamOptions([]);
-    }
-  }, [selectedLeague, leagues]);
 
   // 이미지 클릭 시 파일 선택 창 열기
   const handleImageClick = () => {
