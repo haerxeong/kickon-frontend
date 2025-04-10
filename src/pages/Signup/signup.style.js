@@ -6,11 +6,10 @@ export const SignupContainer = styled.div`
   display: flex;
   width: 31rem;
   padding: 4rem 7rem 2rem 7rem;
-  box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
-  border-radius: 0.75rem;
-  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  border: 1px solid #DCDCDC;
   background: #ffffff;
 `;
 
