@@ -112,10 +112,6 @@ export const CancelButton = styled.button`
   font-weight: 400;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
-  &:hover {
-    background-color: #d0d0d0;
-  }
 `;
 
 export const UpdateButton = styled.button`
@@ -129,10 +125,6 @@ export const UpdateButton = styled.button`
   font-weight: 400;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
-  &:hover {
-    background-color: #a00a09;
-  }
   
   &:disabled {
     background-color: #8F8F8F;
