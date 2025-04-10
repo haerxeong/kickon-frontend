@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const ProfileSettingsContainer = styled.div`
   display: flex;
   width: 31rem;
-  //height: 42rem;
   padding: 5.2rem 7rem 3rem 7rem;
   box-sizing: border-box;
   flex-direction: column;

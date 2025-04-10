@@ -124,7 +124,7 @@ const RootLayout = () => {
         )}
       </MainContainer>
 
-      {(isHomePage || isSignupPage || isProfilePage) && <Footer isDark={isSignupPage || isProfilePage} />}
+      {(isHomePage || isSignupPage) && <Footer isDark={isSignupPage} />}
     </Layout>
   );
 };
