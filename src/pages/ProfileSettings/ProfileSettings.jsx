@@ -152,7 +152,10 @@ const ProfileSettings = () => {
         <S.AccountInfoContainer>
           <S.LeftContent>
             {selectedTeam && (
+              <>
+              <S.SelectedImage src={selectedLeagueData.image} alt={selectedLeagueData.krName} />
               <S.SelectedName>{selectedTeam}</S.SelectedName>
+              </>
             )}
           </S.LeftContent>
         </S.AccountInfoContainer>
