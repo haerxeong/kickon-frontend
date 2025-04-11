@@ -64,6 +64,5 @@ export const LoginButton = styled(Link)`
   font-size: 0.7875rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1rem; /* 133.333% */
   text-decoration: none;
 `;
