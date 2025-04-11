@@ -1,4 +1,3 @@
-//signup.style.js
 import styled, { css } from "styled-components";
 import { FaCheckSquare, FaRegCheckSquare } from "react-icons/fa";
 
@@ -242,7 +241,7 @@ export const NaverLogoIcon = styled.img`
 
 export const KakaoLogoIcon = styled.img`
   width: 1rem;
-  height: 1rem;
+  height: auto;
 `;
 
 export const StyledCheckSquare = styled(FaCheckSquare)`

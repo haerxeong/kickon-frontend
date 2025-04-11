@@ -30,7 +30,7 @@ const handleSocialLogin = (provider) => {
     return;
   }
 
-  window.location.href = `${import.meta.env.VITE_BASE_URL}/oauth2/authorization/${provider}?state=http://localhost:5173/signup`;
+  window.location.href = `${import.meta.env.VITE_BASE_URL}/oauth2/authorization/${provider}?state=http://localhost:5173/signup?provider=${provider}`;
 }
 
     return (

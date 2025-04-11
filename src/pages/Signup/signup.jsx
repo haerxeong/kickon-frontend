@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import * as S from "./signup.style";
 import { League } from "../../mocks/league";
 import naverLogo from "../../assets/naver.svg";
+import kakaoLogo from "../../assets/kakao.svg";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { BsBan } from "react-icons/bs";
+import { useLocation } from "react-router-dom";
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -22,7 +24,17 @@ const Signup = () => {
   const [isPrivacyPolicyAgreed, setIsPrivacyPolicyAgreed] = useState(false);
   const [isMarketingAgreed, setIsMarketingAgreed] = useState(false);
 
+  const location = useLocation();
+  const [isNaverLogin, setIsNaverLogin] = useState(false);
+
   const leagues = League;
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const provider = queryParams.get("provider").split("?")[0];
+    setIsNaverLogin(provider === "naver");
+    console.log(provider);
+  }, [location.search]);
 
   useEffect(() => {
     // Update team options when league changes
@@ -101,7 +113,11 @@ const Signup = () => {
         <S.SignupTitle>회원가입</S.SignupTitle>
 
         <S.SocialLoginWrapper>
-          <S.NaverLogoIcon src={naverLogo} alt="네이버 로고" />
+          {isNaverLogin ? (
+              <S.NaverLogoIcon src={naverLogo} alt="네이버 로고" />
+          ) : (
+              <S.KakaoLogoIcon src={kakaoLogo} alt="카카오 로고" />
+          )}
           <S.SocialText>계정으로 가입을 진행하고 있어요.</S.SocialText>
         </S.SocialLoginWrapper>
 
@@ -140,7 +156,10 @@ const Signup = () => {
               {selectedLeagueData ? (
                   <IoChevronDownOutline size={12} color="#8F8F8F" />
               ) : (
-                  <S.DropdownText>선택해 주세요</S.DropdownText>
+                  <>
+                    <S.DropdownText>선택해 주세요</S.DropdownText>
+                    <IoChevronDownOutline size={12} color="#8F8F8F" />
+                  </>
               )}
             </S.DropdownContent>
           </S.Dropdown>
