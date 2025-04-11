@@ -136,6 +136,13 @@ export const DropdownList = styled.div`
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 4rem; /* 드롭다운 박스 바로 아래에 위치 */
+
+  ${(props) =>
+      props.type === "team" &&
+      css`
+      max-height: 10rem; /* Set a maximum height */
+      overflow-y: auto; /* Enable vertical scrolling */
+    `}
 `;
 
 // DropDownList 안에 들어가는 요소
