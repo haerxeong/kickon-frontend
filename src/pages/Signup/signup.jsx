@@ -5,9 +5,12 @@ import kakaoLogo from "../../assets/kakao.svg";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { BsBan } from "react-icons/bs";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getLeagues } from "../../apis/domains/common/getLeagues";
 import { getTeams } from "../../apis/domains/common/getTeams";
+import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgreement";
+import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo"; // Import updateUserInfo
+
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -17,6 +20,7 @@ const Signup = () => {
   const [teamOptions, setTeamOptions] = useState([]);
   const [isLeagueDropdownOpen, setIsLeagueDropdownOpen] = useState(false);
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState(false);
+
 
   // Checkbox states
   const [isAllAgreed, setIsAllAgreed] = useState(false);
@@ -28,6 +32,7 @@ const Signup = () => {
   const [leagues, setLeagues] = useState([]);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const [isNaverLogin, setIsNaverLogin] = useState(false);
 
   useEffect(() => {
@@ -114,7 +119,7 @@ const Signup = () => {
     setIsMarketingAgreed(newState);
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!nickname || !selectedLeague || !selectedTeam) {
       alert("모든 필수 항목을 입력해주세요.");
       return;
@@ -123,6 +128,49 @@ const Signup = () => {
     if (!isAgeAgreed || !isServiceTermsAgreed || !isPrivacyPolicyAgreed) {
       alert("필수 약관에 동의해주세요.");
       return;
+    }
+
+    try {
+      // Construct the request body for updatePrivacyAgreement
+      const privacyAgreedAt = new Date().toISOString(); // Current time in ISO format
+      const marketingAgreedAt = isMarketingAgreed ? privacyAgreedAt : null; // Only if marketing is agreed
+      const privacyAgreementBody = {
+        privacyAgreedAt: privacyAgreedAt,
+        marketingAgreedAt: marketingAgreedAt,
+      };
+
+      // Call the updatePrivacyAgreement function
+      const privacyResponse = await updatePrivacyAgreement(privacyAgreementBody);
+
+      if (privacyResponse) {
+        console.log("Privacy agreement updated successfully!", privacyResponse);
+      } else {
+        alert("개인정보 동의 업데이트에 실패했습니다.");
+        return; // Exit if privacy agreement fails
+      }
+
+      // Construct the request body for updateUserInfo
+      const userInfoBody = {
+        nickname: nickname,
+        favorite_team: selectedTeam, // Assuming selectedTeam is the team name
+        favorite_league: selectedLeague, // Assuming selectedLeague is the league name
+      };
+
+      // Call the updateUserInfo function
+      const userInfoResponse = await updateUserInfo(userInfoBody);
+
+      if (userInfoResponse) {
+        // Handle success - maybe redirect or show a success message
+        console.log("User info updated successfully!", userInfoResponse);
+        alert("회원가입 성공!"); // Replace with a better UI notification
+        navigate("/");
+      } else {
+        // Handle failure - show an error message
+        alert("유저 정보 업데이트에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("회원가입 중 오류가 발생했습니다.", error);
+      alert("회원가입 중 오류가 발생했습니다.");
     }
 
     console.log("Signup submitted", {
@@ -228,50 +276,48 @@ const Signup = () => {
                 </S.DropdownItem>
               </S.DropdownList>
           )}
-        </S.InputGroup>
-
-        <S.InputGroup>
-          <S.InputLabel>응원팀</S.InputLabel>
-          <S.Dropdown onClick={toggleTeamDropdown}>
-            <S.DropdownContent>
-              <S.LeftContent>
-                {selectedTeam === "응원팀이 없어요." ? (
-                    <>
-                      <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
-                      <S.SelectedName>응원팀이 없어요.</S.SelectedName>
-                    </>
-                ) : selectedTeam ? (
-                    <>
-                      <S.SelectedImage
-                          src={teamOptions.find((team) => team.nameKr === selectedTeam)?.logoUrl}
-                          alt={selectedTeam}
-                      />
-                      <S.SelectedName>{selectedTeam}</S.SelectedName>
-                    </>
-                ) : (
-                    <S.DropdownText>선택해 주세요</S.DropdownText>
-                )}
-              </S.LeftContent>
-              <IoChevronDownOutline size={12} color="#8F8F8F" />
-            </S.DropdownContent>
-          </S.Dropdown>
-          {isTeamDropdownOpen && (
-              <S.DropdownList type="team">
-                {teamOptions.map((team) => (
-                    <S.DropdownItem
-                        key={team.pk}
-                        onClick={() => {
-                          setSelectedTeam(team.nameKr);
-                          setIsTeamDropdownOpen(false);
-                        }}
-                    >
-                      <S.LeagueImage src={team.logoUrl} alt={team.nameKr} />
-                      <S.LeagueName>{team.nameKr}</S.LeagueName>
-                    </S.DropdownItem>
-                ))}
-              </S.DropdownList>
-          )}
-        </S.InputGroup>
+        </S.InputGroup>... <S.InputGroup>
+        <S.InputLabel>응원팀</S.InputLabel>
+        <S.Dropdown onClick={toggleTeamDropdown}>
+          <S.DropdownContent>
+            <S.LeftContent>
+              {selectedTeam === "응원팀이 없어요." ? (
+                  <>
+                    <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
+                    <S.SelectedName>응원팀이 없어요.</S.SelectedName>
+                  </>
+              ) : selectedTeam ? (
+                  <>
+                    <S.SelectedImage
+                        src={teamOptions.find((team) => team.nameKr === selectedTeam)?.logoUrl}
+                        alt={selectedTeam}
+                    />
+                    <S.SelectedName>{selectedTeam}</S.SelectedName>
+                  </>
+              ) : (
+                  <S.DropdownText>선택해 주세요</S.DropdownText>
+              )}
+            </S.LeftContent>
+            <IoChevronDownOutline size={12} color="#8F8F8F" />
+          </S.DropdownContent>
+        </S.Dropdown>
+        {isTeamDropdownOpen && (
+            <S.DropdownList type="team">
+              {teamOptions.map((team) => (
+                  <S.DropdownItem
+                      key={team.pk}
+                      onClick={() => {
+                        setSelectedTeam(team.nameKr);
+                        setIsTeamDropdownOpen(false);
+                      }}
+                  >
+                    <S.LeagueImage src={team.logoUrl} alt={team.nameKr} />
+                    <S.LeagueName>{team.nameKr}</S.LeagueName>
+                  </S.DropdownItem>
+              ))}
+            </S.DropdownList>
+        )}
+      </S.InputGroup>
 
         <S.CheckboxContainer>
           <S.CheckboxWrapper onClick={handleAllAgreementToggle}>
