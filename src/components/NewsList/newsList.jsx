@@ -5,7 +5,6 @@ import {newsList} from "../../mocks/newsList.js";
 import { Link } from "react-router-dom";
 
 const NewsList = () => {
-
   return (
     <NewsListContainer>
       <NewsHeader>
