@@ -34,15 +34,14 @@ const Signup = () => {
     const fetchLeagues = async () => {
       try {
         const data = await getLeagues();
-        setLeagues(data); // Store the fetched leagues in state
-        console.log(data); // Log the fetched data
+        setLeagues(data);
       } catch (error) {
         console.error("Failed to fetch leagues:", error);
       }
     };
 
     fetchLeagues();
-  }, []); // Run only once when the component mounts
+  }, []);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -65,11 +64,9 @@ const Signup = () => {
     const queryParams = new URLSearchParams(location.search);
     const provider = queryParams.get("provider").split("?")[0];
     setIsNaverLogin(provider === "naver");
-    console.log(provider);
   }, [location.search]);
 
   useEffect(() => {
-    // Update team options when league changes
     if (selectedLeague && selectedLeague !== "응원팀이 없어요.") {
       const teams =
           leagues.find((league) => league.nameKr === selectedLeague)?.teams || [];
@@ -80,7 +77,6 @@ const Signup = () => {
   }, [selectedLeague, leagues]);
 
   useEffect(() => {
-    // Check if all required checkboxes are checked
     const requiredAgreements =
         isAgeAgreed && isServiceTermsAgreed && isPrivacyPolicyAgreed;
 
@@ -141,6 +137,16 @@ const Signup = () => {
       (league) => league.nameKr === selectedLeague
   );
 
+  const toggleLeagueDropdown = () => {
+    setIsLeagueDropdownOpen(!isLeagueDropdownOpen);
+    setIsTeamDropdownOpen(false);
+  };
+
+  const toggleTeamDropdown = () => {
+    setIsTeamDropdownOpen(!isTeamDropdownOpen);
+    setIsLeagueDropdownOpen(false);
+  };
+
   return (
       <S.SignupContainer>
         <S.SignupTitle>회원가입</S.SignupTitle>
@@ -170,12 +176,15 @@ const Signup = () => {
             리그
             <FiHelpCircle color="#8F8F8F" style={{ marginLeft: "0.25rem", cursor: "pointer" }} />
           </S.InputLabel>
-          <S.Dropdown
-              onClick={() => setIsLeagueDropdownOpen(!isLeagueDropdownOpen)}
-          >
+          <S.Dropdown onClick={toggleLeagueDropdown}>
             <S.DropdownContent>
               <S.LeftContent>
-                {selectedLeagueData ? (
+                {selectedLeague === "응원팀이 없어요." ? (
+                    <>
+                      <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
+                      <S.SelectedName>응원팀이 없어요.</S.SelectedName>
+                    </>
+                ) : selectedLeagueData ? (
                     <>
                       <S.SelectedImage
                           src={selectedLeagueData.logoUrl}
@@ -183,17 +192,11 @@ const Signup = () => {
                       />
                       <S.SelectedName>{selectedLeagueData.nameKr}</S.SelectedName>
                     </>
-                ) : null}
-              </S.LeftContent>
-
-              {selectedLeagueData ? (
-                  <IoChevronDownOutline size={12} color="#8F8F8F" />
-              ) : (
-                  <>
+                ) : (
                     <S.DropdownText>선택해 주세요</S.DropdownText>
-                    <IoChevronDownOutline size={12} color="#8F8F8F" />
-                  </>
-              )}
+                )}
+              </S.LeftContent>
+              <IoChevronDownOutline size={12} color="#8F8F8F" />
             </S.DropdownContent>
           </S.Dropdown>
 
@@ -203,8 +206,8 @@ const Signup = () => {
                     <S.DropdownItem
                         key={league.pk}
                         onClick={() => {
-                          console.log("선택한 리그:", league.nameKr);
                           setSelectedLeague(league.nameKr);
+                          setSelectedTeam("");
                           setIsLeagueDropdownOpen(false);
                         }}
                     >
@@ -229,12 +232,15 @@ const Signup = () => {
 
         <S.InputGroup>
           <S.InputLabel>응원팀</S.InputLabel>
-          <S.Dropdown
-              onClick={() => setIsTeamDropdownOpen(!isTeamDropdownOpen)}
-          >
+          <S.Dropdown onClick={toggleTeamDropdown}>
             <S.DropdownContent>
               <S.LeftContent>
-                {selectedTeam ? (
+                {selectedTeam === "응원팀이 없어요." ? (
+                    <>
+                      <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
+                      <S.SelectedName>응원팀이 없어요.</S.SelectedName>
+                    </>
+                ) : selectedTeam ? (
                     <>
                       <S.SelectedImage
                           src={teamOptions.find((team) => team.nameKr === selectedTeam)?.logoUrl}
@@ -249,14 +255,12 @@ const Signup = () => {
               <IoChevronDownOutline size={12} color="#8F8F8F" />
             </S.DropdownContent>
           </S.Dropdown>
-
           {isTeamDropdownOpen && (
               <S.DropdownList type="team">
                 {teamOptions.map((team) => (
                     <S.DropdownItem
                         key={team.pk}
                         onClick={() => {
-                          console.log("선택한 팀:", team.nameKr);
                           setSelectedTeam(team.nameKr);
                           setIsTeamDropdownOpen(false);
                         }}
