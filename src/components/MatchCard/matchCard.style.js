@@ -322,3 +322,11 @@ export const JoinedText = styled.p`
     line-height: 0.8rem;
     margin: 0;
 `;
+
+export const Divider = styled.div`
+    width: 27.125rem;
+    height: 0.0625rem;
+    background-color: var(--Black-black_600, #8F8F8F);
+    margin: 1.4rem 1.05rem;
+    position: relative;
+`;
