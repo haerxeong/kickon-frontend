@@ -36,7 +36,19 @@ const MatchCard = () => {
     const [isConfirmed, setIsConfirmed] = useState(false);
 
     const handleClick = (index) => {
+        // Reset counts to 0 when the draw button (index 1) is clicked
+        if (index === 1) {
+            setCounts({ 0: 0, 2: 0 });
+        }
+
         setSelected((prev) => (prev === index ? null : index));
+    };
+
+    const handleContainerClick = () => {
+        // Allow editing by clicking on the container when confirmed
+        if (isConfirmed) {
+            setIsConfirmed(false);
+        }
     };
 
     const incrementCount = (event, index) => {
@@ -153,7 +165,7 @@ const MatchCard = () => {
                 <TimeTitle>경기 전</TimeTitle>
                 <TimeText>{formatKoreanDate(data.games.startAt)}</TimeText>
             </TimeGuide>
-            <MatchButtonContainer>
+            <MatchButtonContainer  onClick={handleContainerClick} style={{ cursor: isConfirmed ? 'pointer' : 'default' }}>
                 {[
                     {
                         name: data.games.homeTeam.name,
@@ -177,7 +189,10 @@ const MatchCard = () => {
                     <MatchButton
                         key={index}
                         aria-selected={selected === index}
-                        onClick={() => handleClick(index)}
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent container click event
+                            handleClick(index);
+                        }}
                         disabled={isConfirmed}
                     >
                         {/* 왼쪽 팀 (index === 0) */}
@@ -285,7 +300,10 @@ const MatchCard = () => {
 
             {selected !== null && !isConfirmed && (
                 <ConfirmButton
-                    onClick={handleConfirm}
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent container click event
+                        handleConfirm();
+                    }}
                     disabled={
                         (selected === 1) && (counts[0] !== counts[2]) ||
                         (selected === 0) && (counts[0] <= counts[2]) ||
