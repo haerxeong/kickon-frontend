@@ -10,7 +10,7 @@ export const NewsContainer = styled.div`
     background: #FFF;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    padding: 0.7rem;
 `;
 
 export const TabContainer = styled.div`
@@ -22,8 +22,8 @@ export const TabContainer = styled.div`
 export const Tab = styled.div`
     color: ${props => props.active ? '#C00C0B' : '#676767'};
     font-family: Pretendard;
-    font-size: 0.85rem;
-    font-weight: ${props => props.active ? '600' : '400'};
+    font-size: 0.8rem;
+    font-weight: ${props => props.active ? '600' : '500'};
     padding: 0.5rem 1rem;
     cursor: pointer;
     position: relative;
@@ -45,7 +45,7 @@ export const TableHeader = styled.div`
     border-bottom: 0.0625rem solid #f0f0f0;
     color: #000;
     font-family: Pretendard;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 400;
     .title {
         flex: 4;
@@ -89,6 +89,7 @@ export const PostItem = styled.div`
   width: 100%;
   padding: 0.75rem 0;
   border-bottom: 0.0625rem solid #f0f0f0;
+  cursor: pointer;
   
   &:last-child {
     border-bottom: none;
@@ -130,6 +131,13 @@ export const PostAuthor = styled.div`
   justify-content: center;
   gap: 0.25rem;
   font-weight: 350;
+
+  img {
+      width: 0.85rem; 
+      height: 0.85rem;
+      border-radius: 50%;
+      object-fit: cover;
+  }
 `;
 
 export const PostDate = styled.div`
