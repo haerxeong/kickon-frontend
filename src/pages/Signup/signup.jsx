@@ -11,7 +11,7 @@ import { getTeams } from "../../apis/domains/common/getTeams";
 import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgreement";
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { AuthContext } from "../../context/AuthContext.jsx";
-import { LeagueTeamContext } from "../../context/LeagueTeamContext.jsx";
+import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -31,7 +31,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const { login } = useContext(AuthContext);
-  const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useContext(LeagueTeamContext);
+  const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useLeagueTeamStore();
 
   useEffect(() => {
     let queryStr = location.search;

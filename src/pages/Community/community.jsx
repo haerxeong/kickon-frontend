@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
     PostItem, PostLikes, PostsWrapper, PostTitle, PostViews
@@ -7,7 +7,7 @@ import GoodIcon from "../../assets/good_black.svg";
 import ProfileIcon from "../../assets/profile.svg";
 import Pagination from "../../components/Pagination/pagination";
 import { getBoardList } from "../../apis/domains/community/getBoardList";
-import {LeagueTeamContext} from "../../context/LeagueTeamContext.jsx";
+import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -15,7 +15,7 @@ const Community = () => {
     const [activePage, setActivePage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const { selectedTeam } = useContext(LeagueTeamContext);
+    const { selectedTeam } = useLeagueTeamStore();
 
     const tabs = ["전체", "인기", `${selectedTeam.nameKr}`];
 
