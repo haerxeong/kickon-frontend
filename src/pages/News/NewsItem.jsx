@@ -4,9 +4,9 @@ import {timeAgo} from "../../utils/timeUtils.js";
 import { truncateText } from "../../utils/textUtils.js";
 import ProfileSvg from "../../assets/profile.svg";
 
-const NewsItem = ({ title, content, ...props }) => {
+const NewsItem = ({ title, content, onClick, ...props }) => {
   return (
-      <S.NewsItemContainer>
+      <S.NewsItemContainer onClick={onClick}>
         <S.ContentWrapper>
           <S.TextContentWrapper>
             <S.TopSection>

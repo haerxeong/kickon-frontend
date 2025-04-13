@@ -9,6 +9,7 @@ export const NewsItemContainer = styled.div`
   width: 100%;
   padding: 0.5rem 0 1rem 0;
   border-bottom: 0.0625rem solid #f0f0f0;
+  cursor: pointer;
 `;
 
 export const ContentWrapper = styled.div`

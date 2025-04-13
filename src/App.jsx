@@ -30,7 +30,9 @@ function App() {
                             <Route path="news/write" element={<PostEditor type="news" />} />
                             <Route path="community/write" element={<PostEditor type="community" />} />
                             <Route path="news/detail" element={<NewsDetailPage />} />
+                            <Route path="news/:id" element={<NewsDetailPage />} />
                             <Route path="community/detail" element={<CommunityDetailPage />} />
+                            <Route path="community/:id" element={<CommunityDetailPage />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
