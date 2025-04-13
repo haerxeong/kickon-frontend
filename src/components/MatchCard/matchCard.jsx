@@ -1,28 +1,11 @@
 import React, { useState } from "react";
 import {
-    MatchButton,
-    StyledTopContainer,
-    LeftText,
-    RightBadge,
-    TimeGuide,
-    TimeText,
-    MatchButtonContainer,
-    MatchCardContainer,
-    ExtraContentRight,
-    ExtraContentLeft,
-    CountButton,
-    CountDisplay,
-    ConfirmButton,
-    JoinedText,
-    TimeTitle,
-    RightText,
-    TeamName,
-    TeamLogo,
-    ParticipationPercentage,
-    TeamLeftContainer,
-    TeamCenterContainer,
-    TeamRightContainer,
-    TeamNameContainer,
+    MatchButton, StyledTopContainer, LeftText, RightBadge,
+    TimeGuide, TimeText, MatchButtonContainer, MatchCardContainer,
+    ExtraContentRight, ExtraContentLeft, CountButton, CountDisplay,
+    ConfirmButton, JoinedText, TimeTitle, RightText,
+    TeamName, TeamLogo, ParticipationPercentage, TeamLeftContainer,
+    TeamCenterContainer, TeamRightContainer, TeamNameContainer,
     TeamRightNameContainer, Divider
 } from "./matchCard.style.js";
 import chevronUp from "../../assets/chevron_up.svg";
@@ -216,7 +199,6 @@ const MatchCard = () => {
         return counts[optionIndex] === maxCount ? "#C00C0B" : "#AFAFAF";
     };
 
-    // Function to render a match card
     const renderMatchCard = (game, gameIndex, isFinished = false) => {
         const showCountControls = !isFinished && selectedGames[gameIndex] !== null;
         const isConfirmed = isFinished || confirmedGames[gameIndex];
@@ -388,12 +370,10 @@ const MatchCard = () => {
 
     return (
         <>
-            {/* Proceeding Games Section */}
             {proceeding_data.games.map((game, gameIndex) => renderMatchCard(game, gameIndex))}
 
             <Divider/>
 
-            {/* Finished Games Section */}
             {finished_data.games.map((game, gameIndex) => renderMatchCard(game, gameIndex, true))}
         </>
     );
