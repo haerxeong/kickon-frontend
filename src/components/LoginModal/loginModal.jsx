@@ -24,6 +24,15 @@ const LoginModal = () => {
 
     if (!isLoginModalOpen) return null;
 
+const handleSocialLogin = (provider) => {
+  if (provider !== "naver" && provider !== "kakao") {
+    console.error("Unknown provider");
+    return;
+  }
+
+  window.location.href = `${import.meta.env.VITE_BASE_URL}/oauth2/authorization/${provider}?state=http://localhost:5173/signup?provider=${provider}`;
+}
+
     return (
         <ModalOverlay onClick={() => dispatch(closeLoginModal())}>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -33,11 +42,11 @@ const LoginModal = () => {
                     로그인하고 킥온과 함께 <br />
                     좋아하는 축구팀 승부예측하러 가요!
                 </DescriptionText>
-                <KakaoLoginButton>
+                <KakaoLoginButton onClick={() => handleSocialLogin("kakao")}>
                     <KakaoLogo src={kakaoLogo} alt="카카오 로고" />
                     <KakaoLoginText>카카오로 로그인</KakaoLoginText>
                 </KakaoLoginButton>
-                <NaverLoginButton>
+                <NaverLoginButton onClick={() => handleSocialLogin("naver")}>
                     <NaverLogo src={naverLogo} alt="네이버 로고" />
                     <NaverLoginText>네이버로 로그인</NaverLoginText>
                 </NaverLoginButton>

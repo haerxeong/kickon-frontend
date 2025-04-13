@@ -1,4 +1,3 @@
-//signup.style.js
 import styled, { css } from "styled-components";
 import { FaCheckSquare, FaRegCheckSquare } from "react-icons/fa";
 
@@ -137,6 +136,13 @@ export const DropdownList = styled.div`
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 4rem; /* 드롭다운 박스 바로 아래에 위치 */
+
+  ${(props) =>
+      props.type === "team" &&
+      css`
+      max-height: 10rem; /* Set a maximum height */
+      overflow-y: auto; /* Enable vertical scrolling */
+    `}
 `;
 
 // DropDownList 안에 들어가는 요소
@@ -242,7 +248,7 @@ export const NaverLogoIcon = styled.img`
 
 export const KakaoLogoIcon = styled.img`
   width: 1rem;
-  height: 1rem;
+  height: auto;
 `;
 
 export const StyledCheckSquare = styled(FaCheckSquare)`
