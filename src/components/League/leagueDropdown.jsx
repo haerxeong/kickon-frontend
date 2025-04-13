@@ -3,7 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import * as S from "./leagueDropdown.style.js";
 import {getLeagues} from "../../apis/domains/common/getLeagues.js";
 
-const LeagueDropdown = ({selectedLeague, setSelectedLeague}) => {
+const LeagueDropdown = ({selectedLeague, setSelectedLeague, activeTab}) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [leagues, setLeagues] = useState([]);
 
@@ -12,7 +12,7 @@ const LeagueDropdown = ({selectedLeague, setSelectedLeague}) => {
     };
 
     const handleLeagueSelect = (league) => {
-        setSelectedLeague(league.krName);
+        setSelectedLeague(league); // 전체 리그 객체 저장
         setIsDropdownOpen(false);
     };
 
@@ -31,8 +31,11 @@ const LeagueDropdown = ({selectedLeague, setSelectedLeague}) => {
 
     return (
         <S.DropdownContainer>
-            <S.TabSelector onClick={toggleDropdown} selected={isDropdownOpen}>
-                <span>{selectedLeague}</span>
+            <S.TabSelector
+                onClick={toggleDropdown}
+                isActive={selectedLeague?.nameKr === activeTab} // 👈 드롭다운도 현재 탭인지 체크!
+            >
+                <span>{selectedLeague?.nameKr || "리그 선택"}</span>
                 <IoIosArrowDown size="0.7rem" color="#8F8F8F" />
             </S.TabSelector>
 
