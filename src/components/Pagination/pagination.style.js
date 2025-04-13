@@ -43,8 +43,12 @@ export const NavButton = styled.button`
     border: none;
     background: transparent;
     font-size: 0.56rem; /* 기존의 0.8배 */
-    color: #676767;
-    cursor: pointer;
+    color: ${props => (props.disabled ? '#D4D4D4' : '#8F8F8F')};
+    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
     display: flex;
     align-items: center;
+
+    &:hover {
+        color: ${props => (props.disabled ? '#D4D4D4' : '#000')};
+    }
 `;
