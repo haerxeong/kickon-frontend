@@ -10,14 +10,19 @@ import { getNewsList } from "../../apis/domains/news/getNewsList";
 
 const News = () => {
     const [newsList, setNewsList] = useState([]);
-    const [selectedLeague, setSelectedLeague] = useState("리그 선택");
+    const [selectedLeague, setSelectedLeague] = useState(null);
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const { selectedTeam } = useLeagueTeamStore();
     const navigate = useNavigate();
+    const leaguePk = selectedLeague?.pk || undefined;
 
-    const tabs = ["전체", "인기", selectedTeam?.nameKr || "", selectedLeague];
+    const tabs = [
+        { type: "text", label: "전체", value: "전체" },
+        { type: "text", label: "인기", value: "인기" },
+        selectedTeam?.nameKr && { type: "text", label: selectedTeam.nameKr, value: selectedTeam.nameKr },
+    ].filter(Boolean);
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -32,7 +37,7 @@ const News = () => {
                     page: activePage,
                     order: activeTab === "인기" ? "hot" : "recent",
                     team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined,
-                    league: selectedLeague !== "리그 선택" ? selectedLeague : undefined,
+                    league: leaguePk,
                 };
 
                 const response = await getNewsList(params);
@@ -56,25 +61,35 @@ const News = () => {
         <S.Container>
             <S.NewsContainer>
                 <S.NavContainer>
-                    {tabs.map(tab => (
+                    {tabs.map((tab, index) => (
                         <S.TabButton
-                            key={tab}
-                            isActive={activeTab === tab}
-                            onClick={() => handleTabClick(tab)}
+                            key={tab.value}
+                            isActive={activeTab === tab.value}
+                            onClick={() => handleTabClick(tab.value)}
                         >
-                            {tab}
+                            {tab.label}
                         </S.TabButton>
                     ))}
 
                     <LeagueDropdown
                         selectedLeague={selectedLeague}
-                        setSelectedLeague={setSelectedLeague}
+                        setSelectedLeague={(league) => {
+                            setSelectedLeague(league);
+                            setActiveTab(league.nameKr);
+                            setActivePage(1);
+                        }}
+                        activeTab={activeTab}
                     />
                 </S.NavContainer>
 
                 <S.Divider>
-                    {tabs.indexOf(activeTab) >= 0 && (
-                        <S.ActiveIndicator left={`${tabs.indexOf(activeTab) * 3 + 0.7}rem`} />
+                    {tabs.map((tab, idx) =>
+                            tab.value === activeTab && (
+                                <S.ActiveIndicator key={tab.value} left={`calc(${idx} * 3rem + 0.7rem)`} />
+                            )
+                    )}
+                    {selectedLeague?.nameKr === activeTab && (
+                        <S.ActiveIndicator left={`calc(${tabs.length} * 3rem + 1rem)`} />
                     )}
                 </S.Divider>
 

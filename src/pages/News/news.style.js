@@ -51,7 +51,7 @@ export const Divider = styled.div`
 export const ActiveIndicator = styled.div`
     position: absolute;
     top: -1px;
-    width: 1.85rem;
+    width: 2rem;
     height: 0;
     stroke-width: 2px;
     stroke: #C00C0B;

@@ -5,25 +5,24 @@ export const DropdownContainer = styled.div`
 `;
 
 export const TabSelector = styled.div`
-    // 리그 선택 탭
-    display: flex;
-    width: auto;
-    justify-content: space-between;
-    align-items: center;
-    align-self: stretch;
-    border-radius: 0.37rem;
-    background: #FFF;
-    font-size: 0.65rem;
-    cursor: pointer;
+  display: flex;
+  width: auto;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 0.37rem;
+  background: #FFF;
+  font-size: 0.65rem;
+  cursor: pointer;
 
-    span {
-        color: #000;
-        font-weight: 400;
-        font-size: 0.7rem;
-        font-style: normal;
-        line-height: 0.7rem;
-        margin-right: 0.2rem;
-    }
+  span {
+    color: ${({ isActive }) => (isActive ? '#C00C0B' : '#000')};
+    font-weight: ${({ isActive }) => (isActive ? 500 : 400)};
+    font-size: 0.7rem;
+    font-style: normal;
+    line-height: 0.7rem;
+    margin-right: 0.2rem;
+  }
 `;
 
 export const DropdownMenu = styled.div`
