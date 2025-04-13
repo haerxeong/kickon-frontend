@@ -1,53 +1,65 @@
-// 임시 커뮤니티 페이지
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
-    PostItem, PostLikes,
-    PostsWrapper,
-    PostTitle, PostViews
+    PostItem, PostLikes, PostsWrapper, PostTitle, PostViews
 } from "./community.style.js";
-import GoodIcon from "../../assets/good_black.svg"
+import GoodIcon from "../../assets/good_black.svg";
 import ProfileIcon from "../../assets/profile.svg";
-import Pagination from "../../components/Pagination/pagination"
-
-function AuthorIcon(props) {
-    return null;
-}
+import * as S from "../../components/Pagination/pagination.style.js";
+import { getBoardList } from "../../apis/domains/community/getBoardList";
+import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 
 const Community = () => {
-    const posts = [
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ (1)", author: "닉네임", date: "2025.01.20", views: "5", likes: "2" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", author: "닉네임123", date: "2025.01.20", views: "22", likes: "16" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임ㄱㄱ", date: "2025.01.20", views: "478", likes: "239" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-    ];
+    const [posts, setPosts] = useState([]);
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const navigate = useNavigate();
+
+    const { selectedTeam } = useLeagueTeamStore();
+
+    const tabs = ["전체", "인기", selectedTeam?.nameKr || "응원팀"];
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const params = {
+                    size: 20,
+                    page: activePage,
+                    order: activeTab === "인기" ? "hot" : "recent",
+                    team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined,
+                };
+
+                const response = await getBoardList(params);
+
+                if (response.data) {
+                    setPosts(response.data);
+                    setTotalPages(response.meta.totalPages || 1);
+                } else {
+                    setPosts([]);
+                    setTotalPages(1);
+                }
+            } catch (error) {
+                console.error("게시글을 불러오는 데 실패했습니다:", error);
+            }
+        };
+
+        fetchPosts();
+    }, [activeTab, activePage, selectedTeam]);
 
     return (
         <NewsContainer>
             <TabContainer>
-                {["전체", "인기", "FC서울"].map((tab) => (
+                {tabs.map((tab) => (
                     <Tab
                         key={tab}
                         active={activeTab === tab}
-                        onClick={() => setActiveTab(tab)} // 클릭하면 활성화 변경
+                        onClick={() => {
+                            setActiveTab(tab);
+                            setActivePage(1); // Reset page on tab change
+                        }}
                     >
                         {tab}
                     </Tab>
@@ -66,27 +78,44 @@ const Community = () => {
             </TableHeader>
 
             <PostsWrapper>
-                {posts.map((post, index) => (
-                    <PostItem key={index}>
+                {posts.map((post) => (
+                    <PostItem key={post.pk} onClick={() => navigate(`/community/${post.pk}`)}>
                         <PostTitle>
                             {post.title}
-                            {post.replyCount && <span className="reply-count">({post.replyCount})</span>}
+                            {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
                         </PostTitle>
                         <PostAuthor>
-                            <img src={ProfileIcon} alt="프로필 아이콘" width={14} height={14} />
-                            {post.author}
+                            <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
+                            {post.user.nickname}
                         </PostAuthor>
-                        <PostDate>{post.date}</PostDate>
+                        <PostDate>{new Date(post.createdAt).toLocaleDateString()}</PostDate>
                         <PostViews>{post.views}</PostViews>
                         <PostLikes>{post.likes}</PostLikes>
                     </PostItem>
                 ))}
             </PostsWrapper>
 
-            {/* ✅ Pagination을 컨테이너 내부에 위치시키기 */}
-            <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={10}/>
+            <S.PaginationWrapper>
+                <S.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
+                             disabled={activePage === 1}>
+                    <GrFormPrevious /> 이전
+                </S.NavButton>
+                {Array.from({ length: totalPages }, (_, i) => (
+                    <S.PageButton
+                        key={i + 1}
+                        active={activePage === i + 1}
+                        onClick={() => setActivePage(i + 1)}
+                    >
+                        {i + 1}
+                    </S.PageButton>
+                ))}
+                <S.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
+                             disabled={activePage === totalPages}>
+                    다음 <GrFormNext />
+                </S.NavButton>
+            </S.PaginationWrapper>
         </NewsContainer>
     );
-}
+};
 
 export default Community;

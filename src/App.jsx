@@ -13,7 +13,7 @@ import PostEditor from "./components/PostEditer/postEditor.jsx";
 import ReportModal from "./components/ReportModal/reportModal.jsx";
 import NewsDetailPage from "./pages/News/newsDetail.jsx";
 import CommunityDetailPage from "./pages/Community/communityDetail.jsx";
-import {AuthProvider} from "./context/AuthContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 function App() {
     return (

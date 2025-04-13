@@ -10,13 +10,14 @@ import { getLeagues } from "../../apis/domains/common/getLeagues";
 import { getTeams } from "../../apis/domains/common/getTeams";
 import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgreement";
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
-import {AuthContext} from "../../context/AuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
+import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
-  const [selectedLeague, setSelectedLeague] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState("");
+  // const [selectedLeague, setSelectedLeague] = useState("");
+  // const [selectedTeam, setSelectedTeam] = useState("");
   const [teamOptions, setTeamOptions] = useState([]);
   const [isLeagueDropdownOpen, setIsLeagueDropdownOpen] = useState(false);
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState(false);
@@ -30,6 +31,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const { login } = useContext(AuthContext);
+  const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useLeagueTeamStore();
 
   useEffect(() => {
     let queryStr = location.search;
@@ -70,48 +72,27 @@ const Signup = () => {
 
   useEffect(() => {
     const fetchTeams = async () => {
-      if (selectedLeague) {
+      if (selectedLeague?.pk) {
         try {
-          const leagueId = leagues.find((league) => league.nameKr === selectedLeague)?.pk;
-          if (leagueId) {
-            const data = await getTeams({ league: leagueId });
-            setTeamOptions(data);
-          }
+          const data = await getTeams({ league: selectedLeague.pk });
+          setTeamOptions(data);
         } catch (error) {
           console.error("Failed to fetch teams:", error);
         }
       }
     };
     fetchTeams();
-  }, [selectedLeague, leagues]);
+  }, [selectedLeague]);
 
   useEffect(() => {
-    if (selectedLeague && selectedLeague !== "응원팀이 없어요.") {
+    if (selectedLeague?.pk && selectedLeague?.nameKr !== "응원팀이 없어요.") {
       const teams =
-          leagues.find((league) => league.nameKr === selectedLeague)?.teams || [];
+          leagues.find((league) => league.nameKr === selectedLeague.nameKr)?.teams || [];
       setTeamOptions(teams);
     } else {
       setTeamOptions([]);
     }
   }, [selectedLeague, leagues]);
-
-  useEffect(() => {
-    const requiredAgreements =
-        isAgeAgreed && isServiceTermsAgreed && isPrivacyPolicyAgreed;
-
-    const isFormValid =
-        nickname.length >= 2 &&
-        selectedLeague &&
-        selectedTeam &&
-        requiredAgreements;
-  }, [
-    nickname,
-    selectedLeague,
-    selectedTeam,
-    isAgeAgreed,
-    isServiceTermsAgreed,
-    isPrivacyPolicyAgreed,
-  ]);
 
   const handleNicknameChange = (e) => {
     const value = e.target.value;
@@ -134,7 +115,7 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    if (!nickname || !selectedLeague || !selectedTeam) {
+    if (!nickname || !selectedLeague.pk || !selectedTeam.pk) {
       alert("모든 필수 항목을 입력해주세요.");
       return;
     }
@@ -161,11 +142,12 @@ const Signup = () => {
         return;
       }
 
-      const selectedTeamPk = teamOptions.find((team) => team.nameKr === selectedTeam)?.pk;
+      // const selectedTeamPk = teamOptions.find((team) => team.nameKr === selectedTeam)?.pk;
+      // setSelectedTeam({pk: selectedTeamPk, nameKr: selectedTeam});
 
       const userInfoBody = {
         nickname: nickname,
-        team: selectedTeamPk,
+        team: selectedTeam.pk,
       };
 
       const userInfoResponse = await updateUserInfo(userInfoBody);
@@ -193,7 +175,7 @@ const Signup = () => {
   };
 
   const selectedLeagueData = leagues.find(
-      (league) => league.nameKr === selectedLeague
+      (league) => league.nameKr === selectedLeague?.nameKr
   );
 
   const toggleLeagueDropdown = () => {
@@ -238,7 +220,7 @@ const Signup = () => {
           <S.Dropdown onClick={toggleLeagueDropdown}>
             <S.DropdownContent>
               <S.LeftContent>
-                {selectedLeague === "응원팀이 없어요." ? (
+                {selectedLeague?.nameKr === "응원팀이 없어요." ? (
                     <>
                       <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
                       <S.SelectedName>응원팀이 없어요.</S.SelectedName>
@@ -265,8 +247,8 @@ const Signup = () => {
                     <S.DropdownItem
                         key={league.pk}
                         onClick={() => {
-                          setSelectedLeague(league.nameKr);
-                          setSelectedTeam("");
+                          setSelectedLeague({ pk: league.pk, nameKr: league.nameKr });
+                          setSelectedTeam({ pk: null, nameKr: null });
                           setIsLeagueDropdownOpen(false);
                         }}
                     >
@@ -276,8 +258,8 @@ const Signup = () => {
                 ))}
                 <S.DropdownItem
                     onClick={() => {
-                      setSelectedLeague("응원팀이 없어요.");
-                      setSelectedTeam("응원팀이 없어요.");
+                      setSelectedLeague({ pk: 0, nameKr: "응원팀이 없어요."});
+                      setSelectedTeam({ pk: 0, nameKr: "응원팀이 없어요."});
                       setIsLeagueDropdownOpen(false);
                       setIsTeamDropdownOpen(false);
                     }}
@@ -292,18 +274,18 @@ const Signup = () => {
         <S.Dropdown onClick={toggleTeamDropdown}>
           <S.DropdownContent>
             <S.LeftContent>
-              {selectedTeam === "응원팀이 없어요." ? (
+              {selectedTeam?.nameKr === "응원팀이 없어요." ? (
                   <>
                     <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
                     <S.SelectedName>응원팀이 없어요.</S.SelectedName>
                   </>
-              ) : selectedTeam ? (
+              ) : selectedTeam?.pk ? (
                   <>
                     <S.SelectedImage
-                        src={teamOptions.find((team) => team.nameKr === selectedTeam)?.logoUrl}
-                        alt={selectedTeam}
+                        src={teamOptions.find((team) => team.nameKr === selectedTeam.nameKr)?.logoUrl}
+                        alt={selectedTeam.nameKr}
                     />
-                    <S.SelectedName>{selectedTeam}</S.SelectedName>
+                    <S.SelectedName>{selectedTeam.nameKr}</S.SelectedName>
                   </>
               ) : (
                   <S.DropdownText>선택해 주세요</S.DropdownText>
@@ -318,7 +300,7 @@ const Signup = () => {
                   <S.DropdownItem
                       key={team.pk}
                       onClick={() => {
-                        setSelectedTeam(team.nameKr);
+                        setSelectedTeam({ pk: team.pk, nameKr: team.nameKr });
                         setIsTeamDropdownOpen(false);
                       }}
                   >
@@ -388,8 +370,8 @@ const Signup = () => {
             onClick={handleSignup}
             disabled={
                 !nickname ||
-                !selectedLeague ||
-                !selectedTeam ||
+                !selectedLeague.pk ||
+                !selectedTeam.pk ||
                 !isAgeAgreed ||
                 !isServiceTermsAgreed ||
                 !isPrivacyPolicyAgreed
