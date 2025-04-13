@@ -9,8 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getLeagues } from "../../apis/domains/common/getLeagues";
 import { getTeams } from "../../apis/domains/common/getTeams";
 import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgreement";
-import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo"; // Import updateUserInfo
-
+import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -20,20 +19,39 @@ const Signup = () => {
   const [teamOptions, setTeamOptions] = useState([]);
   const [isLeagueDropdownOpen, setIsLeagueDropdownOpen] = useState(false);
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState(false);
-
-
-  // Checkbox states
   const [isAllAgreed, setIsAllAgreed] = useState(false);
   const [isAgeAgreed, setIsAgeAgreed] = useState(false);
   const [isServiceTermsAgreed, setIsServiceTermsAgreed] = useState(false);
   const [isPrivacyPolicyAgreed, setIsPrivacyPolicyAgreed] = useState(false);
   const [isMarketingAgreed, setIsMarketingAgreed] = useState(false);
-
   const [leagues, setLeagues] = useState([]);
-
   const location = useLocation();
   const navigate = useNavigate();
   const [isNaverLogin, setIsNaverLogin] = useState(false);
+
+  useEffect(() => {
+    let queryStr = location.search;
+
+    if (queryStr.includes("?accessToken=")) {
+      queryStr = queryStr.replace("?accessToken=", "&accessToken=");
+    }
+
+    const queryParams = new URLSearchParams(queryStr);
+
+    const provider = queryParams.get("provider");
+    const accessToken = queryParams.get("accessToken");
+    const refreshToken = queryParams.get("refreshToken");
+
+    // provider가 제대로 파싱되지 않았을 때 대비
+    if (provider) {
+      setIsNaverLogin(provider === "naver");
+    }
+
+    if (accessToken && refreshToken) {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+    }
+  }, [location.search]);
 
   useEffect(() => {
     const fetchLeagues = async () => {
@@ -64,12 +82,6 @@ const Signup = () => {
     };
     fetchTeams();
   }, [selectedLeague, leagues]);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const provider = queryParams.get("provider").split("?")[0];
-    setIsNaverLogin(provider === "naver");
-  }, [location.search]);
 
   useEffect(() => {
     if (selectedLeague && selectedLeague !== "응원팀이 없어요.") {
@@ -131,43 +143,39 @@ const Signup = () => {
     }
 
     try {
-      // Construct the request body for updatePrivacyAgreement
-      const privacyAgreedAt = new Date().toISOString(); // Current time in ISO format
-      const marketingAgreedAt = isMarketingAgreed ? privacyAgreedAt : null; // Only if marketing is agreed
+      const privacyAgreedAt = new Date().toISOString().split('.')[0] + "Z";
+      const marketingAgreedAt = isMarketingAgreed ? privacyAgreedAt : null;
+
       const privacyAgreementBody = {
         privacyAgreedAt: privacyAgreedAt,
         marketingAgreedAt: marketingAgreedAt,
       };
 
-      // Call the updatePrivacyAgreement function
       const privacyResponse = await updatePrivacyAgreement(privacyAgreementBody);
+      console.log(privacyAgreementBody)
 
-      if (privacyResponse) {
-        console.log("Privacy agreement updated successfully!", privacyResponse);
-      } else {
+      if (!privacyResponse) {
         alert("개인정보 동의 업데이트에 실패했습니다.");
-        return; // Exit if privacy agreement fails
+        return;
       }
 
-      // Construct the request body for updateUserInfo
+      const selectedTeamPk = teamOptions.find((team) => team.nameKr === selectedTeam)?.pk;
+
       const userInfoBody = {
         nickname: nickname,
-        favorite_team: selectedTeam, // Assuming selectedTeam is the team name
-        favorite_league: selectedLeague, // Assuming selectedLeague is the league name
+        team: selectedTeamPk,
       };
 
-      // Call the updateUserInfo function
       const userInfoResponse = await updateUserInfo(userInfoBody);
+      console.log(userInfoBody);
 
-      if (userInfoResponse) {
-        // Handle success - maybe redirect or show a success message
-        console.log("User info updated successfully!", userInfoResponse);
-        alert("회원가입 성공!"); // Replace with a better UI notification
-        navigate("/");
-      } else {
-        // Handle failure - show an error message
+      if (!userInfoResponse) {
         alert("유저 정보 업데이트에 실패했습니다.");
+        return;
       }
+
+      alert("회원가입 성공!");
+      navigate("/");
     } catch (error) {
       console.error("회원가입 중 오류가 발생했습니다.", error);
       alert("회원가입 중 오류가 발생했습니다.");
