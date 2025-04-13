@@ -1,0 +1,22 @@
+import axiosInstance from "../../axios-instance.js";
+
+export const getNewsList = async ({ team, size, page, order, league }) => {
+    try {
+        const response = await axiosInstance.get('/api/news', {
+            params: { team, size, page, order, league },
+        });
+
+        console.log('API Response:', response);
+
+        // Validate the response structure
+        if (response?.code === 'GET_SUCCESS') {
+            return response;
+        } else {
+            console.error('Unexpected response format:', response.data);
+            return { data: [], meta: { totalPages: 1 } }; // Return default structure
+        }
+    } catch (error) {
+        console.error('뉴스 리스트 조회 실패: ', error);
+        return { data: [], meta: { totalPages: 1 } }; // Return default structure on error
+    }
+};
