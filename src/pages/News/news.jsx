@@ -95,7 +95,10 @@ const News = () => {
 
                 <S.NewsList>
                     {newsList.map((item) => (
-                        <NewsItem key={item.pk} {...item} onClick={() => navigate(`/news/${item.pk}`)}/>
+                        <NewsItem key={item.pk} {...item} onClick={() => {
+                            console.log(`Navigating to /news/${item.pk}`);
+                            navigate(`/news/${item.pk}`)
+                        }}/>
                     ))}
                 </S.NewsList>
 
