@@ -33,7 +33,6 @@ const Community = () => {
                 };
 
                 const response = await getBoardList(params);
-                console.log("냠냠 커뮤니티페이지:", response);
 
                 if (response.data) {
                     setPosts(response.data);
