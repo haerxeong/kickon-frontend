@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as S from "./signup.style";
 import naverLogo from "../../assets/naver.svg";
 import kakaoLogo from "../../assets/kakao.svg";
@@ -10,6 +10,7 @@ import { getLeagues } from "../../apis/domains/common/getLeagues";
 import { getTeams } from "../../apis/domains/common/getTeams";
 import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgreement";
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
+import {AuthContext} from "../../context/AuthContext.jsx";
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -28,6 +29,7 @@ const Signup = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isNaverLogin, setIsNaverLogin] = useState(false);
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
     let queryStr = location.search;
@@ -175,6 +177,7 @@ const Signup = () => {
       }
 
       alert("회원가입 성공!");
+      login();
       navigate("/");
     } catch (error) {
       console.error("회원가입 중 오류가 발생했습니다.", error);
