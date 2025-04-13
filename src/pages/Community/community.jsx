@@ -1,53 +1,56 @@
-// 임시 커뮤니티 페이지
-import React, {useState} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
-    PostItem, PostLikes,
-    PostsWrapper,
-    PostTitle, PostViews
+    PostItem, PostLikes, PostsWrapper, PostTitle, PostViews
 } from "./community.style.js";
-import GoodIcon from "../../assets/good_black.svg"
+import GoodIcon from "../../assets/good_black.svg";
 import ProfileIcon from "../../assets/profile.svg";
-import Pagination from "../../components/Pagination/pagination"
-
-function AuthorIcon(props) {
-    return null;
-}
+import Pagination from "../../components/Pagination/pagination";
+import { getBoardList } from "../../apis/domains/community/getBoardList";
+import {LeagueTeamContext} from "../../context/LeagueTeamContext.jsx";
 
 const Community = () => {
-    const posts = [
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ (1)", author: "닉네임", date: "2025.01.20", views: "5", likes: "2" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", author: "닉네임123", date: "2025.01.20", views: "22", likes: "16" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임ㄱㄱ", date: "2025.01.20", views: "478", likes: "239" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-        { title: "(속보) 손흥민 다리 부상 ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ", replyCount: 20, author: "닉네임최대여덟자", date: "2025.01.20", views: "56,245", likes: "24,564" },
-    ];
+    const [posts, setPosts] = useState([]);
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const { selectedTeam } = useContext(LeagueTeamContext);
+
+    const tabs = ["전체", "인기", `${selectedTeam.nameKr}`];
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const params = {
+                    size: 10,
+                    page: activePage,
+                    order: activeTab === "인기" ? "hot" : "recent",
+                    team: activeTab === `${selectedTeam.nameKr}` ? selectedTeam.pk : undefined //
+                };
+
+                const response = await getBoardList(params);
+                setPosts(response.content || []);
+                setTotalPages(response.totalPages || 1);
+            } catch (error) {
+                console.error("게시글을 불러오는 데 실패했습니다:", error);
+            }
+        };
+
+        fetchPosts();
+    }, [activeTab, activePage]);
 
     return (
         <NewsContainer>
             <TabContainer>
-                {["전체", "인기", "FC서울"].map((tab) => (
+                {tabs.map((tab) => (
                     <Tab
                         key={tab}
                         active={activeTab === tab}
-                        onClick={() => setActiveTab(tab)} // 클릭하면 활성화 변경
+                        onClick={() => {
+                            setActiveTab(tab);
+                            setActivePage(1); // ✅ 탭 전환 시 페이지 리셋
+                        }}
                     >
                         {tab}
                     </Tab>
@@ -70,7 +73,7 @@ const Community = () => {
                     <PostItem key={index}>
                         <PostTitle>
                             {post.title}
-                            {post.replyCount && <span className="reply-count">({post.replyCount})</span>}
+                            {post.replyCount > 0 && <span className="reply-count">({post.replyCount})</span>}
                         </PostTitle>
                         <PostAuthor>
                             <img src={ProfileIcon} alt="프로필 아이콘" width={14} height={14} />
@@ -83,10 +86,9 @@ const Community = () => {
                 ))}
             </PostsWrapper>
 
-            {/* ✅ Pagination을 컨테이너 내부에 위치시키기 */}
-            <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={10}/>
+            <Pagination activePage={activePage} setActivePage={setActivePage} totalPages={totalPages} />
         </NewsContainer>
     );
-}
+};
 
 export default Community;
