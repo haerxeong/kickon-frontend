@@ -21,10 +21,7 @@ const Profile = () => {
         profileImageUrl: "",
         teamLogoUrl: ""
     });
-    const [rankingData, setRankingData] = useState({
-        point: 0,
-        teamLanking: "-"
-    });
+    const [rankingData, setRankingData] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -115,7 +112,7 @@ const UserCard = ({ userData, isLoading, error, onLogout }) => {
                         )}
                     </Username>
                     <ProfileEdit>
-                        프로필 설정 <MdNavigateNext size={14} />
+                        프로필 설정 <MdNavigateNext size={10} />
                     </ProfileEdit>
                 </UserDetails>
             </ProfileInfo>
