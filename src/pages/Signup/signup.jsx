@@ -16,8 +16,6 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 const Signup = () => {
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
-  // const [selectedLeague, setSelectedLeague] = useState("");
-  // const [selectedTeam, setSelectedTeam] = useState("");
   const [teamOptions, setTeamOptions] = useState([]);
   const [isLeagueDropdownOpen, setIsLeagueDropdownOpen] = useState(false);
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState(false);

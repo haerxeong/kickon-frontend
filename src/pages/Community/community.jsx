@@ -20,7 +20,7 @@ const Community = () => {
 
     const { selectedTeam } = useLeagueTeamStore();
 
-    const tabs = ["전체", "인기", selectedTeam?.nameKr || "응원팀"];
+    const tabs = ["전체", "인기", selectedTeam?.nameKr || ""];
 
     useEffect(() => {
         const fetchPosts = async () => {
