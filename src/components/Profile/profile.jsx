@@ -126,7 +126,7 @@ const UserCard = ({ userData, isLoading, error, onLogout }) => {
                 <StatBox>
                     <StatTitle>
                         지금까지 모은 포인트
-                        <BsQuestionCircle onClick={handleIconClick} />
+                        <BsQuestionCircle onClick={handleIconClick} color="#8F8F8F" size={6} style={{ marginLeft: "0.175rem" }}/>
                     </StatTitle>
                     <StatValue>{userData.point} P</StatValue>
                 </StatBox>
