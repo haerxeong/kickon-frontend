@@ -12,13 +12,18 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../features/modal/modalSlice.js";
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
+import { getUserRanking } from "../../apis/domains/common/getUserRanking.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 
 const Profile = () => {
     const [userData, setUserData] = useState({
         nickname: "닉네임",
         profileImageUrl: "",
-        teamLogoUrl: "",
+        teamLogoUrl: ""
+    });
+    const [rankingData, setRankingData] = useState({
+        point: 0,
+        teamLanking: "-"
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -34,8 +39,14 @@ const Profile = () => {
         const fetchUserData = async () => {
             setIsLoading(true);
             try {
+                // Fetch profile data
                 const profileData = await getProfilecard();
                 setUserData(profileData);
+
+                // Fetch ranking data (will return default values if not found)
+                const ranking = await getUserRanking();
+                setRankingData(ranking);
+
                 setError(null);
             } catch (err) {
                 setError("프로필 정보를 불러오는데 실패했습니다.");
@@ -53,20 +64,16 @@ const Profile = () => {
     const handleLogout = () => {
         // 로컬 스토리지에서 토큰 제거
         localStorage.removeItem("authToken");
-        localStorage.removeItem("refreshToken"); // 리프레시 토큰이 있다면 제거
 
         // 인증 컨텍스트의 logout 함수 호출
         logout();
-
-        // 리다이렉트나 페이지 새로고침으로 상태 초기화
-        window.location.reload(); // 페이지 새로고침
 
         console.log("로그아웃 처리 완료");
     };
 
     return isAuthenticated ? (
         <UserCard
-            userData={userData}
+            userData={{...userData, ...rankingData}}
             isLoading={isLoading}
             error={error}
             onLogout={handleLogout}
