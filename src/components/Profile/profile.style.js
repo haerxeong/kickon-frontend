@@ -73,6 +73,8 @@ export const ProfileImage = styled.img`
     width: 2.8rem;
     height: 2.8rem;
     flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
 `;
 
 export const MyTeam = styled.img`
