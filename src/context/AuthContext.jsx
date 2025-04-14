@@ -16,14 +16,14 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  // const logout = () => {
-  //   localStorage.removeItem("accessToken");
-  //   localStorage.removeItem("refreshToken");
-  //   setIsAuthenticated(false);
-  // };
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setIsAuthenticated(false);
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login }}>
+    <AuthContext.Provider value={{ isAuthenticated, login , logout}}>
       {children}
     </AuthContext.Provider>
   );
