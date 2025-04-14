@@ -26,13 +26,18 @@ const MatchCard = () => {
                     name: "아스톤 빌라",
                     logoUrl: "https://media.api-sports.io/football/teams/66.png"
                 },
-                gameStatus: "예측 진행중",
+                gameStatus: "                                                                             ",
                 startAt: "2025-04-05T11:30:00",
                 gambleResult: {
                     home: 50,
                     away: 45,
                     draw: 5,
                     participationNumber: 1204
+                },
+                myGambleResult: {
+                    homeScore: 1,
+                    awayScore: 1,
+                    result: "HOME",
                 }
             },
             {
@@ -51,7 +56,8 @@ const MatchCard = () => {
                     away: 45,
                     draw: 5,
                     participationNumber: 1204
-                }
+                },
+                myGambleResult: null,
             }
         ]
     };
@@ -74,7 +80,9 @@ const MatchCard = () => {
                     away: 45,
                     draw: 5,
                     participationNumber: 1204
-                }
+                },
+                homeScore: 0,
+                awayScore: 3,
             },
             {
                 homeTeam: {
@@ -92,19 +100,46 @@ const MatchCard = () => {
                     away: 45,
                     draw: 5,
                     participationNumber: 1204
-                }
+                },
+                homeScore: 1,
+                awayScore: 1,
             }
         ]
     };
 
+    // Initialize with myGambleResult scores or default to 0
+    const initialCountsForGames = proceeding_data.games.map((game) => {
+        if (game.myGambleResult) {
+            return {
+                0: game.myGambleResult.homeScore,
+                2: game.myGambleResult.awayScore
+            };
+        }
+        return { 0: 0, 2: 0 };
+    });
+
     const [selectedGames, setSelectedGames] = useState(proceeding_data.games.map(() => null));
-    const [countsForGames, setCountsForGames] = useState(proceeding_data.games.map(() => ({ 0: 0, 2: 0 })));
-    const [confirmedGames, setConfirmedGames] = useState(proceeding_data.games.map(() => false));
+    const [countsForGames, setCountsForGames] = useState(initialCountsForGames);
+    const [confirmedGames, setConfirmedGames] = useState(proceeding_data.games.map((game) =>
+        game.myGambleResult !== null
+    ));
+
+    // To track if a user has edited an existing prediction
+    const [editedGames, setEditedGames] = useState(proceeding_data.games.map(() => false));
 
     const handleClick = (gameIndex, optionIndex) => {
         const newSelectedGames = [...selectedGames];
+        const newEditedGames = [...editedGames];
+        newEditedGames[gameIndex] = true;
+        setEditedGames(newEditedGames);
 
+        // Reset scores to 0 when a user starts editing
         if (optionIndex === 1) {
+            const newCountsForGames = [...countsForGames];
+            newCountsForGames[gameIndex] = { 0: 0, 2: 0 };
+            setCountsForGames(newCountsForGames);
+        } else if (!newEditedGames[gameIndex]) {
+            // Reset scores to 0 on first edit
             const newCountsForGames = [...countsForGames];
             newCountsForGames[gameIndex] = { 0: 0, 2: 0 };
             setCountsForGames(newCountsForGames);
@@ -119,6 +154,16 @@ const MatchCard = () => {
             const newConfirmedGames = [...confirmedGames];
             newConfirmedGames[gameIndex] = false;
             setConfirmedGames(newConfirmedGames);
+
+            // Reset counts to 0 when reopening a confirmed prediction
+            const newCountsForGames = [...countsForGames];
+            newCountsForGames[gameIndex] = { 0: 0, 2: 0 };
+            setCountsForGames(newCountsForGames);
+
+            // Mark as edited
+            const newEditedGames = [...editedGames];
+            newEditedGames[gameIndex] = true;
+            setEditedGames(newEditedGames);
         }
     };
 
@@ -199,6 +244,46 @@ const MatchCard = () => {
         return counts[optionIndex] === maxCount ? "#C00C0B" : "#AFAFAF";
     };
 
+    const getScoreValue = (game, gameIndex, optionIndex, isFinished) => {
+        if (isFinished) {
+            //경기끝났을때(구분선아래)
+            return optionIndex === 0 ? game.homeScore : game.awayScore;
+        } else {
+            //경기전(구분선 위)
+            return countsForGames[gameIndex][optionIndex];
+        }
+    };
+
+    // Function to get the color for score display in finished games
+    const getFinishedScoreColor = (game, optionIndex) => {
+        const homeScore = game.homeScore;
+        const awayScore = game.awayScore;
+
+        if (homeScore > awayScore && optionIndex === 0) {
+            return "#C00C0B";
+        } else if (awayScore > homeScore && optionIndex === 2) {
+            return "#C00C0B";
+        } else {
+            return "#AFAFAF";
+        }
+    };
+
+    // Function to get background color for match buttons in finished games
+    const getFinishedMatchBackground = (game, optionIndex) => {
+        const homeScore = game.homeScore;
+        const awayScore = game.awayScore;
+
+        if (homeScore > awayScore && optionIndex === 0) {
+            return "rgba(192, 12, 11, 0.20)";
+        } else if (awayScore > homeScore && optionIndex === 2) {
+            return "rgba(192, 12, 11, 0.20)";
+        } else if (homeScore === awayScore && optionIndex === 1) {
+            return "rgba(192, 12, 11, 0.20)";
+        } else {
+            return "#F0F0F0";
+        }
+    };
+
     const renderMatchCard = (game, gameIndex, isFinished = false) => {
         const showCountControls = !isFinished && selectedGames[gameIndex] !== null;
         const isConfirmed = isFinished || confirmedGames[gameIndex];
@@ -248,6 +333,12 @@ const MatchCard = () => {
                                 }
                             }}
                             disabled={isConfirmed || isFinished}
+                            style={{
+                                background: isFinished
+                                    ? getFinishedMatchBackground(game, optionIndex)
+                                    : undefined,
+                                color: "#676767"
+                            }}
                         >
                             {optionIndex === 0 && (
                                 <TeamLeftContainer>
@@ -259,11 +350,14 @@ const MatchCard = () => {
                                         />
                                     )}
                                     <TeamNameContainer>
-                                        <TeamName small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}>
+                                        <TeamName
+                                            small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                            style={{ color: "#676767" }}
+                                        >
                                             {option.name}
                                         </TeamName>
                                         {(isFinished || selectedGames[gameIndex] !== null || isConfirmed) && (
-                                            <ParticipationPercentage>
+                                            <ParticipationPercentage style={{ color: "#676767" }}>
                                                 {option.percentage}%
                                             </ParticipationPercentage>
                                         )}
@@ -273,11 +367,14 @@ const MatchCard = () => {
 
                             {optionIndex === 1 && (
                                 <TeamCenterContainer>
-                                    <TeamName small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}>
+                                    <TeamName
+                                        small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                        style={{ color: "#676767" }}
+                                    >
                                         {option.name}
                                     </TeamName>
                                     {(isFinished || selectedGames[gameIndex] !== null || isConfirmed) && (
-                                        <ParticipationPercentage>
+                                        <ParticipationPercentage style={{ color: "#676767" }}>
                                             {option.percentage}%
                                         </ParticipationPercentage>
                                     )}
@@ -287,11 +384,14 @@ const MatchCard = () => {
                             {optionIndex === 2 && (
                                 <TeamRightContainer>
                                     <TeamRightNameContainer>
-                                        <TeamName small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}>
+                                        <TeamName
+                                            small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                            style={{ color: "#676767" }}
+                                        >
                                             {option.name}
                                         </TeamName>
                                         {(isFinished || selectedGames[gameIndex] !== null || isConfirmed) && (
-                                            <ParticipationPercentage>
+                                            <ParticipationPercentage style={{ color: "#676767" }}>
                                                 {option.percentage}%
                                             </ParticipationPercentage>
                                         )}
@@ -310,14 +410,14 @@ const MatchCard = () => {
                                 <CountDisplay
                                     isVisible={(isFinished || (showCountControls && !isConfirmed) || isConfirmed)}
                                     isLeft={optionIndex === 2}
-                                    isZero={isFinished ? false : countsForGames[gameIndex][optionIndex] === 0}
+                                    isZero={isFinished ? false : getScoreValue(game, gameIndex, optionIndex, isFinished) === 0}
                                     style={{
                                         backgroundColor: isFinished
-                                            ? "#C00C0B"
+                                            ? getFinishedScoreColor(game, optionIndex)
                                             : getCountDisplayColor(gameIndex, optionIndex)
                                     }}
                                 >
-                                    {isFinished ? (optionIndex === 0 ? "1" : "0") : countsForGames[gameIndex][optionIndex]}
+                                    {getScoreValue(game, gameIndex, optionIndex, isFinished)}
                                 </CountDisplay>
                             )}
                             {optionIndex === 0 && !isFinished && !isConfirmed && (
