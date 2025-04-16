@@ -73,6 +73,8 @@ export const ProfileImage = styled.img`
     width: 2.8rem;
     height: 2.8rem;
     flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
 `;
 
 export const MyTeam = styled.img`
@@ -107,7 +109,6 @@ export const UsernameSuffix = styled.span`
 export const ProfileEdit = styled.button`
     display: flex;
     align-items: center;
-    gap: 0.1rem; /* 글자와 아이콘 사이 여백 */
     color: #676767;
     font-family: Pretendard;
     font-size: 0.47rem;
@@ -117,6 +118,7 @@ export const ProfileEdit = styled.button`
     background: transparent;
     border: none;
     text-align: left;
+    padding: 0;
 `;
 
 export const UserStats = styled.div`
