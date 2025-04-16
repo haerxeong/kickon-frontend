@@ -10,8 +10,8 @@ export const getUserRanking = async () => {
         if (response.code === "NOT_FOUND_USER_POINT_RANKING") {
             console.log('유저 랭킹 정보 없음, 기본값 사용');
             return {
-                point: 0,
-                teamLanking: "-"
+                totalPoints: 0,
+                ranking: "-"
             };
         }
 
@@ -21,15 +21,15 @@ export const getUserRanking = async () => {
         }
 
         return {
-            point: response.data.point || 0,
-            teamLanking: response.data.teamLanking || "-"
+            totalPoints: response.data.totalPoints || 0,
+            ranking: response.data.ranking || "-"
         };
     } catch (error) {
         console.error('유저 랭킹 정보 가져오기 실패: ', error.toJSON());
         // Return default values for any API error
         return {
-            point: 0,
-            teamLanking: "-"
+            totalPoints: 0,
+            ranking: "-"
         };
     }
 };
