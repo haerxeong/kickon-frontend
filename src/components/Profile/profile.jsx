@@ -59,9 +59,6 @@ const Profile = () => {
     }, [isAuthenticated]);
 
     const handleLogout = () => {
-        // 로컬 스토리지에서 토큰 제거
-        localStorage.removeItem("authToken");
-
         // 인증 컨텍스트의 logout 함수 호출
         logout();
 
@@ -121,14 +118,14 @@ const UserCard = ({ userData, isLoading, error, onLogout }) => {
             <UserStats>
                 <StatBox>
                     <StatTitle>이번 시즌 우리 팀 내 순위</StatTitle>
-                    <StatValue>{userData.teamLanking}위</StatValue>
+                    <StatValue>{userData.ranking}위</StatValue>
                 </StatBox>
                 <StatBox>
                     <StatTitle>
                         지금까지 모은 포인트
                         <BsQuestionCircle onClick={handleIconClick} color="#8F8F8F" size={6} style={{ marginLeft: "0.175rem" }}/>
                     </StatTitle>
-                    <StatValue>{userData.point} P</StatValue>
+                    <StatValue>{userData.totalPoints} P</StatValue>
                 </StatBox>
             </UserStats>
 
