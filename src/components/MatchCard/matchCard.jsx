@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     MatchButton, StyledTopContainer, LeftText, RightBadge,
     TimeGuide, TimeText, MatchButtonContainer, MatchCardContainer,
@@ -11,121 +11,70 @@ import {
 import chevronUp from "../../assets/chevron_up.svg";
 import chevronDown from "../../assets/chevron_down.svg";
 import chevronDownNon from "../../assets/chevron_down_non.svg";
+import {fetchMatchData} from "../../apis/domains/common/getMatchList.js";
 
 
-const MatchCard = () => {
-    const proceeding_data = {
-        name: "K리그 1",
-        games: [
-            {
-                homeTeam: {
-                    name: "사우샘프턴",
-                    logoUrl: "https://media.api-sports.io/football/teams/41.png"
-                },
-                awayTeam: {
-                    name: "아스톤 빌라",
-                    logoUrl: "https://media.api-sports.io/football/teams/66.png"
-                },
-                gameStatus: "                                                                             ",
-                startAt: "2025-04-05T11:30:00",
-                gambleResult: {
-                    home: 50,
-                    away: 45,
-                    draw: 5,
-                    participationNumber: 1204
-                },
-                myGambleResult: {
-                    homeScore: 1,
-                    awayScore: 1,
-                    result: "HOME",
-                }
-            },
-            {
-                homeTeam: {
-                    name: "FC 서울",
-                    logoUrl: "https://media.api-sports.io/football/teams/45.png"
-                },
-                awayTeam: {
-                    name: "수원 FC",
-                    logoUrl: "https://media.api-sports.io/football/teams/42.png"
-                },
-                gameStatus: "참여완료",
-                startAt: "2025-04-05T11:30:00",
-                gambleResult: {
-                    home: 50,
-                    away: 45,
-                    draw: 5,
-                    participationNumber: 1204
-                },
-                myGambleResult: null,
-            }
-        ]
-    };
-    const finished_data = {
-        name: "K리그 1",
-        games: [
-            {
-                homeTeam: {
-                    name: "사우샘프턴",
-                    logoUrl: "https://media.api-sports.io/football/teams/41.png"
-                },
-                awayTeam: {
-                    name: "아스톤 빌라",
-                    logoUrl: "https://media.api-sports.io/football/teams/66.png"
-                },
-                gameStatus: "예측 진행중",
-                startAt: "2025-04-05T11:30:00",
-                gambleResult: {
-                    home: 50,
-                    away: 45,
-                    draw: 5,
-                    participationNumber: 1204
-                },
-                homeScore: 0,
-                awayScore: 3,
-            },
-            {
-                homeTeam: {
-                    name: "FC 서울",
-                    logoUrl: "https://media.api-sports.io/football/teams/45.png"
-                },
-                awayTeam: {
-                    name: "수원 FC",
-                    logoUrl: "https://media.api-sports.io/football/teams/42.png"
-                },
-                gameStatus: "참여완료",
-                startAt: "2025-04-05T11:30:00",
-                gambleResult: {
-                    home: 50,
-                    away: 45,
-                    draw: 5,
-                    participationNumber: 1204
-                },
-                homeScore: 1,
-                awayScore: 1,
-            }
-        ]
-    };
-
-    // Initialize with myGambleResult scores or default to 0
-    const initialCountsForGames = proceeding_data.games.map((game) => {
-        if (game.myGambleResult) {
-            return {
-                0: game.myGambleResult.homeScore,
-                2: game.myGambleResult.awayScore
-            };
-        }
-        return { 0: 0, 2: 0 };
+const MatchCard = ({league}) => {
+    const [proceedingData, setProceedingData] = useState({
+        name: "",
+        games: []
     });
 
-    const [selectedGames, setSelectedGames] = useState(proceeding_data.games.map(() => null));
-    const [countsForGames, setCountsForGames] = useState(initialCountsForGames);
-    const [confirmedGames, setConfirmedGames] = useState(proceeding_data.games.map((game) =>
-        game.myGambleResult !== null
-    ));
+    const [finishedData, setFinishedData] = useState({
+        name: "",
+        games: []
+    });
 
-    // To track if a user has edited an existing prediction
-    const [editedGames, setEditedGames] = useState(proceeding_data.games.map(() => false));
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Initialize state for selected games, counts, and confirmations
+    const [selectedGames, setSelectedGames] = useState([]);
+    const [countsForGames, setCountsForGames] = useState([]);
+    const [confirmedGames, setConfirmedGames] = useState([]);
+    const [editedGames, setEditedGames] = useState([]);
+
+    // Fetch both proceeding and finished data on component mount
+    useEffect(() => {
+        const loadMatchData = async () => {
+            try {
+                setLoading(true);
+
+                // Fetch proceeding matches
+                const proceedingResult = await fetchMatchData(league, "proceeding");
+                setProceedingData(proceedingResult);
+
+                // Fetch finished matches
+                const finishedResult = await fetchMatchData(league, "finished");
+                setFinishedData(finishedResult);
+
+                // Initialize state arrays based on the number of proceeding games
+                const initialCountsForGames = proceedingResult.games.map((game) => {
+                    if (game.myGambleResult) {
+                        return {
+                            0: game.myGambleResult.homeScore,
+                            2: game.myGambleResult.awayScore
+                        };
+                    }
+                    return { 0: 0, 2: 0 };
+                });
+
+                setCountsForGames(initialCountsForGames);
+                setSelectedGames(proceedingResult.games.map(() => null));
+                setConfirmedGames(proceedingResult.games.map((game) => game.myGambleResult !== null));
+                setEditedGames(proceedingResult.games.map(() => false));
+
+                setError(null);
+            } catch (err) {
+                console.error("데이터 로딩 중 오류 발생:", err);
+                setError("매치 데이터를 불러오는데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadMatchData();
+    }, [league]);
 
     const handleClick = (gameIndex, optionIndex) => {
         const newSelectedGames = [...selectedGames];
@@ -291,7 +240,7 @@ const MatchCard = () => {
         return (
             <MatchCardContainer key={`game-${isFinished ? "finished-" : ""}${gameIndex}`}>
                 <StyledTopContainer>
-                    <LeftText>{isFinished ? finished_data.name : proceeding_data.name}</LeftText>
+                    <LeftText>{isFinished ? finishedData.name : proceedingData.name}</LeftText>
                     <RightBadge>{isConfirmed ? "참여 완료" : game.gameStatus}</RightBadge>
                 </StyledTopContainer>
                 <RightText>마감 50분전</RightText>
@@ -468,13 +417,21 @@ const MatchCard = () => {
         );
     };
 
+    if (loading) {
+        return <div>데이터를 불러오는 중입니다...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
         <>
-            {proceeding_data.games.map((game, gameIndex) => renderMatchCard(game, gameIndex))}
+            {proceedingData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex))}
 
             <Divider/>
 
-            {finished_data.games.map((game, gameIndex) => renderMatchCard(game, gameIndex, true))}
+            {finishedData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex, true))}
         </>
     );
 };
