@@ -42,15 +42,16 @@ const MatchCard = ({league}) => {
 
                 // Fetch proceeding matches
                 const proceedingResult = await fetchMatchData(league, "proceeding");
-                setProceedingData(proceedingResult);
+                setProceedingData(proceedingResult || { name: "", games: [] });
 
                 // Fetch finished matches
                 const finishedResult = await fetchMatchData(league, "finished");
-                setFinishedData(finishedResult);
+                setFinishedData(finishedResult || { name: "", games: [] });
 
                 // Initialize state arrays based on the number of proceeding games
-                const initialCountsForGames = proceedingResult.games.map((game) => {
-                    if (game.myGambleResult) {
+                const games = proceedingResult?.games || [];
+                const initialCountsForGames = games.map((game) => {
+                    if (game?.myGambleResult) {
                         return {
                             0: game.myGambleResult.homeScore,
                             2: game.myGambleResult.awayScore
@@ -60,9 +61,14 @@ const MatchCard = ({league}) => {
                 });
 
                 setCountsForGames(initialCountsForGames);
-                setSelectedGames(proceedingResult.games.map(() => null));
-                setConfirmedGames(proceedingResult.games.map((game) => game.myGambleResult !== null));
-                setEditedGames(proceedingResult.games.map(() => false));
+                setSelectedGames(games.map(() => null));
+                setConfirmedGames(games.map((game) => game?.myGambleResult !== null));
+                setEditedGames(games.map(() => false));
+
+                console.log("Proceeding data:", proceedingResult);
+                console.log("Proceeding games:", proceedingResult?.games);
+                console.log("Finished data:", finishedResult);
+                console.log("Finished games:", finishedResult?.games);
 
                 setError(null);
             } catch (err) {
@@ -427,6 +433,9 @@ const MatchCard = ({league}) => {
 
     return (
         <>
+            {console.log("Rendering with proceeding games:", proceedingData)}
+            {console.log("Rendering with finished games:", finishedData.games)}
+
             {proceedingData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex))}
 
             <Divider/>
