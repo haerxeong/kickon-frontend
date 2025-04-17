@@ -17,7 +17,7 @@ export const fetchMatchData = async (league, status) => {
             throw new Error(response.data.message);
         }
 
-        return response.data.data;
+        return response.data;
     } catch (error) {
         console.error(`${status} 매치리스트 가져오기 실패:`, error);
         throw error;
