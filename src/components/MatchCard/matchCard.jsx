@@ -25,7 +25,6 @@ const MatchCard = ({league}) => {
         name: "",
         games: []
     });
-    const [userLeague, setUserLeague] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -43,7 +42,7 @@ const MatchCard = ({league}) => {
 
                 const profileData = await getProfilecard();
                 const leaguePk = profileData?.leaguePk;
-                setUserLeague(leaguePk);
+                // setUserLeague(leaguePk); // 이 줄 제거
 
                 if (!leaguePk) {
                     throw new Error('League information not found in user profile');
