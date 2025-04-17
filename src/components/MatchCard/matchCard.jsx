@@ -1,76 +1,180 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
-    MatchButton,
-    StyledTopContainer,
-    LeftText,
-    RightBadge,
-    TimeGuide,
-    TimeText,
-    MatchButtonContainer,
-    MatchCardContainer,
-    ExtraContentRight,
-    ExtraContentLeft,
-    CountButton,
-    CountDisplay,
-    ConfirmButton,
-    JoinedText,
-    TimeTitle,
-    RightText,
-    TeamName,
-    TeamLogo,
-    ParticipationPercentage,
-    TeamContainer,
-    TeamLeftContainer,
-    TeamCenterContainer,
-    TeamRightContainer,
-    TeamNameContainer,
-    TeamRightNameContainer
+    MatchButton, StyledTopContainer, LeftText, RightBadge,
+    TimeGuide, TimeText, MatchButtonContainer, MatchCardContainer,
+    ExtraContentRight, ExtraContentLeft, CountButton, CountDisplay,
+    ConfirmButton, JoinedText, TimeTitle, RightText,
+    TeamName, TeamLogo, ParticipationPercentage, TeamLeftContainer,
+    TeamCenterContainer, TeamRightContainer, TeamNameContainer,
+    TeamRightNameContainer, Divider
 } from "./matchCard.style.js";
 import chevronUp from "../../assets/chevron_up.svg";
 import chevronDown from "../../assets/chevron_down.svg";
 import chevronDownNon from "../../assets/chevron_down_non.svg";
+import {fetchMatchData} from "../../apis/domains/common/getMatchList.js";
+import {getProfilecard} from "../../apis/domains/common/getProfilecard.js";
 
-const MatchCard = () => {
-    const [selected, setSelected] = useState(null);
-    const [counts, setCounts] = useState({ 0: 0, 2: 0 });
-    const [isConfirmed, setIsConfirmed] = useState(false);
 
-    const handleClick = (index) => {
-        setSelected((prev) => (prev === index ? null : index));
+const MatchCard = ({league}) => {
+    const [proceedingData, setProceedingData] = useState({
+        name: "",
+        games: []
+    });
+
+    const [finishedData, setFinishedData] = useState({
+        name: "",
+        games: []
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Initialize state for selected games, counts, and confirmations
+    const [selectedGames, setSelectedGames] = useState([]);
+    const [countsForGames, setCountsForGames] = useState([]);
+    const [confirmedGames, setConfirmedGames] = useState([]);
+    const [editedGames, setEditedGames] = useState([]);
+
+    // Fetch both proceeding and finished data on component mount
+    useEffect(() => {
+        const loadMatchData = async () => {
+            try {
+                setLoading(true);
+
+                const profileData = await getProfilecard();
+                const leaguePk = profileData?.leaguePk;
+                // setUserLeague(leaguePk); // 이 줄 제거
+
+                if (!leaguePk) {
+                    throw new Error('League information not found in user profile');
+                }
+                // Fetch proceeding matches
+                const proceedingResult = await fetchMatchData(leaguePk, "proceeding");
+                setProceedingData(proceedingResult || { name: "", games: [] });
+
+                // Fetch finished matches
+                const finishedResult = await fetchMatchData(leaguePk, "finished");
+                setFinishedData(finishedResult || { name: "", games: [] });
+
+                // Initialize state arrays based on the number of proceeding games
+                const games = proceedingResult?.games || [];
+                const initialCountsForGames = games.map((game) => {
+                    if (game?.myGambleResult) {
+                        return {
+                            0: game.myGambleResult.homeScore,
+                            2: game.myGambleResult.awayScore
+                        };
+                    }
+                    return { 0: 0, 2: 0 };
+                });
+
+                setCountsForGames(initialCountsForGames);
+                setSelectedGames(games.map(() => null));
+                setConfirmedGames(games.map((game) => game?.myGambleResult !== null));
+                setEditedGames(games.map(() => false));
+
+                console.log("Proceeding data:", proceedingResult);
+                console.log("Proceeding games:", proceedingResult?.games);
+                console.log("Finished data:", finishedResult);
+                console.log("Finished games:", finishedResult?.games);
+
+                setError(null);
+            } catch (err) {
+                console.error("데이터 로딩 중 오류 발생:", err);
+                setError("매치 데이터를 불러오는데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadMatchData();
+    }, [league]);
+
+    const handleClick = (gameIndex, optionIndex) => {
+        const newSelectedGames = [...selectedGames];
+        const newEditedGames = [...editedGames];
+        newEditedGames[gameIndex] = true;
+        setEditedGames(newEditedGames);
+
+        // Reset scores to 0 when a user starts editing
+        if (optionIndex === 1) {
+            const newCountsForGames = [...countsForGames];
+            newCountsForGames[gameIndex] = { 0: 0, 2: 0 };
+            setCountsForGames(newCountsForGames);
+        } else if (!newEditedGames[gameIndex]) {
+            // Reset scores to 0 on first edit
+            const newCountsForGames = [...countsForGames];
+            newCountsForGames[gameIndex] = { 0: 0, 2: 0 };
+            setCountsForGames(newCountsForGames);
+        }
+
+        newSelectedGames[gameIndex] = newSelectedGames[gameIndex] === optionIndex ? null : optionIndex;
+        setSelectedGames(newSelectedGames);
     };
 
-    const incrementCount = (event, index) => {
-        event.stopPropagation(); // MatchButton 클릭 방지
+    const handleContainerClick = (gameIndex) => {
+        if (confirmedGames[gameIndex]) {
+            const newConfirmedGames = [...confirmedGames];
+            newConfirmedGames[gameIndex] = false;
+            setConfirmedGames(newConfirmedGames);
 
-        // 무승부 선택 시 양 팀 카운트 동시에 증가
-        if (selected === 1) {
-            setCounts((prev) => ({
-                ...prev,
-                0: prev[0] + 1,
-                2: prev[2] + 1
-            }));
-        } else {
-            setCounts((prev) => ({ ...prev, [index]: prev[index] + 1 }));
+            // Reset counts to 0 when reopening a confirmed prediction
+            const newCountsForGames = [...countsForGames];
+            newCountsForGames[gameIndex] = { 0: 0, 2: 0 };
+            setCountsForGames(newCountsForGames);
+
+            // Mark as edited
+            const newEditedGames = [...editedGames];
+            newEditedGames[gameIndex] = true;
+            setEditedGames(newEditedGames);
         }
     };
 
-    const decrementCount = (event, index) => {
-        event.stopPropagation(); // MatchButton 클릭 방지
+    const incrementCount = (event, gameIndex, optionIndex) => {
+        event.stopPropagation();
 
-        // 무승부 선택 시 양 팀 카운트 동시에 감소
-        if (selected === 1) {
-            setCounts((prev) => ({
-                ...prev,
-                0: Math.max(0, prev[0] - 1),
-                2: Math.max(0, prev[2] - 1)
-            }));
+        const newCountsForGames = [...countsForGames];
+
+        if (selectedGames[gameIndex] === 1) {
+            newCountsForGames[gameIndex] = {
+                ...newCountsForGames[gameIndex],
+                0: newCountsForGames[gameIndex][0] + 1,
+                2: newCountsForGames[gameIndex][2] + 1
+            };
         } else {
-            setCounts((prev) => ({ ...prev, [index]: Math.max(0, prev[index] - 1) }));
+            newCountsForGames[gameIndex] = {
+                ...newCountsForGames[gameIndex],
+                [optionIndex]: newCountsForGames[gameIndex][optionIndex] + 1
+            };
         }
+
+        setCountsForGames(newCountsForGames);
     };
 
-    const handleConfirm = () => {
-        setIsConfirmed(true);
+    const decrementCount = (event, gameIndex, optionIndex) => {
+        event.stopPropagation();
+
+        const newCountsForGames = [...countsForGames];
+
+        if (selectedGames[gameIndex] === 1) {
+            newCountsForGames[gameIndex] = {
+                ...newCountsForGames[gameIndex],
+                0: Math.max(0, newCountsForGames[gameIndex][0] - 1),
+                2: Math.max(0, newCountsForGames[gameIndex][2] - 1)
+            };
+        } else {
+            newCountsForGames[gameIndex] = {
+                ...newCountsForGames[gameIndex],
+                [optionIndex]: Math.max(0, newCountsForGames[gameIndex][optionIndex] - 1)
+            };
+        }
+
+        setCountsForGames(newCountsForGames);
+    };
+
+    const handleConfirm = (gameIndex) => {
+        const newConfirmedGames = [...confirmedGames];
+        newConfirmedGames[gameIndex] = true;
+        setConfirmedGames(newConfirmedGames);
     };
 
     const formatKoreanDate = (dateString) => {
@@ -88,213 +192,263 @@ const MatchCard = () => {
         return `${month}.${day} (${dayOfWeek}) ${hour}:${minute}`;
     };
 
-    const data = {
-        name: "K리그 1",
-        games : {
-            homeTeam : {
-                "name" : "FC 서울",
-                "logoUrl" : "https://media.api-sports.io/football/teams/45.png"
-            },
-            awayTeam : {
-                "name" : "수원 FC",
-                "logoUrl" : "https://media.api-sports.io/football/teams/42.png"
-            },
-            gameStatus: "예측 진행중",
-            startAt: "2025-04-05T11:30:00",
-            gambleResult: {
-                home: 600,
-                away: 500,
-                draw: 104,
-                participationNumber: 1204
-            }
-        }
-    };
-
-    // Calculate percentages for each option
-    const calculatePercentage = (value) => {
-        const total = data.games.gambleResult.home +
-            data.games.gambleResult.draw +
-            data.games.gambleResult.away;
-        return ((value / total) * 100).toFixed(1);
-    };
-
-    const homePercentage = calculatePercentage(data.games.gambleResult.home);
-    const drawPercentage = calculatePercentage(data.games.gambleResult.draw);
-    const awayPercentage = calculatePercentage(data.games.gambleResult.away);
-
-    // 항상 카운트 컨트롤이 보이도록 설정 (selected가 null이 아닐 때)
-    const showCountControls = selected !== null;
-
-    // CountDisplay의 배경색 결정 로직
-    const getCountDisplayColor = (index) => {
-        // 0점이면 회색
-        if (counts[index] === 0) {
+    const getCountDisplayColor = (gameIndex, optionIndex) => {
+        const counts = countsForGames[gameIndex];
+        if (counts[optionIndex] === 0) {
             return "#AFAFAF";
         }
 
-        // 두 팀 점수가 같으면서 0이 아니면 둘 다 빨간색
         if (counts[0] === counts[2] && counts[0] > 0) {
             return "#C00C0B";
         }
 
-        // 점수가 높은 팀만 빨간색
         const maxCount = Math.max(counts[0], counts[2]);
-        return counts[index] === maxCount ? "#C00C0B" : "#AFAFAF";
+        return counts[optionIndex] === maxCount ? "#C00C0B" : "#AFAFAF";
     };
 
+    const getScoreValue = (game, gameIndex, optionIndex, isFinished) => {
+        if (isFinished) {
+            //경기끝났을때(구분선아래)
+            return optionIndex === 0 ? game.homeScore : game.awayScore;
+        } else {
+            //경기전(구분선 위)
+            return countsForGames[gameIndex][optionIndex];
+        }
+    };
+
+    // Function to get the color for score display in finished games
+    const getFinishedScoreColor = (game, optionIndex) => {
+        const homeScore = game.homeScore;
+        const awayScore = game.awayScore;
+
+        if (homeScore > awayScore && optionIndex === 0) {
+            return "#C00C0B";
+        } else if (awayScore > homeScore && optionIndex === 2) {
+            return "#C00C0B";
+        } else {
+            return "#AFAFAF";
+        }
+    };
+
+    // Function to get background color for match buttons in finished games
+    const getFinishedMatchBackground = (game, optionIndex) => {
+        const homeScore = game.homeScore;
+        const awayScore = game.awayScore;
+
+        if (homeScore > awayScore && optionIndex === 0) {
+            return "rgba(192, 12, 11, 0.20)";
+        } else if (awayScore > homeScore && optionIndex === 2) {
+            return "rgba(192, 12, 11, 0.20)";
+        } else if (homeScore === awayScore && optionIndex === 1) {
+            return "rgba(192, 12, 11, 0.20)";
+        } else {
+            return "#F0F0F0";
+        }
+    };
+
+    const renderMatchCard = (game, gameIndex, isFinished = false) => {
+        const showCountControls = !isFinished && selectedGames[gameIndex] !== null;
+        const isConfirmed = isFinished || confirmedGames[gameIndex];
+
+        return (
+            <MatchCardContainer key={`game-${isFinished ? "finished-" : ""}${gameIndex}`}>
+                <StyledTopContainer>
+                    <LeftText>{isFinished ? finishedData.name : proceedingData.name}</LeftText>
+                    <RightBadge>{isConfirmed ? "참여 완료" : game.gameStatus}</RightBadge>
+                </StyledTopContainer>
+                <RightText>마감 50분전</RightText>
+                <TimeGuide>
+                    <TimeTitle>경기 {isFinished ? "이후" : "전"}</TimeTitle>
+                    <TimeText>{formatKoreanDate(game.startAt)}</TimeText>
+                </TimeGuide>
+                <MatchButtonContainer
+                    onClick={() => !isFinished && handleContainerClick(gameIndex)}
+                    style={{ cursor: (isConfirmed && !isFinished) ? 'pointer' : 'default' }}
+                >
+                    {[
+                        {
+                            name: game.homeTeam.name,
+                            logo: game.homeTeam.logoUrl,
+                            percentage: game.gambleResult.home,
+                            value: game.gambleResult.home
+                        },
+                        {
+                            name: "무승부",
+                            logo: null,
+                            percentage: game.gambleResult.draw,
+                            value: game.gambleResult.draw
+                        },
+                        {
+                            name: game.awayTeam.name,
+                            logo: game.awayTeam.logoUrl,
+                            percentage: game.gambleResult.away,
+                            value: game.gambleResult.away
+                        }
+                    ].map((option, optionIndex) => (
+                        <MatchButton
+                            key={`game-${isFinished ? "finished-" : ""}${gameIndex}-option-${optionIndex}`}
+                            aria-selected={!isFinished && selectedGames[gameIndex] === optionIndex}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (!isFinished) {
+                                    handleClick(gameIndex, optionIndex);
+                                }
+                            }}
+                            disabled={isConfirmed || isFinished}
+                            style={{
+                                background: isFinished
+                                    ? getFinishedMatchBackground(game, optionIndex)
+                                    : undefined,
+                                color: "#676767"
+                            }}
+                        >
+                            {optionIndex === 0 && (
+                                <TeamLeftContainer>
+                                    {option.logo && (
+                                        <TeamLogo
+                                            src={option.logo}
+                                            alt={option.name}
+                                            small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                        />
+                                    )}
+                                    <TeamNameContainer>
+                                        <TeamName
+                                            small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                            style={{ color: "#676767" }}
+                                        >
+                                            {option.name}
+                                        </TeamName>
+                                        {(isFinished || selectedGames[gameIndex] !== null || isConfirmed) && (
+                                            <ParticipationPercentage style={{ color: "#676767" }}>
+                                                {option.percentage}%
+                                            </ParticipationPercentage>
+                                        )}
+                                    </TeamNameContainer>
+                                </TeamLeftContainer>
+                            )}
+
+                            {optionIndex === 1 && (
+                                <TeamCenterContainer>
+                                    <TeamName
+                                        small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                        style={{ color: "#676767" }}
+                                    >
+                                        {option.name}
+                                    </TeamName>
+                                    {(isFinished || selectedGames[gameIndex] !== null || isConfirmed) && (
+                                        <ParticipationPercentage style={{ color: "#676767" }}>
+                                            {option.percentage}%
+                                        </ParticipationPercentage>
+                                    )}
+                                </TeamCenterContainer>
+                            )}
+
+                            {optionIndex === 2 && (
+                                <TeamRightContainer>
+                                    <TeamRightNameContainer>
+                                        <TeamName
+                                            small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                            style={{ color: "#676767" }}
+                                        >
+                                            {option.name}
+                                        </TeamName>
+                                        {(isFinished || selectedGames[gameIndex] !== null || isConfirmed) && (
+                                            <ParticipationPercentage style={{ color: "#676767" }}>
+                                                {option.percentage}%
+                                            </ParticipationPercentage>
+                                        )}
+                                    </TeamRightNameContainer>
+                                    {option.logo && (
+                                        <TeamLogo
+                                            src={option.logo}
+                                            alt={option.name}
+                                            small={(isFinished || selectedGames[gameIndex] !== null || isConfirmed)}
+                                        />
+                                    )}
+                                </TeamRightContainer>
+                            )}
+
+                            {(optionIndex === 0 || optionIndex === 2) && (
+                                <CountDisplay
+                                    isVisible={(isFinished || (showCountControls && !isConfirmed) || isConfirmed)}
+                                    isLeft={optionIndex === 2}
+                                    isZero={isFinished ? false : getScoreValue(game, gameIndex, optionIndex, isFinished) === 0}
+                                    style={{
+                                        backgroundColor: isFinished
+                                            ? getFinishedScoreColor(game, optionIndex)
+                                            : getCountDisplayColor(gameIndex, optionIndex)
+                                    }}
+                                >
+                                    {getScoreValue(game, gameIndex, optionIndex, isFinished)}
+                                </CountDisplay>
+                            )}
+                            {optionIndex === 0 && !isFinished && !isConfirmed && (
+                                <ExtraContentRight isVisible={showCountControls}>
+                                    <CountButton onClick={(e) => incrementCount(e, gameIndex, optionIndex)}>
+                                        <img src={chevronUp} alt="Increase" />
+                                    </CountButton>
+                                    <CountButton onClick={(e) => decrementCount(e, gameIndex, optionIndex)}>
+                                        <img
+                                            src={countsForGames[gameIndex][optionIndex] === 0 ? chevronDownNon : chevronDown}
+                                            alt="Decrease"
+                                        />
+                                    </CountButton>
+                                </ExtraContentRight>
+                            )}
+                            {optionIndex === 2 && !isFinished && !isConfirmed && (
+                                <ExtraContentLeft isVisible={showCountControls}>
+                                    <CountButton onClick={(e) => incrementCount(e, gameIndex, optionIndex)}>
+                                        <img src={chevronUp} alt="Increase" />
+                                    </CountButton>
+                                    <CountButton onClick={(e) => decrementCount(e, gameIndex, optionIndex)}>
+                                        <img
+                                            src={countsForGames[gameIndex][optionIndex] === 0 ? chevronDownNon : chevronDown}
+                                            alt="Decrease"
+                                        />
+                                    </CountButton>
+                                </ExtraContentLeft>
+                            )}
+                        </MatchButton>
+                    ))}
+                </MatchButtonContainer>
+
+                {!isFinished && selectedGames[gameIndex] !== null && !isConfirmed && (
+                    <ConfirmButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleConfirm(gameIndex);
+                        }}
+                        disabled={
+                            (selectedGames[gameIndex] === 1) && (countsForGames[gameIndex][0] !== countsForGames[gameIndex][2]) ||
+                            (selectedGames[gameIndex] === 0) && (countsForGames[gameIndex][0] <= countsForGames[gameIndex][2]) ||
+                            (selectedGames[gameIndex] === 2) && (countsForGames[gameIndex][0] >= countsForGames[gameIndex][2])
+                        }
+                    >선택 완료</ConfirmButton>
+                )}
+                <JoinedText>{game.gambleResult.participationNumber}명 참여</JoinedText>
+            </MatchCardContainer>
+        );
+    };
+
+    if (loading) {
+        return <div>데이터를 불러오는 중입니다...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
-        <MatchCardContainer>
-            <StyledTopContainer>
-                <LeftText>{data.name}</LeftText>
-                <RightBadge>{isConfirmed ? "참여 완료" : "예측 진행 중"}</RightBadge>
-            </StyledTopContainer>
-            <RightText>마감 50분전</RightText>
-            <TimeGuide>
-                <TimeTitle>경기 전</TimeTitle>
-                <TimeText>{formatKoreanDate(data.games.startAt)}</TimeText>
-            </TimeGuide>
-            <MatchButtonContainer>
-                {[
-                    {
-                        name: data.games.homeTeam.name,
-                        logo: data.games.homeTeam.logoUrl,
-                        percentage: homePercentage,
-                        value: data.games.gambleResult.home
-                    },
-                    {
-                        name: "무승부",
-                        logo: null,
-                        percentage: drawPercentage,
-                        value: data.games.gambleResult.draw
-                    },
-                    {
-                        name: data.games.awayTeam.name,
-                        logo: data.games.awayTeam.logoUrl,
-                        percentage: awayPercentage,
-                        value: data.games.gambleResult.away
-                    }
-                ].map((option, index) => (
-                    <MatchButton
-                        key={index}
-                        aria-selected={selected === index}
-                        onClick={() => handleClick(index)}
-                        disabled={isConfirmed}
-                    >
-                        {/* 왼쪽 팀 (index === 0) */}
-                        {index === 0 && (
-                            <TeamLeftContainer>
-                                {option.logo && (
-                                    <TeamLogo
-                                        src={option.logo}
-                                        alt={option.name}
-                                        small={selected !== null || isConfirmed}
-                                    />
-                                )}
-                                <TeamNameContainer>
-                                    <TeamName small={selected !== null || isConfirmed}>
-                                        {option.name}
-                                    </TeamName>
-                                    {(selected !== null || isConfirmed) && (
-                                        <ParticipationPercentage>
-                                            {option.percentage}%
-                                        </ParticipationPercentage>
-                                    )}
-                                </TeamNameContainer>
-                            </TeamLeftContainer>
-                        )}
+        <>
+            {console.log("Rendering with proceeding games:", proceedingData)}
+            {console.log("Rendering with finished games:", finishedData.games)}
 
-                        {/* 중앙 (무승부) */}
-                        {index === 1 && (
-                            <TeamCenterContainer>
-                                <TeamName small={selected !== null || isConfirmed}>
-                                    {option.name}
-                                </TeamName>
-                                {(selected !== null || isConfirmed) && (
-                                    <ParticipationPercentage>
-                                        {option.percentage}%
-                                    </ParticipationPercentage>
-                                )}
-                            </TeamCenterContainer>
-                        )}
+            {proceedingData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex))}
 
-                        {/* 오른쪽 팀 (index === 2) */}
-                        {index === 2 && (
-                            <TeamRightContainer>
-                                <TeamRightNameContainer>
-                                    <TeamName small={selected !== null || isConfirmed}>
-                                        {option.name}
-                                    </TeamName>
-                                    {(selected !== null || isConfirmed) && (
-                                        <ParticipationPercentage>
-                                            {option.percentage}%
-                                        </ParticipationPercentage>
-                                    )}
-                                </TeamRightNameContainer>
-                                {option.logo && (
-                                    <TeamLogo
-                                        src={option.logo}
-                                        alt={option.name}
-                                        small={selected !== null || isConfirmed}
-                                    />
-                                )}
-                            </TeamRightContainer>
-                        )}
+            <Divider/>
 
-                        {/* 카운트 표시 및 컨트롤 버튼 */}
-                        {(index === 0 || index === 2) && (
-                            <CountDisplay
-                                isVisible={(showCountControls && !isConfirmed) || isConfirmed}
-                                isLeft={index === 2}
-                                isZero={counts[index] === 0}
-                                style={{
-                                    backgroundColor: getCountDisplayColor(index)
-                                }}
-                            >
-                                {counts[index]}
-                            </CountDisplay>
-                        )}
-                        {index === 0 && !isConfirmed && (
-                            <ExtraContentRight isVisible={showCountControls}>
-                                <CountButton onClick={(e) => incrementCount(e, index)}>
-                                    <img src={chevronUp} alt="Increase" />
-                                </CountButton>
-                                <CountButton onClick={(e) => decrementCount(e, index)}>
-                                    <img
-                                        src={counts[index] === 0 ? chevronDownNon : chevronDown}
-                                        alt="Decrease"
-                                    />
-                                </CountButton>
-                            </ExtraContentRight>
-                        )}
-                        {index === 2 && !isConfirmed && (
-                            <ExtraContentLeft isVisible={showCountControls}>
-                                <CountButton onClick={(e) => incrementCount(e, index)}>
-                                    <img src={chevronUp} alt="Increase" />
-                                </CountButton>
-                                <CountButton onClick={(e) => decrementCount(e, index)}>
-                                    <img
-                                        src={counts[index] === 0 ? chevronDownNon : chevronDown}
-                                        alt="Decrease"
-                                    />
-                                </CountButton>
-                            </ExtraContentLeft>
-                        )}
-                    </MatchButton>
-                ))}
-            </MatchButtonContainer>
-
-            {selected !== null && !isConfirmed && (
-                <ConfirmButton
-                    onClick={handleConfirm}
-                    disabled={
-                        (selected === 1) && (counts[0] !== counts[2]) ||
-                        (selected === 0) && (counts[0] <= counts[2]) ||
-                        (selected === 2) && (counts[0] >= counts[2])
-                    }
-                >선택 완료</ConfirmButton>
-            )}
-            <JoinedText>{data.games.gambleResult.participationNumber}명 참여</JoinedText>
-        </MatchCardContainer>
+            {finishedData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex, true))}
+        </>
     );
 };
 

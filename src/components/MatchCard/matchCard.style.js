@@ -116,6 +116,7 @@ export const MatchButtonContainer = styled.div`
     box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10);
     margin-top: 1.7rem;
     margin-left: 2.77rem;
+    
 `;
 
 export const MatchButton = styled.button`
@@ -148,7 +149,7 @@ export const MatchButton = styled.button`
         background: rgba(192, 12, 11, 0.30);
         box-shadow: 0px 1.44px 7.2px 0px rgba(217, 25, 32, 0.40);
     }
-    
+
     &:first-child {
         border-radius: 0.4rem 0rem 0rem 0.4rem;
     }
@@ -159,6 +160,10 @@ export const MatchButton = styled.button`
 
     &:not(:first-child):not(:last-child) {
         border-radius: 0;
+    }
+    
+    &:disabled {
+        color: #000;
     }
 `;
 
@@ -301,6 +306,10 @@ export const ConfirmButton = styled.button`
     font-style: normal;
     font-weight: 500;
     line-height: 0.8rem;
+
+    &:disabled {
+        color: #DCDCDC;
+    }
 `;
 
 export const JoinedText = styled.p`
@@ -312,4 +321,12 @@ export const JoinedText = styled.p`
     font-weight: 400;
     line-height: 0.8rem;
     margin: 0;
+`;
+
+export const Divider = styled.div`
+    width: 27.125rem;
+    height: 0.0625rem;
+    background-color: var(--Black-black_600, #8F8F8F);
+    margin: 1.4rem 1.05rem;
+    position: relative;
 `;
