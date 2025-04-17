@@ -4,7 +4,7 @@ export const fetchMatchData = async (league, status) => {
     try {
         const response = await axiosInstance.get('/api/game', {
             params: {
-                league: 1,
+                league,
                 status
             }
         });

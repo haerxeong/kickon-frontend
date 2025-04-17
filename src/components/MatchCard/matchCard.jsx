@@ -12,6 +12,7 @@ import chevronUp from "../../assets/chevron_up.svg";
 import chevronDown from "../../assets/chevron_down.svg";
 import chevronDownNon from "../../assets/chevron_down_non.svg";
 import {fetchMatchData} from "../../apis/domains/common/getMatchList.js";
+import {getProfilecard} from "../../apis/domains/common/getProfilecard.js";
 
 
 const MatchCard = ({league}) => {
@@ -24,7 +25,7 @@ const MatchCard = ({league}) => {
         name: "",
         games: []
     });
-
+    const [userLeague, setUserLeague] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -40,12 +41,19 @@ const MatchCard = ({league}) => {
             try {
                 setLoading(true);
 
+                const profileData = await getProfilecard();
+                const leaguePk = profileData?.leaguePk;
+                setUserLeague(leaguePk);
+
+                if (!leaguePk) {
+                    throw new Error('League information not found in user profile');
+                }
                 // Fetch proceeding matches
-                const proceedingResult = await fetchMatchData(league, "proceeding");
+                const proceedingResult = await fetchMatchData(leaguePk, "proceeding");
                 setProceedingData(proceedingResult || { name: "", games: [] });
 
                 // Fetch finished matches
-                const finishedResult = await fetchMatchData(league, "finished");
+                const finishedResult = await fetchMatchData(leaguePk, "finished");
                 setFinishedData(finishedResult || { name: "", games: [] });
 
                 // Initialize state arrays based on the number of proceeding games
