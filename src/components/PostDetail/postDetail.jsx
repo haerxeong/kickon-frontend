@@ -201,7 +201,7 @@ const PostDetail = () => {
         <S.ArticleLabel>
           <S.ArticleTeam src={post.team?.logoUrl} alt={post.team?.nameKr} />
           <S.ArticleCategory>
-            {post.category || post.badge}
+            {post.category}
           </S.ArticleCategory>
         </S.ArticleLabel>
       )}
