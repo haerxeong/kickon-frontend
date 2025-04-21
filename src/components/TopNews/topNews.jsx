@@ -50,14 +50,10 @@ const TopNews = () => {
                 {newsItems.slice(0, 5).map((news, index) => (
                     <TNews key={news.pk || index}>
                         <NewsImage
-                            src={news.thumbnailUrl || "https://via.placeholder.com/64"}
-                            alt={news.title || "뉴스 이미지"}
-                            onError={(e) => {
-                                e.target.src = "https://via.placeholder.com/64";
-                            }}
+                            src={news.thumbnailUrl}
                         />
                         <NewsTitle>
-                            {news.title || "[K리그 1] 새 시즌 판도에 영향을 미칠 새로운 팀을 찾아 떠나는 경험 많은 선수들"}
+                            {news.title}
                         </NewsTitle>
                     </TNews>
                 ))}
