@@ -2,78 +2,60 @@ import styled from "styled-components";
 
 export const TopNewsContainer = styled.div`
     width: 15rem;
-    height: 24.4rem;
+    min-height: 8rem;
     flex-shrink: 0;
     border-radius: 0.5rem;
     border: 1px solid #DCDCDC;
     background: #FFF;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding-top: 3rem;
     position: relative;
-    padding-top: 2.5rem;
+    overflow: hidden;
 `;
 
 export const ContainerTitle = styled.div`
     color: #000;
-    font-family: Pretendard,serif;
-    font-size: 0.8rem; 
+    font-family: Pretendard, serif;
+    font-size: 0.8rem;
     font-style: normal;
     font-weight: 600;
-    line-height: 0.8rem;  
+    line-height: 0.8rem;
     position: absolute;
-    top: 1.2rem; 
-    left: 0.8rem;  
+    top: 1.2rem;
+    left: 0.8rem;
 `;
 
 export const TNews = styled.div`
     display: flex;
-    height : 4.35rem;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem; 
-    width: 100%;  
+    width: 100%;
+    min-height: 4.25rem;
+    padding: 0.5rem 0;
     position: relative;
+    border-top: 1px solid #F0F0F0;
 
-    &::before {
-        content: "";
-        position: absolute;
-        top: -0.8rem; 
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background-color: #F0F0F0;
-    }
-
-    /* 첫 번째 항목에는 구분선이 없도록 처리 */
-    &:first-child::before {
-        display: none;
+    &:first-child {
+        border-top: none;
     }
 `;
 
 export const NewsImage = styled.img`
-    position: absolute;
-    left: 0.6rem;  
-    top: -0.28rem;  
-    object-fit: cover; 
     width: 4rem;
+    height: 3rem;
+    object-fit: cover;
+    margin-left: 0.6rem;
+    border-radius: 0.175rem;
 `;
 
 export const NewsTitle = styled.div`
-    position: absolute;
-    top:-0.2rem;
-    left: 5rem;
-    display: flex;
-    width: 8.94rem; 
-    height: 3rem;  
-    flex-direction: column;
-    justify-content: center;
-    flex-shrink: 0;
+    width: 8.94rem;
+    padding-left: 0.4rem;
     color: #000;
-    
-    font-family: Pretendard,serif;
-    font-size: 0.6rem; 
+    font-family: Pretendard, serif;
+    font-size: 0.6rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 0.9rem;  
-`
+    line-height: 0.9rem;
+    display: flex;
+    align-items: center;
+`;

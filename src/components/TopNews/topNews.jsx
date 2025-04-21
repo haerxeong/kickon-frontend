@@ -33,15 +33,31 @@ const TopNews = () => {
         return <div>{error}</div>;
     }
 
+    // 데이터가 없거나 빈 배열인 경우 처리
+    if (!newsItems || newsItems.length === 0) {
+        return (
+            <TopNewsContainer>
+                <ContainerTitle>많이 본 뉴스 TOP 5</ContainerTitle>
+                <div style={{ padding: '1rem', textAlign: 'center' }}>뉴스가 없습니다.</div>
+            </TopNewsContainer>
+        );
+    }
+
     return (
         <div>
             <TopNewsContainer>
                 <ContainerTitle>많이 본 뉴스 TOP 5</ContainerTitle>
-                {newsItems.map((news, index) => (
+                {newsItems.slice(0, 5).map((news, index) => (
                     <TNews key={news.pk || index}>
-                        <NewsImage src={news.thumbnailUrl} alt={news.title} />
+                        <NewsImage
+                            src={news.thumbnailUrl || "https://via.placeholder.com/64"}
+                            alt={news.title || "뉴스 이미지"}
+                            onError={(e) => {
+                                e.target.src = "https://via.placeholder.com/64";
+                            }}
+                        />
                         <NewsTitle>
-                            {news.title}
+                            {news.title || "[K리그 1] 새 시즌 판도에 영향을 미칠 새로운 팀을 찾아 떠나는 경험 많은 선수들"}
                         </NewsTitle>
                     </TNews>
                 ))}
