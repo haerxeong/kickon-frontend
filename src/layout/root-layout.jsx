@@ -99,16 +99,8 @@ const RootLayout = () => {
         ) : (
           <ContentWrapper>
             <LeftColumn>
-              <RankingTable
-                title="이번 시즌 순위"
-                rankings={rankings}
-                type="season"
-              />
-              <RankingTable
-                title="승부예측 순위"
-                rankings={rankings}
-                type="prediction"
-              />
+              <RankingTable title="이번 시즌 순위" type="season" />
+              <RankingTable title="승부예측 순위" type="gamble" />
             </LeftColumn>
 
             <MainContent>

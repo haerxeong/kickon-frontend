@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { closeReportModal } from "../../features/modal/modalSlice";
+import { reportBoard, reportNews } from "../../apis/domains/report/report";
 import {
     ModalOverlay,
     ModalContainer,
@@ -15,7 +16,7 @@ import {
 } from "./reportModal.style.js";
 
 const ReportModal = () => {
-    const isReportModalOpen = useSelector((state) => state.reportModal.isReportModalOpen);
+    const { isReportModalOpen, reportType, contentId } = useSelector((state) => state.reportModal);
     const dispatch = useDispatch();
 
     // Options for reporting
@@ -33,6 +34,7 @@ const ReportModal = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [otherText, setOtherText] = useState("");
     const [isSubmitActive, setIsSubmitActive] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const otherInputRef = useRef(null);
 
     useEffect(() => {
@@ -65,59 +67,87 @@ const ReportModal = () => {
         }
     };
 
-    const handleSubmit = () => {
-        // Handle submission logic here
-        const reportData = {
-            reason: selectedOption,
-            details: selectedOption === "other" ? otherText : null
-        };
-
-        console.log("Report submitted:", reportData);
-        dispatch(closeReportModal());
-    };
+    const handleSubmit = async () => {
+        if (!isSubmitActive || isSubmitting) return;
+        
+        setIsSubmitting(true);
+        
+        try {
+          // 신고 내용 준비
+          const reason = selectedOption === "other" ? otherText : selectedOption;
+          
+          // 신고 타입에 따라 API 호출
+          let response;
+          if (reportType === 'board') {
+            response = await reportBoard(contentId, reason);
+          } else if (reportType === 'news') {
+            response = await reportNews(contentId, reason);
+          }
+          
+          // 응답 코드에 따라 다른 메시지 표시
+          if (response && response.code === "GET_SUCCESS") {
+            alert("신고가 접수되었습니다.");
+            dispatch(closeReportModal());
+          } else {
+            // 실패 메시지 표시 (응답의 message 필드 사용)
+            const errorMessage = response?.message || "신고 처리 중 오류가 발생했습니다.";
+            alert(errorMessage);
+          }
+        } catch (error) {
+          console.error("신고 처리 중 오류 발생:", error);
+          
+          // 오류 응답에서 메시지 추출 시도
+          const errorMessage = error.response?.data?.message || "신고 처리 중 오류가 발생했습니다. 다시 시도해주세요.";
+          alert(errorMessage);
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
 
     if (!isReportModalOpen) return null;
 
     return (
         <ModalOverlay onClick={() => dispatch(closeReportModal())}>
-            <ModalContainer onClick={(e) => e.stopPropagation()}>
-                <ReportTitle>게시글 신고</ReportTitle>
-                <CloseButton onClick={() => dispatch(closeReportModal())} />
-
-                <ReportForm>
-                    <CheckboxContainer>
-                        {reportReasons.map((reason) => (
-                            <CheckboxLabel key={reason.id}>
-                                <CheckboxInput
-                                    type="checkbox"
-                                    checked={selectedOption === reason.id}
-                                    onChange={() => handleOptionChange(reason.id)}
-                                />
-                                {reason.label}
-                            </CheckboxLabel>
-                        ))}
-
-                        {selectedOption === "other" && (
-                            <OtherInput
-                                ref={otherInputRef}
-                                placeholder="사유를 작성해주세요"
-                                value={otherText}
-                                onChange={handleOtherTextChange}
-                            />
-                        )}
-                    </CheckboxContainer>
-
-                    <SubmitButton
-                        active={isSubmitActive}
-                        disabled={!isSubmitActive}
-                        onClick={isSubmitActive ? handleSubmit : undefined}
-                    >
-                        신고하기
-                    </SubmitButton>
-                </ReportForm>
-            </ModalContainer>
+          <ModalContainer onClick={(e) => e.stopPropagation()}>
+            <ReportTitle>
+              {reportType === 'news' ? '뉴스 신고' : '게시글 신고'}
+            </ReportTitle>
+            <CloseButton onClick={() => dispatch(closeReportModal())} />
+            <ReportForm>
+              <CheckboxContainer>
+                {reportReasons.map((reason) => (
+                  <CheckboxLabel key={reason.id}>
+                    <CheckboxInput
+                      type="radio"
+                      name="reportReason"
+                      checked={selectedOption === reason.id}
+                      onChange={() => handleOptionChange(reason.id)}
+                    />
+                    {reason.label}
+                  </CheckboxLabel>
+                ))}
+              </CheckboxContainer>
+              
+              {selectedOption === "other" && (
+                <OtherInput
+                  ref={otherInputRef}
+                  value={otherText}
+                  onChange={handleOtherTextChange}
+                  placeholder="신고 사유를 직접 입력해주세요."
+                />
+              )}
+              
+              <SubmitButton 
+                active={isSubmitActive} 
+                onClick={handleSubmit}
+                disabled={!isSubmitActive || isSubmitting}
+              >
+                {isSubmitting ? "처리 중..." : "신고하기"}
+              </SubmitButton>
+            </ReportForm>
+          </ModalContainer>
         </ModalOverlay>
-    );
-};
-
-export default ReportModal;
+      );
+    };
+    
+    export default ReportModal;
