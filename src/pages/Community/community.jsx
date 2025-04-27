@@ -10,6 +10,7 @@ import { getBoardList } from "../../apis/domains/community/getBoardList";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../apis/axios-instance";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -49,6 +50,19 @@ const Community = () => {
         fetchPosts();
     }, [activeTab, activePage, selectedTeam]);
 
+    const handlePostClick = async (postId) => {
+        try {
+            // Call the API to increase the view count
+            await axiosInstance.post('/api/board-view-history', { board: postId });
+            console.log(`View count increased for post ID: ${postId}`);
+
+            // Navigate to the post detail page
+            navigate(`/community/${postId}`);
+        } catch (error) {
+            console.error('Failed to increase view count:', error);
+        }
+    };
+
     return (
         <NewsContainer>
             <TabContainer>
@@ -79,7 +93,7 @@ const Community = () => {
 
             <PostsWrapper>
                 {posts.map((post) => (
-                    <PostItem key={post.pk} onClick={() => navigate(`/community/${post.pk}`)}>
+                    <PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
                         <PostTitle>
                             {post.title}
                             {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
