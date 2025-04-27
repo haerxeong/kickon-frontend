@@ -217,6 +217,11 @@ const MatchCard = ({league}) => {
 
     // Function to get the color for score display in finished games
     const getFinishedScoreColor = (game, optionIndex) => {
+        // Check if "미참여" status
+        if (game.myGambleResult === null) {
+            return "#AFAFAF"; // Gray color for "미참여"
+        }
+
         const homeScore = game.homeScore;
         const awayScore = game.awayScore;
 
@@ -245,15 +250,41 @@ const MatchCard = ({league}) => {
         }
     };
 
+    // Function to determine the status text for RightBadge
+    const getStatusText = (game, isFinished) => {
+        // For all games (both proceeding and finished)
+        if (game.gameStatus === "PENDING" && !isFinished) {
+            return "예측 진행중";
+        }
+
+        // For both proceeding and finished games
+        return game.myGambleResult !== null ? "참여 완료" : "미참여";
+    };
+
+    // Function to determine the badge styles
+    const getBadgeStyles = (game, isFinished) => {
+        // For "미참여" status
+        if (game.myGambleResult === null && !(game.gameStatus === "PENDING" && !isFinished)) {
+            return {
+                backgroundColor: "#AFAFAF",
+                color: "#FFFFFF"
+            };
+        }
+        return {}; // Default styles
+    };
+
     const renderMatchCard = (game, gameIndex, isFinished = false) => {
         const showCountControls = !isFinished && selectedGames[gameIndex] !== null;
         const isConfirmed = isFinished || confirmedGames[gameIndex];
+        const isNotParticipated = game.myGambleResult === null && !(game.gameStatus === "PENDING" && !isFinished);
 
         return (
             <MatchCardContainer key={`game-${isFinished ? "finished-" : ""}${gameIndex}`}>
                 <StyledTopContainer>
                     <LeftText>{isFinished ? finishedData.name : proceedingData.name}</LeftText>
-                    <RightBadge>{isConfirmed ? "참여 완료" : game.gameStatus}</RightBadge>
+                    <RightBadge style={getBadgeStyles(game, isFinished)}>
+                        {getStatusText(game, isFinished)}
+                    </RightBadge>
                 </StyledTopContainer>
                 <RightText>마감 50분전</RightText>
                 <TimeGuide>
@@ -375,7 +406,8 @@ const MatchCard = ({league}) => {
                                     style={{
                                         backgroundColor: isFinished
                                             ? getFinishedScoreColor(game, optionIndex)
-                                            : getCountDisplayColor(gameIndex, optionIndex)
+                                            : getCountDisplayColor(gameIndex, optionIndex),
+                                        color: isNotParticipated && isFinished ? "#FFFFFF" : undefined
                                     }}
                                 >
                                     {getScoreValue(game, gameIndex, optionIndex, isFinished)}
