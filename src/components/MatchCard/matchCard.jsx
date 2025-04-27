@@ -13,6 +13,8 @@ import chevronDown from "../../assets/chevron_down.svg";
 import chevronDownNon from "../../assets/chevron_down_non.svg";
 import {fetchMatchData} from "../../apis/domains/common/getMatchList.js";
 import {getProfilecard} from "../../apis/domains/common/getProfilecard.js";
+import {postMatchPrediction} from "../../apis/domains/common/postGamble.js";
+import {patchMatchPrediction} from "../../apis/domains/common/patchGamble.js";
 
 
 const MatchCard = ({league}) => {
@@ -170,11 +172,40 @@ const MatchCard = ({league}) => {
         setCountsForGames(newCountsForGames);
     };
 
-    const handleConfirm = (gameIndex) => {
-        const newConfirmedGames = [...confirmedGames];
-        newConfirmedGames[gameIndex] = true;
-        setConfirmedGames(newConfirmedGames);
+    const handleConfirm = async (gameIndex) => {
+        const game = proceedingData.games[gameIndex];
+        const counts = countsForGames[gameIndex];
+
+        // 이미 예측이 있으면 PATCH, 없으면 POST
+        if (game.myGambleResult) {
+            // PATCH: myGambleResult.gamble이 gambleId임
+            const gambleId = game.myGambleResult.id;
+            const result = await patchMatchPrediction(
+                gambleId,
+                counts[0],
+                counts[2]
+            );
+            if (typeof result === 'string') {
+                alert(result);
+            } else {
+                // 성공 처리
+            }
+        } else {
+            // POST
+            const result = await postMatchPrediction(
+                game.pk, // 또는 game.id
+                counts[0],
+                counts[2]
+            );
+            if (typeof result === 'string') {
+                alert(result);
+            } else {
+                // 성공 처리
+            }
+        }
     };
+
+
 
     const formatKoreanDate = (dateString) => {
         const date = new Date(dateString);
