@@ -17,6 +17,7 @@ import { getNewsDetail } from "../../apis/domains/news/news.js";
 import { getBoardDetail } from "../../apis/domains/community/community.js";
 import { getNewsCommentList } from "../../apis/domains/news/getNewsCommentList.js"; // 뉴스 댓글 API 가져오기
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js"; // 프로필 카드 정보 가져오기
+import axiosInstance from "../../apis/axios-instance.js"; // axios 인스턴스 가져오기
 import parse from 'html-react-parser';
 
 const PostDetail = () => {
@@ -194,11 +195,23 @@ const PostDetail = () => {
     }));
   };
 
-  const toggleReplyKick = (replyId) => {
-    setLikedReplies((prev) => ({
-      ...prev,
-      [replyId]: !prev[replyId],
-    }));
+  // 답글 킥(좋아요) 토글 함수
+  const toggleReplyKick = async (replyId) => {
+    try {
+      // 뉴스 페이지인지 게시판 페이지인지 확인
+      const isNewsReply = location.pathname.includes('/news/');
+
+      // API 엔드포인트 설정
+      const endpoint = isNewsReply ? "/api/news-reply-kick" : "/api/board-reply-kick";
+      const body = { reply: replyId };
+
+      // API 호출
+      await axiosInstance.post(endpoint, body);
+
+      console.log(`✅ Successfully toggled kick for reply ID: ${replyId}`);
+    } catch (error) {
+      console.error("Failed to toggle reply 킥:", error);
+    }
   };
 
   const toggleReReplyBox = (replyId) => {
@@ -206,14 +219,6 @@ const PostDetail = () => {
       ...prev,
       [replyId]: !prev[replyId],
     }));
-  };
-
-  const toggleCommentLike = (commentId) => {
-    setLikedComments((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }));
-    // 여기에 나중에 좋아요 API 호출 추가
   };
 
   // 로딩 중일 때 표시
@@ -311,167 +316,180 @@ const PostDetail = () => {
             </S.CommentInputBox>
         )}
         {displayComments.length > 0 && (
-        <S.CommentsSection>
-          <S.CommentsSectionTitle>댓글 {commentsCount}개</S.CommentsSectionTitle>
+            <S.CommentsSection>
+              <S.CommentsSectionTitle>댓글 {commentsCount}개</S.CommentsSectionTitle>
 
-          {/* 댓글 로딩 중 표시 */}
-          {commentLoading && <div>댓글 로딩 중...</div>}
-          {commentError && <div>{commentError}</div>}
+              {/* 댓글 로딩 중 표시 */}
+              {commentLoading && <div>댓글 로딩 중...</div>}
+              {commentError && <div>{commentError}</div>}
 
-          {/* 댓글이 없는 경우 빈 화면 표시 */}
-          {!commentLoading && !commentError && displayComments.length === 0 && (
-              <S.EmptyComments>댓글이 없습니다.</S.EmptyComments>
-          )}
+              {/* 댓글이 없는 경우 빈 화면 표시 */}
+              {!commentLoading && !commentError && displayComments.length === 0 && (
+                  <S.EmptyComments>댓글이 없습니다.</S.EmptyComments>
+              )}
 
-          {displayComments.length > 0 &&
-              displayComments.map((comment) => (
-                  <S.CommentItem key={comment.pk || comment.id}>
-                    <S.CommentHeaderWrapper>
-                      <S.CommentHeader>
-                        <img
-                            src={comment.user.profileImageUrl || ProfileIcon}
-                            alt="프로필 아이콘"
-                            width={24}
-                            height={24}
-                            className="rounded-full object-cover"
-                        />
-                        <span
-                            style={{
-                              fontSize: "0.75rem",
-                              marginRight: "0.3rem",
-                              color: "#000",
-                            }}
-                        >
+              {displayComments.length > 0 &&
+                  displayComments.map((comment) => (
+                      <S.CommentItem key={comment.pk}>
+                        <S.CommentHeaderWrapper>
+                          <S.CommentHeader>
+                            <img
+                                src={comment.user.profileImageUrl || ProfileIcon}
+                                alt="프로필 아이콘"
+                                width={24}
+                                height={24}
+                                className="rounded-full object-cover"
+                            />
+                            <span
+                                style={{
+                                  fontSize: "0.75rem",
+                                  marginRight: "0.3rem",
+                                  color: "#000",
+                                }}
+                            >
                     {comment.user.nickname}
                   </span>
-                        <span style={{fontSize: "0.7rem", color: "#888"}}>
+                            <span style={{fontSize: "0.7rem", color: "#888"}}>
                     {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
                   </span>
-                      </S.CommentHeader>
-                      <S.CommentLikes
-                          key={comment.pk || comment.id}
-                          active={likedComments[comment.pk || comment.id] || false}
-                          onClick={() => toggleCommentLike(comment.pk || comment.id)}
-                      >
-                        <img
-                            src={likedComments[comment.pk || comment.id] ? RKickIcon : KickIcon}
-                            alt="좋아요 아이콘"
-                            width={12}
-                            height={12}
-                        />
-                        {comment.kickCount}
-                      </S.CommentLikes>
-                    </S.CommentHeaderWrapper>
-                    <S.CommentContent>{comment.contents || comment.content}</S.CommentContent>
-                    <S.CommentActions>
-                      {canComment && (
-                          <S.ReplyButton
-                              isActive={openReplyIds[comment.pk || comment.id]}
-                              onClick={() => toggleReplyBox(comment.pk || comment.id)}
-                          >
-                            답글
-                          </S.ReplyButton>
-                      )}
-                      {/* 답글 입력 박스 - 답글 버튼 클릭시 표시 */}
-                      {openReplyIds[comment.pk || comment.id] && (
-                          <S.ReplyInputWrapper>
-                            <S.ReplyInput placeholder="답글을 입력하세요..."/>
-                            <S.ReplySubmitButton>등록</S.ReplySubmitButton>
-                          </S.ReplyInputWrapper>
-                      )}
-                      {(comment.replies?.length ?? 0) > 0 && (
-                          <S.MoreButton onClick={() => toggleReplies(comment.pk || comment.id)}>
-                            {showReplies[comment.pk || comment.id] ? (
-                                <>
-                                  <MdExpandLess size={16}/> 답글 숨기기
-                                </>
-                            ) : (
-                                <>
-                                  <MdExpandMore size={16}/> 답글 {comment.replies.length}
-                                  개
-                                </>
-                            )}
-                          </S.MoreButton>
-                      )}
-                    </S.CommentActions>
+                          </S.CommentHeader>
+                          <S.CommentLikes
+                              key={comment.pk}
+                              active={likedComments[comment.pk] || false}
+                              onClick={async () => {
+                                try {
+                                  await toggleReplyKick(comment.pk);
+                                  // UI 상태 업데이트
+                                  setLikedReplies((prev) => ({
+                                    ...prev,
+                                    kickCount: likedComments[comment.pk] ? comment.kickCount + 1 : comment.kickCount - 1
+                                  }));
+                                } catch (error) {
+                                  console.log("Failed to toggle Reply Kick:", error);
+                                }
 
-                    {/* 답글 표시 - 토글 상태에 따라 표시 */}
-                    {comment.replies &&
-                        comment.replies.length > 0 &&
-                        showReplies[comment.pk || comment.id] && (
-                            <S.RepliesContainer>
-                              {comment.replies.map((reply) => (
-                                  <S.ReplyItem key={reply.pk}>
-                                    <S.ReplyHeaderWrapper>
-                                      <S.ReplyHeader>
-                                        <img
-                                            src={reply.user.profileImageUrl || ProfileIcon}
-                                            alt="프로필 아이콘"
-                                            width={24}
-                                            height={24}
-                                            style={{
-                                              borderRadius: "50%",
-                                              objectFit: "cover",
-                                            }}
-                                        />
-                                        <span
-                                            style={{
-                                              fontSize: "0.7rem",
-                                              marginRight: "0.3rem",
-                                              color: "#000",
-                                            }}
-                                        >
+                              }}
+
+                          >
+                            <img
+                                src={likedComments[comment.pk] ? RKickIcon : KickIcon}
+                                alt="좋아요 아이콘"
+                                width={12}
+                                height={12}
+                            />
+                            {comment.kickCount}
+                          </S.CommentLikes>
+                        </S.CommentHeaderWrapper>
+                        <S.CommentContent>{comment.contents || comment.content}</S.CommentContent>
+                        <S.CommentActions>
+                          {canComment && (
+                              <S.ReplyButton
+                                  isActive={openReplyIds[comment.pk]}
+                                  onClick={() => toggleReplyBox(comment.pk)}
+                              >
+                                답글
+                              </S.ReplyButton>
+                          )}
+                          {/* 답글 입력 박스 - 답글 버튼 클릭시 표시 */}
+                          {openReplyIds[comment.pk] && (
+                              <S.ReplyInputWrapper>
+                                <S.ReplyInput placeholder="답글을 입력하세요..."/>
+                                <S.ReplySubmitButton>등록</S.ReplySubmitButton>
+                              </S.ReplyInputWrapper>
+                          )}
+                          {(comment.replies?.length ?? 0) > 0 && (
+                              <S.MoreButton onClick={() => toggleReplies(comment.pk)}>
+                                {showReplies[comment.pk] ? (
+                                    <>
+                                      <MdExpandLess size={16}/> 답글 숨기기
+                                    </>
+                                ) : (
+                                    <>
+                                      <MdExpandMore size={16}/> 답글 {comment.replies.length}
+                                      개
+                                    </>
+                                )}
+                              </S.MoreButton>
+                          )}
+                        </S.CommentActions>
+
+                        {/* 답글 표시 - 토글 상태에 따라 표시 */}
+                        {comment.replies &&
+                            comment.replies.length > 0 &&
+                            showReplies[comment.pk] && (
+                                <S.RepliesContainer>
+                                  {comment.replies.map((reply) => (
+                                      <S.ReplyItem key={reply.pk}>
+                                        <S.ReplyHeaderWrapper>
+                                          <S.ReplyHeader>
+                                            <img
+                                                src={reply.user.profileImageUrl || ProfileIcon}
+                                                alt="프로필 아이콘"
+                                                width={24}
+                                                height={24}
+                                                style={{
+                                                  borderRadius: "50%",
+                                                  objectFit: "cover",
+                                                }}
+                                            />
+                                            <span
+                                                style={{
+                                                  fontSize: "0.7rem",
+                                                  marginRight: "0.3rem",
+                                                  color: "#000",
+                                                }}
+                                            >
                               {reply.user.nickname}
                             </span>
-                                        <span
-                                            style={{fontSize: "0.65rem", color: "#888"}}
-                                        >
+                                            <span
+                                                style={{fontSize: "0.65rem", color: "#888"}}
+                                            >
                               {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
                             </span>
-                                      </S.ReplyHeader>
-                                      <S.ReplyLikes
-                                          key={reply.pk}
-                                          active={likedReplies[reply.pk] || false}
-                                          onClick={() => toggleReplyKick(reply.pk)}
-                                      >
-                                        <img
-                                            src={
-                                              likedReplies[reply.pk] ? RKickIcon : KickIcon
-                                            }
-                                            alt="좋아요 아이콘"
-                                            width={12}
-                                            height={12}
-                                        />
-                                        {reply.kickCount}
-                                      </S.ReplyLikes>
-                                    </S.ReplyHeaderWrapper>
-                                    <S.ReplyContent>{reply.contents}</S.ReplyContent>
-
-                                    {/* New ReplyActions component */}
-                                    <S.ReplyActions>
-                                      {location.pathname.includes('/community/') && canComment && (
-                                          <S.ReplyActionButton
-                                              isActive={openReReplyIds[reply.pk]}
-                                              onClick={() => toggleReReplyBox(reply.pk)}
+                                          </S.ReplyHeader>
+                                          <S.ReplyLikes
+                                              key={reply.pk}
+                                              active={likedReplies[reply.pk] || false}
+                                              onClick={() => toggleReplyKick(reply.pk)}
                                           >
-                                            답글
-                                          </S.ReplyActionButton>
-                                      )}
-                                      {/* Re-reply input box */}
-                                      {openReReplyIds[reply.pk] && (
-                                          <S.ReplyInputWrapper>
-                                            <S.ReplyInput placeholder="답글을 입력하세요..."/>
-                                            <S.ReplySubmitButton>등록</S.ReplySubmitButton>
-                                          </S.ReplyInputWrapper>
-                                      )}
-                                    </S.ReplyActions>
-                                  </S.ReplyItem>
-                              ))}
-                            </S.RepliesContainer>
-                        )}
-                  </S.CommentItem>
-              ))}
-        </S.CommentsSection>
+                                            <img
+                                                src={
+                                                  likedReplies[reply.pk] ? RKickIcon : KickIcon
+                                                }
+                                                alt="좋아요 아이콘"
+                                                width={12}
+                                                height={12}
+                                            />
+                                            {reply.kickCount}
+                                          </S.ReplyLikes>
+                                        </S.ReplyHeaderWrapper>
+                                        <S.ReplyContent>{reply.contents}</S.ReplyContent>
+
+                                        {/* New ReplyActions component */}
+                                        <S.ReplyActions>
+                                          {location.pathname.includes('/community/') && canComment && (
+                                              <S.ReplyActionButton
+                                                  isActive={openReReplyIds[reply.pk]}
+                                                  onClick={() => toggleReReplyBox(reply.pk)}
+                                              >
+                                                답글
+                                              </S.ReplyActionButton>
+                                          )}
+                                          {/* Re-reply input box */}
+                                          {openReReplyIds[reply.pk] && (
+                                              <S.ReplyInputWrapper>
+                                                <S.ReplyInput placeholder="답글을 입력하세요..."/>
+                                                <S.ReplySubmitButton>등록</S.ReplySubmitButton>
+                                              </S.ReplyInputWrapper>
+                                          )}
+                                        </S.ReplyActions>
+                                      </S.ReplyItem>
+                                  ))}
+                                </S.RepliesContainer>
+                            )}
+                      </S.CommentItem>
+                  ))}
+            </S.CommentsSection>
         )}
         {/* 댓글이 있을 때만 페이지네이션 표시 */}
         {displayComments.length > 0 && (
