@@ -194,7 +194,7 @@ const PostDetail = () => {
     }));
   };
 
-  const toggleReplyLike = (replyId) => {
+  const toggleReplyKick = (replyId) => {
     setLikedReplies((prev) => ({
       ...prev,
       [replyId]: !prev[replyId],
@@ -364,7 +364,7 @@ const PostDetail = () => {
                     </S.CommentHeaderWrapper>
                     <S.CommentContent>{comment.contents || comment.content}</S.CommentContent>
                     <S.CommentActions>
-                      {location.pathname.includes('/community/') && canComment && (
+                      {canComment && (
                           <S.ReplyButton
                               isActive={openReplyIds[comment.pk || comment.id]}
                               onClick={() => toggleReplyBox(comment.pk || comment.id)}
@@ -432,7 +432,7 @@ const PostDetail = () => {
                                       <S.ReplyLikes
                                           key={reply.pk}
                                           active={likedReplies[reply.pk] || false}
-                                          onClick={() => toggleReplyLike(reply.pk)}
+                                          onClick={() => toggleReplyKick(reply.pk)}
                                       >
                                         <img
                                             src={
