@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import * as S from "./postEditor.style";
 import { PiImageSquare } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa6";
-import { FiHelpCircle, FiVideo } from "react-icons/fi";
-import { TbBold, TbUnderline, TbItalic } from "react-icons/tb";
-import {
-    BsLink45Deg,
-    BsChatSquareText
-} from "react-icons/bs";
-import { MdFormatListBulleted } from "react-icons/md";
-import { RiQuoteText } from "react-icons/ri";
-import { TfiLayoutLineSolid } from "react-icons/tfi";
+import { FiHelpCircle } from "react-icons/fi";
+import { IoImageOutline } from "react-icons/io5";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { uploadImageToS3 } from "../../utils/imageUpload";
+import { getTeams } from "../../apis/domains/common/getTeams";
+import axiosInstance from "../../apis/axios-instance.js";
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
+    const [teamSuggestions, setTeamSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedTab, setSelectedTab] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+    const [uploadedImagePreview, setUploadedImagePreview] = useState("");
+    const [selectedTeamId, setSelectedTeamId] = useState(null);
+    const fileInputRef = useRef(null);
+    const teamSearchRef = useRef(null);
 
     const isNews = type === "news";
 
@@ -29,8 +34,73 @@ const PostEditor = ({ type = "news" }) => {
 
     const communityTabs = ["전체", "리버풀"];
 
+    // Mock team data for demonstration
+    const mockTeams = [
+        { id: 1, name: "리버풀" },
+        { id: 2, name: "맨체스터 유나이티드" },
+        { id: 3, name: "맨체스터 시티" },
+        { id: 4, name: "첼시" },
+        { id: 5, name: "아스널" },
+        { id: 6, name: "토트넘" },
+        { id: 7, name: "레알 마드리드" },
+        { id: 8, name: "바르셀로나" }
+    ];
+
+    // Handle outside click to close suggestions
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (teamSearchRef.current && !teamSearchRef.current.contains(event.target)) {
+                setShowSuggestions(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // Search for teams
+    useEffect(() => {
+        if (teamName.trim() === "") {
+            setTeamSuggestions([]);
+            return;
+        }
+
+        // In a real app, replace this with API call
+        const fetchTeams = async () => {
+            try {
+                // Simulate API call with mock data
+                // const response = await getTeams({ keyword: teamName });
+                // setTeamSuggestions(response.data);
+
+                // Using mock data for demonstration
+                const filteredTeams = mockTeams.filter(team =>
+                    team.name.toLowerCase().includes(teamName.toLowerCase())
+                );
+                setTeamSuggestions(filteredTeams);
+                setShowSuggestions(true);
+            } catch (error) {
+                console.error("Failed to fetch teams:", error);
+            }
+        };
+
+        const debounceTimer = setTimeout(() => {
+            fetchTeams();
+        }, 300);
+
+        return () => clearTimeout(debounceTimer);
+    }, [teamName]);
+
+    const handleTeamSelect = (team) => {
+        setTeamName(team.name);
+        setSelectedTeamId(team.id);
+        setShowSuggestions(false);
+    };
+
     const handleTeamNameClear = () => {
         setTeamName("");
+        setSelectedTeamId(null);
     };
 
     const handleTabSelect = (tab) => {
@@ -38,31 +108,139 @@ const PostEditor = ({ type = "news" }) => {
         setShowDropdown(false);
     };
 
+    const handleButtonClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Show preview immediately
+        const previewUrl = URL.createObjectURL(file);
+        setUploadedImagePreview(previewUrl);
+
+        try {
+            // Upload to S3
+            const imageUrl = await uploadImageToS3(file);
+            setUploadedImageUrl(imageUrl);
+            alert('이미지가 성공적으로 업로드되었습니다!');
+        } catch (error) {
+            console.error(error);
+            alert('이미지 업로드에 실패했습니다.');
+            setUploadedImagePreview("");
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setUploadedImagePreview("");
+        setUploadedImageUrl("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const handleSubmit = async () => {
+        const endpoint = isNews ? "/api/news" : "/api/board";
+        const payload = {
+            team: selectedTeamId,
+            title,
+            contents: content,
+            ...(isNews && { thumbnailUrl: uploadedImageUrl, category: selectedTab }),
+        };
+
+        try {
+            const response = await axiosInstance.post(endpoint, payload);
+            alert("Post submitted successfully!");
+        } catch (error) {
+            console.error("Failed to submit post:", error);
+            alert("Failed to submit post.");
+        }
+    };
+
+    const modules = {
+        toolbar: [
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["blockquote", "link", "image", "video"],
+            ["clean"]
+        ]
+    };
+
+    const formats = [
+        "header",
+        "bold", "italic", "underline",
+        "list", "bullet",
+        "blockquote",
+        "link", "image", "video"
+    ];
+
     return (
         <S.Container>
             {isNews && (
                 <>
-                    {/* 대표 이미지 추가 */}
-                    <S.ImageUploadSection>
-                        <PiImageSquare size="0.93rem" color="#8F8F8F" />
-                        <S.ImageUploadText>대표 이미지 추가</S.ImageUploadText>
-                    </S.ImageUploadSection>
+                    {/* 대표 이미지 업로드 섹션 */}
+                    {!uploadedImagePreview ? (
+                        <S.ImageUploadSection onClick={handleButtonClick}>
+                            <PiImageSquare size="0.93rem" color="#8F8F8F" />
+                            <S.ImageUploadText>대표 이미지 추가</S.ImageUploadText>
+                        </S.ImageUploadSection>
+                    ) : (
+                        <S.ImagePreviewContainer>
+                            <S.ImagePreview src={uploadedImagePreview} alt="Uploaded preview" />
+                            <S.RemoveImageButton onClick={handleRemoveImage}>
+                                <IoClose size="1rem" color="#fff" />
+                            </S.RemoveImageButton>
+                        </S.ImagePreviewContainer>
+                    )}
+
+                    {/* 숨겨진 파일 선택 input */}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleImageChange}
+                    />
 
                     {/* 팀명 검색창 및 탭 영역 */}
                     <S.SearchAndTabSection>
-                        <S.TeamSearchInput>
-                            <input
-                                type="text"
-                                placeholder="팀명 검색"
-                                value={teamName}
-                                onChange={(e) => setTeamName(e.target.value)}
-                            />
-                            {teamName && (
-                                <S.ClearButton onClick={handleTeamNameClear}>
-                                    <IoClose size="0.83rem" color="#8F8F8F" />
-                                </S.ClearButton>
+                        <S.TeamSearchWrapper ref={teamSearchRef}>
+                            <S.TeamSearchInput>
+                                <input
+                                    type="text"
+                                    placeholder="팀명 검색"
+                                    value={teamName}
+                                    onChange={(e) => setTeamName(e.target.value)}
+                                    onFocus={() => {
+                                        if (teamName && teamSuggestions.length > 0) {
+                                            setShowSuggestions(true);
+                                        }
+                                    }}
+                                />
+                                {teamName && (
+                                    <S.ClearButton onClick={handleTeamNameClear}>
+                                        <IoClose size="0.83rem" color="#8F8F8F" />
+                                    </S.ClearButton>
+                                )}
+                            </S.TeamSearchInput>
+
+                            {showSuggestions && teamSuggestions.length > 0 && (
+                                <S.SuggestionDropdown>
+                                    {teamSuggestions.map((team) => (
+                                        <S.SuggestionItem
+                                            key={team.id}
+                                            onClick={() => handleTeamSelect(team)}
+                                        >
+                                            {team.name}
+                                        </S.SuggestionItem>
+                                    ))}
+                                </S.SuggestionDropdown>
                             )}
-                        </S.TeamSearchInput>
+                        </S.TeamSearchWrapper>
 
                         <S.TabSectionWrapper>
                             <S.TabSelector onClick={() => setShowDropdown(!showDropdown)} selected={!!selectedTab}>
@@ -84,12 +262,11 @@ const PostEditor = ({ type = "news" }) => {
                                 <FiHelpCircle size="0.9rem" color="#8F8F8F" />
                             </S.HelpIcon>
                         </S.TabSectionWrapper>
-
                     </S.SearchAndTabSection>
                 </>
             )}
 
-            {/* 탭 선택 영역 */}
+            {/* 커뮤니티 탭 선택 */}
             {!isNews && (
                 <S.TabSectionWrapper>
                     <S.CommunityTabSelector onClick={() => setShowDropdown(!showDropdown)} selected={!!selectedTab}>
@@ -116,62 +293,22 @@ const PostEditor = ({ type = "news" }) => {
                 onChange={(e) => setTitle(e.target.value)}
             />
 
-            {/* 글 작성 툴바 */}
-            <S.EditorToolbar>
-                <S.FormatDropdown>
-                    <span>제목</span>
-                    <FaChevronDown size="0.5rem" color="#8F8F8F" />
-                </S.FormatDropdown>
-
-                <S.Divider />
-
-                <S.FormattingToolsContainer>
-                    <TbBold size="0.925rem" color="#8C8C8C" />
-                    <TbUnderline size="0.925rem" color="#8C8C8C" />
-                    <TbItalic size="0.925rem" color="#8C8C8C" />
-                    <MdFormatListBulleted size="0.925rem" color="#8C8C8C" />
-                </S.FormattingToolsContainer>
-
-                <S.Divider />
-
-                <S.ToolIcon>
-                    <RiQuoteText size="0.925rem" color="#8C8C8C" />
-                </S.ToolIcon>
-
-                <S.ToolIcon>
-                    <BsChatSquareText size="0.925rem" color="#8C8C8C" />
-                </S.ToolIcon>
-
-                <S.ToolIcon>
-                    <TfiLayoutLineSolid size="0.925rem" color="#8C8C8C" />
-                </S.ToolIcon>
-
-                <S.Divider />
-
-                <S.ToolIcon>
-                    <BsLink45Deg size="1rem" color="#8C8C8C" />
-                </S.ToolIcon>
-
-                <S.ToolIcon>
-                    <PiImageSquare size="1rem" color="#8C8C8C" />
-                </S.ToolIcon>
-
-                <S.ToolIcon>
-                    <FiVideo size="0.925rem" color="#8C8C8C" />
-                </S.ToolIcon>
-            </S.EditorToolbar>
-
-            {/* 글 작성 영역 */}
-            <S.ContentTextarea
-                placeholder="내용을 입력하세요"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-            />
+            {/* 글 작성 영역 (ReactQuill 적용) */}
+            <S.QuillWrapper>
+                <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="내용을 입력하세요"
+                />
+            </S.QuillWrapper>
 
             {/* 버튼 영역 */}
             <S.ButtonContainer>
                 <S.CancelButton>취소</S.CancelButton>
-                <S.SubmitButton>작성완료</S.SubmitButton>
+                <S.SubmitButton onClick={handleSubmit}>작성완료</S.SubmitButton>
             </S.ButtonContainer>
         </S.Container>
     );

@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^7.17.5",
+    "@mantine/hooks": "^7.17.5",
+    "@mantine/rte": "^5.10.5",
     "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
@@ -19,6 +22,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.5.0",
+    "react-quill-new": "^3.4.6",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.4.1",
     "styled-components": "^6.1.16",
