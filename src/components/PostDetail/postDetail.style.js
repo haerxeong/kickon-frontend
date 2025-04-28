@@ -203,7 +203,7 @@ export const MenuItem = styled.div`
 `;
 
 export const CommentInputBox = styled.div`
-  position: absolute;
+  //position: absolute;
   left: 0.8rem;
   display: flex;
   width: 28rem;
@@ -214,6 +214,7 @@ export const CommentInputBox = styled.div`
   border-radius: 0.625rem;
   background: #f0f0f0;
   color: black;
+    margin-left: 0.7rem;
 `;
 
 export const CommentInputLabel = styled.div`
