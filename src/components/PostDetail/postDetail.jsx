@@ -170,6 +170,33 @@ const PostDetail = () => {
     }));
   };
 
+  const toggleKick = async ({ isLiked, newsPk, boardPk }) => {
+    try {
+      if (newsPk) {
+        // 뉴스 킥 API
+        const endpoint = "/api/news-kick";
+        const body = { news: newsPk };
+        if (isLiked) {
+          await axiosInstance.post(endpoint, body); // Create 킥
+        } else {
+          await axiosInstance.post(endpoint, body); // Delete 킥 (based on PK)
+        }
+      } else if (boardPk) {
+        // 게시글 킥 API
+        const endpoint = "/api/board-kick";
+        const body = { board: boardPk };
+        if (isLiked) {
+          await axiosInstance.post(endpoint, body); // Create 킥
+        } else {
+          await axiosInstance.post(endpoint, body); // Delete 킥 (based on PK)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to toggle 킥:", error);
+    }
+  };
+
+  // API 데이터와 기존 하드코딩된 데이터 병합
   const post = apiPost;
 
   // 로딩 중일 때 표시
