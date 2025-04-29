@@ -9,15 +9,16 @@ export const uploadImageToS3 = async (file) => {
                 type: "news-images",
                 fileName: file.name,
             },
-            {
-                headers: {
-                    "x-amz-adl": "public-read",
-                },
-            }
+            // {
+            //     headers: {
+            //         "x-amz-acl": "public-read",
+            //     },
+            // }
         );
 
         // presigned URL, 실제 접근 URL 추출
-        const { presignedUrl, sUrl } = presignedRes.data.data;
+        console.log(presignedRes)
+        const { presignedUrl, sUrl } = presignedRes.data;
 
         // S3에 파일 업로드 (PUT)
         await axiosInstance.put(

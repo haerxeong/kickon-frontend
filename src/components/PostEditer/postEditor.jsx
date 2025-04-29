@@ -10,6 +10,7 @@ import "react-quill-new/dist/quill.snow.css";
 import { uploadImageToS3 } from "../../utils/imageUpload";
 import { getTeams } from "../../apis/domains/common/getTeams";
 import axiosInstance from "../../apis/axios-instance.js";
+import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
@@ -25,6 +26,8 @@ const PostEditor = ({ type = "news" }) => {
     const fileInputRef = useRef(null);
     const teamSearchRef = useRef(null);
 
+    const { selectedTeam, selectedLeague } = useLeagueTeamStore();
+
     const isNews = type === "news";
 
     const newsTabs = [
@@ -32,19 +35,7 @@ const PostEditor = ({ type = "news" }) => {
         "불화설", "은퇴", "인터뷰", "현지 팬 반응", "기타"
     ];
 
-    const communityTabs = ["전체", "리버풀"];
-
-    // Mock team data for demonstration
-    const mockTeams = [
-        { id: 1, name: "리버풀" },
-        { id: 2, name: "맨체스터 유나이티드" },
-        { id: 3, name: "맨체스터 시티" },
-        { id: 4, name: "첼시" },
-        { id: 5, name: "아스널" },
-        { id: 6, name: "토트넘" },
-        { id: 7, name: "레알 마드리드" },
-        { id: 8, name: "바르셀로나" }
-    ];
+    const communityTabs = ["전체", selectedTeam?.nameKr || ""];
 
     // Handle outside click to close suggestions
     useEffect(() => {
@@ -67,21 +58,30 @@ const PostEditor = ({ type = "news" }) => {
             return;
         }
 
-        // In a real app, replace this with API call
         const fetchTeams = async () => {
             try {
-                // Simulate API call with mock data
-                // const response = await getTeams({ keyword: teamName });
-                // setTeamSuggestions(response.data);
+                const teams = await getTeams({
+                    league: selectedLeague?.pk,
+                    keyword: teamName,
+                });
 
-                // Using mock data for demonstration
-                const filteredTeams = mockTeams.filter(team =>
-                    team.name.toLowerCase().includes(teamName.toLowerCase())
-                );
-                setTeamSuggestions(filteredTeams);
-                setShowSuggestions(true);
+                // Teams are directly in the response from getTeams
+                if (Array.isArray(teams)) {
+                    const formattedTeams = teams.map(team => ({
+                        id: team.pk,
+                        name: team.nameKr,
+                        logoUrl: team.logoUrl,
+                    }));
+
+                    setTeamSuggestions(formattedTeams);
+                    setShowSuggestions(true);
+                } else {
+                    console.error("Unexpected team data format:", teams);
+                    setTeamSuggestions([]);
+                }
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
+                setTeamSuggestions([]);
             }
         };
 
@@ -90,7 +90,8 @@ const PostEditor = ({ type = "news" }) => {
         }, 300);
 
         return () => clearTimeout(debounceTimer);
-    }, [teamName]);
+    }, [teamName, selectedLeague?.pk]);
+
 
     const handleTeamSelect = (team) => {
         setTeamName(team.name);

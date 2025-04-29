@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     display: flex;
-    width: 31rem;
+    width: 31.5rem;
     padding: 1.4rem 0.74rem 4.625rem 0.74rem;
     flex-direction: column;
     align-items: flex-start;
@@ -224,10 +224,14 @@ export const SubmitButton = styled.button`
 
 export const QuillWrapper = styled.div`
     margin-bottom: 24px;
+    color: #000;
+    font-size: 0.6rem;
+    font-style: normal;
+    line-height: 0.8rem;
 
     .quill {
         border-radius: 4px;
-        overflow: hidden;
+        overflow: scroll;
         border: 1px solid #dcdcdc;
     }
 
@@ -283,31 +287,6 @@ export const TeamSearchWrapper = styled.div`
   min-width: 0;
 `;
 
-// export const TeamSearchInput = styled.div`
-//   display: flex;
-//   align-items: center;
-//   background-color: #f9f9f9;
-//   border: 1px solid #dcdcdc;
-//   border-radius: 4px;
-//   padding: 0 8px;
-//
-//   input {
-//     flex: 1;
-//     min-width: 0;
-//     height: 36px;
-//     border: none;
-//     background: transparent;
-//     font-size: 0.87rem;
-//     color: #333;
-//     outline: none;
-//     padding: 0 4px;
-//
-//     &::placeholder {
-//       color: #8f8f8f;
-//     }
-//   }
-// `;
-
 export const SuggestionDropdown = styled.div`
   width: 13rem;
   position: absolute;
@@ -331,26 +310,43 @@ export const SuggestionItem = styled.div`
     cursor: pointer;
     transition: background-color 0.2s;
     
-    //padding: 10px 16px;
-    //font-size: 0.87rem;
-    //color: #333;
-    //cursor: pointer;
-    //transition: background-color 0.2s;
-    //
-    //display: flex;
-    //width: 6.75rem;
-    //padding: 0.416rem 0.74rem;
-    //justify-content: space-between;
-    //align-items: flex-start;
-    //gap: 1.48rem;
-    //align-self: stretch;
-    //border-radius: 0.37rem;
-    //border: 1px solid #DCDCDC;
-    //background: #FFF;
-    //font-size: 0.65rem;
-    //cursor: pointer;
-
   &:hover {
     background-color: #f3f3f3;
+  }
+`;
+
+export const ImagePreviewContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #f3f3f3;
+`;
+
+export const ImagePreview = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+export const RemoveImageButton = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
   }
 `;
