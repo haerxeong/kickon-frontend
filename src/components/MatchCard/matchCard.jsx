@@ -172,6 +172,32 @@ const MatchCard = ({league}) => {
         setCountsForGames(newCountsForGames);
     };
 
+    const getRemainingTime = (dateString) => {
+        const now = new Date();
+        const targetDate = new Date(dateString);
+
+        // 밀리초 단위의 차이를 계산
+        const diffMs = targetDate - now;
+
+        // 음수면 이미 지난 시간이므로 빈 문자열 반환
+        if (diffMs <= 0) {
+            return "";
+        }
+
+        // 분, 시간 단위로 변환
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+        if (diffHours >= 24) {
+            const diffDays = Math.floor(diffHours / 24);
+            return `마감 ${diffDays}일 전`;
+        } else if (diffHours >= 1) {
+            return `마감 ${diffHours}시간 전`;
+        } else {
+            return `마감 ${diffMinutes}분 전`;
+        }
+    };
+
     const handleConfirm = async (gameIndex) => {
         const game = proceedingData.games[gameIndex];
         const counts = countsForGames[gameIndex];
@@ -358,7 +384,7 @@ const MatchCard = ({league}) => {
                         {getStatusText(game, isFinished)}
                     </RightBadge>
                 </StyledTopContainer>
-                <RightText>마감 50분전</RightText>
+                {!isFinished && <RightText>{getRemainingTime(game.startAt)}</RightText>}
                 <TimeGuide>
                     <TimeTitle>경기 {isFinished ? "이후" : "전"}</TimeTitle>
                     <TimeText>{formatKoreanDate(game.startAt)}</TimeText>
