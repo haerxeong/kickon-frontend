@@ -63,8 +63,16 @@ const RankingTable = ({ title, type = "season" }) => {
       console.log('받은 응답:', response);
       
       if (response && response.data) {
-        setRankings(response.data);
+        if (Array.isArray(response.data)) {
+          setRankings(response.data);
+        } else if (Array.isArray(response.data.data)) {
+          setRankings(response.data.data);
+        } else {
+          setRankings([]);
+          setError("순위 데이터를 불러오는데 실패했습니다.");
+        }
       } else {
+        setRankings([]);
         setError("순위 데이터를 불러오는데 실패했습니다.");
       }
     } catch (err) {
