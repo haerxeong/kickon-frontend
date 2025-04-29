@@ -29,6 +29,7 @@ const PostDetail = () => {
   const [openReplyIds, setOpenReplyIds] = useState({});
   const [showReplies, setShowReplies] = useState({});
   const [openReReplyIds, setOpenReReplyIds] = useState({});
+  const [commentInput, setCommentInput] = useState(""); // 댓글 입력 상태 추가
 
   // API 연동을 위한 상태 추가
   const [apiPost, setApiPost] = useState(null);
@@ -131,50 +132,58 @@ const PostDetail = () => {
   }, [newsPk, boardPk, location.pathname, userProfile]);
 
   // 댓글 목록 가져오기
-  useEffect(() => {
-    const fetchComments = async () => {
-      // 뉴스 경로이고 newsPk가 있을 때만 댓글 API 호출
-      if (location.pathname.includes('/news/') && newsPk) {
-        try {
-          setCommentLoading(true);
-          const response = await getNewsCommentList({
-            news: newsPk,
-            size: COMMENTS_PER_PAGE,
-            page: activePage
+  const fetchComments = async () => {
+    // 뉴스 경로이고 newsPk가 있을 때만 댓글 API 호출
+    if (location.pathname.includes('/news/') && newsPk) {
+      try {
+        setCommentLoading(true);
+        const response = await getNewsCommentList({
+          news: newsPk,
+          size: COMMENTS_PER_PAGE,
+          page: activePage
+        });
+
+        console.log("댓글 API 응답:", response);
+
+        if (response && response.data) {
+          setComments(response.data);
+          setTotalCommentPages(response.meta?.totalPages || 1);
+          setCommentsCount(response.meta?.totalItems || 0);
+
+          // 댓글 좋아요 상태 초기화
+          const initialLikedComments = {};
+          const initialLikedReplies = {};
+
+          response.data.forEach(comment => {
+            initialLikedComments[comment.pk] = comment.kicked || false;
+
+            // 답글 좋아요 상태 초기화
+            if (comment.replies && comment.replies.length > 0) {
+              comment.replies.forEach(reply => {
+                initialLikedReplies[reply.pk] = reply.kicked || false;
+              });
+            }
           });
 
-          console.log("댓글 API 응답:", response);
+          setLikedComments(initialLikedComments);
+          setLikedReplies(initialLikedReplies);
 
-          if (response && response.data) {
-            setComments(response.data);
-            setTotalCommentPages(response.meta?.totalPages || 1);
-            setCommentsCount(response.meta?.totalItems || 0);
-
-            // 댓글 좋아요 상태 초기화
-            const initialLikedState = {};
-            response.data.forEach(comment => {
-              initialLikedState[comment.pk] = comment.kicked || false;
-
-              // 답글 좋아요 상태 초기화
-              if (comment.replies && comment.replies.length > 0) {
-                comment.replies.forEach(reply => {
-                  initialLikedState[reply.pk] = reply.kicked || false;
-                });
-              }
-            });
-
-            setLikedComments(initialLikedState);
-          }
-        } catch (err) {
-          console.error("댓글 가져오기 실패:", err);
-          setCommentError("댓글을 불러오는데 실패했습니다.");
-        } finally {
-          setCommentLoading(false);
+          console.log("댓글 좋아요 상태 초기화:", initialLikedComments);
+          console.log("답글 좋아요 상태 초기화:", initialLikedReplies);
         }
+      } catch (err) {
+        console.error("댓글 가져오기 실패:", err);
+        setCommentError("댓글을 불러오는데 실패했습니다.");
+      } finally {
+        setCommentLoading(false);
       }
-    };
+    }
+  };
 
-    fetchComments();
+  useEffect(() => {
+    if (location.pathname.includes('/news/') && newsPk) {
+      fetchComments();
+    }
   }, [newsPk, activePage, location.pathname]);
 
   const toggleMenu = () => {
@@ -195,9 +204,228 @@ const PostDetail = () => {
     }));
   };
 
+  // 댓글 입력 핸들러
+  const handleCommentInputChange = (e) => {
+    setCommentInput(e.target.value);
+  };
+
+  // 댓글 제출 핸들러
+  const handleCommentSubmit = async () => {
+    if (!commentInput.trim()) {
+      alert("댓글 내용을 입력해주세요.");
+      return;
+    }
+
+    try {
+      // 새로운 댓글 객체 생성 (UI 즉시 업데이트용)
+      const tempComment = {
+        pk: `temp-${Date.now()}`, // 임시 ID
+        user: userProfile,
+        contents: commentInput,
+        replies: [],
+        kicked: false,
+        kickCount: 0,
+        createdAt: new Date().toISOString()
+      };
+
+      // 댓글 목록에 새 댓글 즉시 추가 (맨 앞에 추가하여 바로 볼 수 있게 함)
+      setComments(prevComments => [tempComment, ...prevComments]);
+
+      // 댓글 수 즉시 증가
+      setCommentsCount(prevCount => prevCount + 1);
+
+      // 입력창 즉시 초기화
+      setCommentInput("");
+
+      // 게시글 댓글 수 즉시 업데이트
+      if (apiPost) {
+        setApiPost(prev => ({
+          ...prev,
+          replies: prev.replies + 1
+        }));
+      }
+
+      // 댓글 생성 API 요청
+      const response = await axiosInstance.post("/api/news-reply", {
+        news: parseInt(newsPk),
+        contents: tempComment.contents
+      });
+
+      console.log("댓글 생성 응답:", response);
+
+      if (response.data) {
+        // 임시 댓글을 실제 API 응답으로 교체
+        setComments(prevComments => prevComments.map(comment =>
+            comment.pk === tempComment.pk
+                ? { ...response.data, user: userProfile, replies: [] }
+                : comment
+        ));
+      }
+    } catch (error) {
+      console.error("댓글 생성 실패:", error);
+
+      // 실패 시 추가했던 임시 댓글 제거
+      setComments(prevComments =>
+          prevComments.filter(comment => !comment.pk.toString().startsWith('temp-'))
+      );
+
+      // 댓글 수 원복
+      setCommentsCount(prevCount => Math.max(0, prevCount - 1));
+
+      // 게시글 댓글 수 원복
+      if (apiPost) {
+        setApiPost(prev => ({
+          ...prev,
+          replies: Math.max(0, prev.replies - 1)
+        }));
+      }
+
+      alert("댓글 작성에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // 댓글 킥(좋아요) 토글 함수
+  const toggleCommentKick = async (commentId) => {
+    try {
+      // 현재 좋아요 상태 및 킥 카운트 가져오기
+      const currentKickState = likedComments[commentId] || false;
+      const commentToUpdate = comments.find(comment => comment.pk === commentId);
+
+      if (!commentToUpdate) {
+        console.error(`댓글을 찾을 수 없음: ${commentId}`);
+        return;
+      }
+
+      const currentKickCount = commentToUpdate.kickCount || 0;
+
+      // UI 먼저 업데이트 (낙관적 업데이트)
+      setLikedComments(prev => ({
+        ...prev,
+        [commentId]: !currentKickState
+      }));
+
+      // 댓글 객체에서 kickCount 업데이트
+      setComments(prevComments =>
+          prevComments.map(comment => {
+            if (comment.pk === commentId) {
+              const newKickCount = currentKickState
+                  ? Math.max(0, currentKickCount - 1)
+                  : currentKickCount + 1;
+
+              console.log(`댓글 ${commentId} 킥 상태 변경: ${currentKickState} -> ${!currentKickState}, 킥 수: ${currentKickCount} -> ${newKickCount}`);
+
+              return {
+                ...comment,
+                kickCount: newKickCount,
+                kicked: !currentKickState
+              };
+            }
+            return comment;
+          })
+      );
+
+      // 뉴스 페이지인지 게시판 페이지인지 확인
+      const isNewsReply = location.pathname.includes('/news/');
+
+      // API 엔드포인트 설정
+      const endpoint = isNewsReply ? "/api/news-reply-kick" : "/api/board-reply-kick";
+      const body = { reply: commentId };
+
+      // API 호출
+      await axiosInstance.post(endpoint, body);
+
+      console.log(`✅ Successfully toggled kick for comment ID: ${commentId}`);
+    } catch (error) {
+      console.error("Failed to toggle comment kick:", error);
+
+      // 실패 시 UI 상태 되돌리기
+      const currentKickState = likedComments[commentId] || false;
+      const commentToUpdate = comments.find(comment => comment.pk === commentId);
+
+      if (commentToUpdate) {
+        const currentKickCount = commentToUpdate.kickCount || 0;
+
+        setLikedComments(prev => ({
+          ...prev,
+          [commentId]: currentKickState
+        }));
+
+        // 댓글 객체에서 kickCount 되돌리기
+        setComments(prevComments =>
+            prevComments.map(comment => {
+              if (comment.pk === commentId) {
+                return {
+                  ...comment,
+                  kickCount: currentKickCount,
+                  kicked: currentKickState
+                };
+              }
+              return comment;
+            })
+        );
+      }
+    }
+  };
+
   // 답글 킥(좋아요) 토글 함수
   const toggleReplyKick = async (replyId) => {
     try {
+      // 현재 좋아요 상태 가져오기
+      const currentKickState = likedReplies[replyId] || false;
+
+      // 해당 답글이 있는 댓글과 답글 찾기
+      let targetReply = null;
+      const parentComment = comments.find(comment =>
+              comment.replies && comment.replies.some(reply => {
+                if (reply.pk === replyId) {
+                  targetReply = reply;
+                  return true;
+                }
+                return false;
+              })
+      );
+
+      if (!targetReply) {
+        console.error(`답글을 찾을 수 없음: ${replyId}`);
+        return;
+      }
+
+      const currentKickCount = targetReply.kickCount || 0;
+
+      // UI 먼저 업데이트 (낙관적 업데이트)
+      setLikedReplies(prev => ({
+        ...prev,
+        [replyId]: !currentKickState
+      }));
+
+      // 댓글 객체 내의 답글에서 kickCount 업데이트
+      setComments(prevComments =>
+          prevComments.map(comment => {
+            if (comment.replies && comment.replies.some(reply => reply.pk === replyId)) {
+              return {
+                ...comment,
+                replies: comment.replies.map(reply => {
+                  if (reply.pk === replyId) {
+                    const newKickCount = currentKickState
+                        ? Math.max(0, currentKickCount - 1)
+                        : currentKickCount + 1;
+
+                    console.log(`답글 ${replyId} 킥 상태 변경: ${currentKickState} -> ${!currentKickState}, 킥 수: ${currentKickCount} -> ${newKickCount}`);
+
+                    return {
+                      ...reply,
+                      kickCount: newKickCount,
+                      kicked: !currentKickState
+                    };
+                  }
+                  return reply;
+                })
+              };
+            }
+            return comment;
+          })
+      );
+
       // 뉴스 페이지인지 게시판 페이지인지 확인
       const isNewsReply = location.pathname.includes('/news/');
 
@@ -210,7 +438,36 @@ const PostDetail = () => {
 
       console.log(`✅ Successfully toggled kick for reply ID: ${replyId}`);
     } catch (error) {
-      console.error("Failed to toggle reply 킥:", error);
+      console.error("Failed to toggle reply kick:", error);
+
+      // 실패 시 UI 상태 되돌리기
+      const currentKickState = likedReplies[replyId] || false;
+
+      setLikedReplies(prev => ({
+        ...prev,
+        [replyId]: currentKickState
+      }));
+
+      // 댓글 객체 내의 답글에서 kickCount 되돌리기
+      setComments(prevComments =>
+          prevComments.map(comment => {
+            if (comment.replies && comment.replies.some(reply => reply.pk === replyId)) {
+              return {
+                ...comment,
+                replies: comment.replies.map(reply => {
+                  if (reply.pk === replyId) {
+                    return {
+                      ...reply,
+                      kicked: currentKickState
+                    };
+                  }
+                  return reply;
+                })
+              };
+            }
+            return comment;
+          })
+      );
     }
   };
 
@@ -310,8 +567,12 @@ const PostDetail = () => {
             <S.CommentInputBox>
               <S.CommentInputLabel>댓글 쓰기</S.CommentInputLabel>
               <S.CommentInputContainer>
-                <S.CommentInput placeholder="댓글을 입력하세요..."/>
-                <S.SubmitButton>등록</S.SubmitButton>
+                <S.CommentInput
+                    placeholder="댓글을 입력하세요..."
+                    value={commentInput}
+                    onChange={handleCommentInputChange}
+                />
+                <S.SubmitButton onClick={handleCommentSubmit}>등록</S.SubmitButton>
               </S.CommentInputContainer>
             </S.CommentInputBox>
         )}
@@ -338,7 +599,10 @@ const PostDetail = () => {
                                 alt="프로필 아이콘"
                                 width={24}
                                 height={24}
-                                className="rounded-full object-cover"
+                                style={{
+                                  borderRadius: '50%',
+                                  objectFit: 'cover'
+                                }}
                             />
                             <span
                                 style={{
@@ -347,29 +611,16 @@ const PostDetail = () => {
                                   color: "#000",
                                 }}
                             >
-                    {comment.user.nickname}
-                  </span>
+                              {comment.user.nickname}
+                            </span>
                             <span style={{fontSize: "0.7rem", color: "#888"}}>
-                    {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
-                  </span>
+                              {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
+                            </span>
                           </S.CommentHeader>
                           <S.CommentLikes
                               key={comment.pk}
                               active={likedComments[comment.pk] || false}
-                              onClick={async () => {
-                                try {
-                                  await toggleReplyKick(comment.pk);
-                                  // UI 상태 업데이트
-                                  setLikedReplies((prev) => ({
-                                    ...prev,
-                                    kickCount: likedComments[comment.pk] ? comment.kickCount + 1 : comment.kickCount - 1
-                                  }));
-                                } catch (error) {
-                                  console.log("Failed to toggle Reply Kick:", error);
-                                }
-
-                              }}
-
+                              onClick={() => toggleCommentKick(comment.pk)}
                           >
                             <img
                                 src={likedComments[comment.pk] ? RKickIcon : KickIcon}
@@ -377,7 +628,7 @@ const PostDetail = () => {
                                 width={12}
                                 height={12}
                             />
-                            {comment.kickCount}
+                            {comment.kickCount || 0}
                           </S.CommentLikes>
                         </S.CommentHeaderWrapper>
                         <S.CommentContent>{comment.contents || comment.content}</S.CommentContent>
@@ -439,13 +690,13 @@ const PostDetail = () => {
                                                   color: "#000",
                                                 }}
                                             >
-                              {reply.user.nickname}
-                            </span>
+                                              {reply.user.nickname}
+                                            </span>
                                             <span
                                                 style={{fontSize: "0.65rem", color: "#888"}}
                                             >
-                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
-                            </span>
+                                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
+                                            </span>
                                           </S.ReplyHeader>
                                           <S.ReplyLikes
                                               key={reply.pk}
