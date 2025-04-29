@@ -19,6 +19,14 @@ const ReportModal = () => {
     const { isReportModalOpen, reportType, contentId } = useSelector((state) => state.reportModal);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+      if (isReportModalOpen) {
+        setSelectedOption(null);
+        setOtherText("");
+        setIsSubmitting(false);
+      }
+    }, [isReportModalOpen]);
+
     // Options for reporting
     const reportReasons = [
         { id: "inappropriate", label: "허위사실이에요." },
