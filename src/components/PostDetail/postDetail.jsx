@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { getNewsDetail } from "../../apis/domains/news/news.js"; // 추가된 부분
 import { getBoardDetail } from "../../apis/domains/community/community.js";
 import parse from 'html-react-parser';
+import axiosInstance from "../../apis/axios-instance.js";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -132,6 +133,32 @@ const PostDetail = () => {
       ...prev,
       [replyId]: !prev[replyId],
     }));
+  };
+
+  const toggleKick = async ({ isLiked, newsPk, boardPk }) => {
+    try {
+      if (newsPk) {
+        // 뉴스 킥 API
+        const endpoint = "/api/news-kick";
+        const body = { news: newsPk };
+        if (isLiked) {
+          await axiosInstance.post(endpoint, body); // Create 킥
+        } else {
+          await axiosInstance.post(endpoint, body); // Delete 킥 (based on PK)
+        }
+      } else if (boardPk) {
+        // 게시글 킥 API
+        const endpoint = "/api/board-kick";
+        const body = { board: boardPk };
+        if (isLiked) {
+          await axiosInstance.post(endpoint, body); // Create 킥
+        } else {
+          await axiosInstance.post(endpoint, body); // Delete 킥 (based on PK)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to toggle 킥:", error);
+    }
   };
 
   // API 데이터와 기존 하드코딩된 데이터 병합
@@ -256,7 +283,21 @@ const PostDetail = () => {
 
       
       <S.ArticleActions>
-        <S.LikeButton isLiked={isLiked} onClick={() => setIsLiked(!isLiked)}>
+        <S.LikeButton
+            isLiked={isLiked}
+            onClick={async () => {
+              try {
+                await toggleKick({ isLiked: !isLiked, newsPk, boardPk });
+                setIsLiked(!isLiked); // Toggle the local state
+                setApiPost((prev) => ({
+                  ...prev,
+                  likes: isLiked ? prev.likes - 1 : prev.likes + 1, // Update likes count
+                }));
+              } catch (error) {
+                console.error("Failed to toggle 킥:", error);
+              }
+            }}
+        >
           <img src={isLiked ? RKickIcon : BKickIcon} alt="킥 아이콘" width={14} height={14} />
           <span>킥</span>
           <span className="likes">{post.likes}</span>
