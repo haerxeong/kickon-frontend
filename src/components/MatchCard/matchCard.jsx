@@ -176,33 +176,74 @@ const MatchCard = ({league}) => {
         const game = proceedingData.games[gameIndex];
         const counts = countsForGames[gameIndex];
 
-        // 이미 예측이 있으면 PATCH, 없으면 POST
-        if (game.myGambleResult) {
-            // PATCH: myGambleResult.gamble이 gambleId임
-            const gambleId = game.myGambleResult.id;
-            const result = await patchMatchPrediction(
-                gambleId,
-                counts[0],
-                counts[2]
-            );
-            if (typeof result === 'string') {
-                alert(result);
+        try {
+            // 이미 예측이 있으면 PATCH, 없으면 POST
+            if (game.myGambleResult) {
+                // PATCH: myGambleResult.gamble이 gambleId임
+                const gambleId = game.myGambleResult.id;
+                const result = await patchMatchPrediction(
+                    gambleId,
+                    counts[0],
+                    counts[2]
+                );
+                if (typeof result === 'string') {
+                    alert(result);
+                } else {
+                    // 성공 처리 후 UI 업데이트
+                    updateUIAfterConfirmation(gameIndex, counts);
+                }
             } else {
-                // 성공 처리
+                // POST
+                const result = await postMatchPrediction(
+                    game.pk, // 또는 game.id
+                    counts[0],
+                    counts[2]
+                );
+                if (typeof result === 'string') {
+                    alert(result);
+                } else {
+                    // 성공 처리 후 UI 업데이트
+                    updateUIAfterConfirmation(gameIndex, counts);
+                }
             }
-        } else {
-            // POST
-            const result = await postMatchPrediction(
-                game.pk, // 또는 game.id
-                counts[0],
-                counts[2]
-            );
-            if (typeof result === 'string') {
-                alert(result);
-            } else {
-                // 성공 처리
-            }
+        } catch (error) {
+            console.error("예측 제출 중 오류 발생:", error);
+            alert("예측 제출 중 오류가 발생했습니다.");
         }
+    };
+
+    // API 호출 성공 후 UI 업데이트를 위한 함수
+    const updateUIAfterConfirmation = (gameIndex, counts) => {
+        // 확인 상태 업데이트
+        const newConfirmedGames = [...confirmedGames];
+        newConfirmedGames[gameIndex] = true;
+        setConfirmedGames(newConfirmedGames);
+
+        // proceedingData 업데이트 (깊은 복사)
+        const newProceedingData = JSON.parse(JSON.stringify(proceedingData));
+
+        // 해당 게임의 myGambleResult 업데이트
+        if (!newProceedingData.games[gameIndex].myGambleResult) {
+            newProceedingData.games[gameIndex].myGambleResult = {
+                homeScore: counts[0],
+                awayScore: counts[2]
+            };
+        } else {
+            newProceedingData.games[gameIndex].myGambleResult.homeScore = counts[0];
+            newProceedingData.games[gameIndex].myGambleResult.awayScore = counts[2];
+        }
+
+        setProceedingData(newProceedingData);
+
+        // 편집 상태 초기화
+        const newEditedGames = [...editedGames];
+        newEditedGames[gameIndex] = false;
+        setEditedGames(newEditedGames);
+
+        // 선택 상태 초기화
+        const newSelectedGames = [...selectedGames];
+        newSelectedGames[gameIndex] = null;
+        setSelectedGames(newSelectedGames);
     };
 
 
