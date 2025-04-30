@@ -34,6 +34,15 @@ const Header = ({ isDark }) => {
         클럽 커뮤니티
       </S.NavItem>
 
+      <S.NavItem
+          to="/transferability"
+          isDark={isDark}
+          currentPath={currentPath}
+          itemPath="/transferability"
+      >
+          이적 예측
+      </S.NavItem>
+
       <S.LoginButton to="/login" currentPath={currentPath}>
         로그인
       </S.LoginButton>

@@ -14,6 +14,7 @@ import ReportModal from "./components/ReportModal/reportModal.jsx";
 import NewsDetailPage from "./pages/News/newsDetail.jsx";
 import CommunityDetailPage from "./pages/Community/communityDetail.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import Transferability from "./pages/Transferability/transferability.jsx";
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                             <Route path="news/:newsPk" element={<NewsDetailPage />} />
                             <Route path="community/detail" element={<CommunityDetailPage />} />
                             <Route path="community/:boardPk" element={<CommunityDetailPage />} />
+                            <Route path="/transferability" element={<Transferability />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
