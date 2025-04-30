@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./rankingTable.style";
 import { IoChevronDown } from "react-icons/io5";
-import { 
-  getActualSeasonRanking, 
-  getGambleSeasonRanking, 
-  getLeagueList 
+import {
+  getActualSeasonRanking,
+  getGambleSeasonRanking,
+  getLeagueList,
 } from "../../apis/domains/ranking/ranking.js";
 
 const RankingTable = ({ title, type = "season" }) => {
@@ -21,7 +21,7 @@ const RankingTable = ({ title, type = "season" }) => {
       try {
         setLoading(true);
         const response = await getLeagueList();
-        
+
         if (response && response.data) {
           setLeagues(response.data);
           // 첫 번째 리그를 기본값으로 설정
@@ -45,13 +45,13 @@ const RankingTable = ({ title, type = "season" }) => {
   // 순위 데이터 가져오기 (시즌 또는 승부예측)
   const fetchRankings = async (leagueId) => {
     if (!leagueId) return;
-    
+
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log(`리그 ID: ${leagueId}, 타입: ${type} 데이터 요청 중...`);
-      
+
       // 타입에 따라 다른 API 호출
       let response;
       if (type === "season") {
@@ -59,9 +59,9 @@ const RankingTable = ({ title, type = "season" }) => {
       } else if (type === "gamble") {
         response = await getGambleSeasonRanking({ league: leagueId });
       }
-      
-      console.log('받은 응답:', response);
-      
+
+      console.log("받은 응답:", response);
+
       if (response && response.data) {
         if (Array.isArray(response.data)) {
           setRankings(response.data);
@@ -109,7 +109,7 @@ const RankingTable = ({ title, type = "season" }) => {
           <IoChevronDown size="0.7rem" color="#8F8F8F" />
         </S.LeagueSelector>
       )}
-      
+
       {isOpen && (
         <S.DropdownMenu>
           {leagues.map((league) => (
@@ -126,58 +126,63 @@ const RankingTable = ({ title, type = "season" }) => {
       <S.Divider />
       <S.Table>
         <thead>
-        <S.HeaderRow type={type}>
-          <S.TableHeader>순위</S.TableHeader>
-          <S.TableHeader></S.TableHeader>
-          {type === "season" ? (
-            <>
-              <S.TableHeader>경기</S.TableHeader>
-              <S.TableHeader>승점</S.TableHeader>
-              <S.TableHeader>득점</S.TableHeader>
-            </>
-          ) : (
-            <>
-              <S.TableHeader />
-              <S.TableHeader>경기</S.TableHeader>
-              <S.TableHeader>점수</S.TableHeader>
-            </>
-          )}
-        </S.HeaderRow>
+          <S.HeaderRow type={type}>
+            <S.TableHeader>순위</S.TableHeader>
+            <S.TableHeader></S.TableHeader>
+            {type === "season" ? (
+              <>
+                <S.TableHeader>경기</S.TableHeader>
+                <S.TableHeader>승점</S.TableHeader>
+                <S.TableHeader>득점</S.TableHeader>
+              </>
+            ) : (
+              <>
+                <S.TableHeader />
+                <S.TableHeader>경기</S.TableHeader>
+                <S.TableHeader>점수</S.TableHeader>
+              </>
+            )}
+          </S.HeaderRow>
         </thead>
         <tbody>
-        
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '1rem' }}>로딩 중...</div>
-        ) : error ? (
-          <div style={{ textAlign: 'center', padding: '1rem', color: 'red' }}>{error}</div>
-        ) : (
-          rankings.slice(0, 10).map((item) => (
-            <S.TableRow key={item.rankOrder}>
-              <S.TableData>{item.rankOrder}</S.TableData>
-              <S.TeamCell>
-                <S.TeamLogo 
-                  src={item.teamLogoUrl} 
-                  alt={item.teamName}
-                  onError={(e) => {e.target.src = '/path/to/default-logo.png'}}
-                />
-                <S.TableData>{item.teamName}</S.TableData>
-              </S.TeamCell>
-              {type === "season" ? (
-                <>
-                  <S.TableData>{item.gameNum}</S.TableData>
-                  <S.TableData>{item.points}</S.TableData>
-                  <S.TableData>{item.wonScores}</S.TableData>
-                </>
-              ) : (
-                <>
-                  <S.TableData />
-                  <S.TableData>{item.gameNum}</S.TableData>
-                  <S.TableData>{item.points}</S.TableData>
-                </>
-              )}
-            </S.TableRow>
-          ))
-        )}
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "1rem" }}>
+              로딩 중...
+            </div>
+          ) : error ? (
+            <div style={{ textAlign: "center", padding: "1rem", color: "red" }}>
+              {error}
+            </div>
+          ) : (
+            rankings.slice(0, 10).map((item) => (
+              <S.TableRow key={item.rankOrder}>
+                <S.TableData>{item.rankOrder}</S.TableData>
+                <S.TeamCell>
+                  <S.TeamLogo
+                    src={item.teamLogoUrl}
+                    alt={item.teamName}
+                    onError={(e) => {
+                      e.target.src = "/path/to/default-logo.png";
+                    }}
+                  />
+                  <S.TableData>{item.teamName}</S.TableData>
+                </S.TeamCell>
+                {type === "season" ? (
+                  <>
+                    <S.TableData>{item.gameNum}</S.TableData>
+                    <S.TableData>{item.points}</S.TableData>
+                    <S.TableData>{item.wonScores}</S.TableData>
+                  </>
+                ) : (
+                  <>
+                    <S.TableData />
+                    <S.TableData>{item.gameNum}</S.TableData>
+                    <S.TableData>{item.points}</S.TableData>
+                  </>
+                )}
+              </S.TableRow>
+            ))
+          )}
         </tbody>
       </S.Table>
     </S.TableContainer>
