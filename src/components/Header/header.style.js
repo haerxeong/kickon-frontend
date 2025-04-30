@@ -39,7 +39,12 @@ export const NavItem = styled(Link)`
       return itemPath === "/community" ? "#FFF" : "#8F8F8F";
     }
 
-    // Case 4: Signup - same as profile settings (both #FFF)
+    // Case 4: Transferability - Transferability #FFF, others #8F8F8F
+    if (currentPath.includes("/transferability")) {
+        return itemPath === "/transferability" ? "#FFF" : "#8F8F8F";
+    }
+
+    // Case 5: Signup - same as profile settings (both #FFF)
     if (currentPath === "/signup") return "#FFF";
 
     // Default (fallback) using isDark prop
