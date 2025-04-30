@@ -13,6 +13,8 @@ import chevronDown from "../../assets/chevron_down.svg";
 import chevronDownNon from "../../assets/chevron_down_non.svg";
 import {fetchMatchData} from "../../apis/domains/common/getMatchList.js";
 import {getProfilecard} from "../../apis/domains/common/getProfilecard.js";
+import {postMatchPrediction} from "../../apis/domains/common/postGamble.js";
+import {patchMatchPrediction} from "../../apis/domains/common/patchGamble.js";
 
 
 const MatchCard = ({league}) => {
@@ -170,11 +172,107 @@ const MatchCard = ({league}) => {
         setCountsForGames(newCountsForGames);
     };
 
-    const handleConfirm = (gameIndex) => {
+    const getRemainingTime = (dateString) => {
+        const now = new Date();
+        const targetDate = new Date(dateString);
+
+        // 밀리초 단위의 차이를 계산
+        const diffMs = targetDate - now;
+
+        // 음수면 이미 지난 시간이므로 빈 문자열 반환
+        if (diffMs <= 0) {
+            return "";
+        }
+
+        // 분, 시간 단위로 변환
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+        if (diffHours >= 24) {
+            const diffDays = Math.floor(diffHours / 24);
+            return `마감 ${diffDays}일 전`;
+        } else if (diffHours >= 1) {
+            return `마감 ${diffHours}시간 전`;
+        } else {
+            return `마감 ${diffMinutes}분 전`;
+        }
+    };
+
+    const handleConfirm = async (gameIndex) => {
+        const game = proceedingData.games[gameIndex];
+        const counts = countsForGames[gameIndex];
+
+        try {
+            // 이미 예측이 있으면 PATCH, 없으면 POST
+            if (game.myGambleResult) {
+                // PATCH: myGambleResult.gamble이 gambleId임
+                const gambleId = game.myGambleResult.id;
+                const result = await patchMatchPrediction(
+                    gambleId,
+                    counts[0],
+                    counts[2]
+                );
+                if (typeof result === 'string') {
+                    alert(result);
+                } else {
+                    // 성공 처리 후 UI 업데이트
+                    updateUIAfterConfirmation(gameIndex, counts);
+                }
+            } else {
+                // POST
+                const result = await postMatchPrediction(
+                    game.pk, // 또는 game.id
+                    counts[0],
+                    counts[2]
+                );
+                if (typeof result === 'string') {
+                    alert(result);
+                } else {
+                    // 성공 처리 후 UI 업데이트
+                    updateUIAfterConfirmation(gameIndex, counts);
+                }
+            }
+        } catch (error) {
+            console.error("예측 제출 중 오류 발생:", error);
+            alert("예측 제출 중 오류가 발생했습니다.");
+        }
+    };
+
+    // API 호출 성공 후 UI 업데이트를 위한 함수
+    const updateUIAfterConfirmation = (gameIndex, counts) => {
+        // 확인 상태 업데이트
         const newConfirmedGames = [...confirmedGames];
         newConfirmedGames[gameIndex] = true;
         setConfirmedGames(newConfirmedGames);
+
+        // proceedingData 업데이트 (깊은 복사)
+        const newProceedingData = JSON.parse(JSON.stringify(proceedingData));
+
+        // 해당 게임의 myGambleResult 업데이트
+        if (!newProceedingData.games[gameIndex].myGambleResult) {
+            newProceedingData.games[gameIndex].myGambleResult = {
+                homeScore: counts[0],
+                awayScore: counts[2]
+            };
+        } else {
+            newProceedingData.games[gameIndex].myGambleResult.homeScore = counts[0];
+            newProceedingData.games[gameIndex].myGambleResult.awayScore = counts[2];
+        }
+
+        setProceedingData(newProceedingData);
+
+        // 편집 상태 초기화
+        const newEditedGames = [...editedGames];
+        newEditedGames[gameIndex] = false;
+        setEditedGames(newEditedGames);
+
+        // 선택 상태 초기화
+        const newSelectedGames = [...selectedGames];
+        newSelectedGames[gameIndex] = null;
+        setSelectedGames(newSelectedGames);
     };
+
+
 
     const formatKoreanDate = (dateString) => {
         const date = new Date(dateString);
@@ -217,6 +315,11 @@ const MatchCard = ({league}) => {
 
     // Function to get the color for score display in finished games
     const getFinishedScoreColor = (game, optionIndex) => {
+        // Check if "미참여" status
+        if (game.myGambleResult === null) {
+            return "#AFAFAF"; // Gray color for "미참여"
+        }
+
         const homeScore = game.homeScore;
         const awayScore = game.awayScore;
 
@@ -245,17 +348,43 @@ const MatchCard = ({league}) => {
         }
     };
 
+    // Function to determine the status text for RightBadge
+    const getStatusText = (game, isFinished) => {
+        // For all games (both proceeding and finished)
+        if (game.gameStatus === "PENDING" && !isFinished) {
+            return "예측 진행중";
+        }
+
+        // For both proceeding and finished games
+        return game.myGambleResult !== null ? "참여 완료" : "미참여";
+    };
+
+    // Function to determine the badge styles
+    const getBadgeStyles = (game, isFinished) => {
+        // For "미참여" status
+        if (game.myGambleResult === null && !(game.gameStatus === "PENDING" && !isFinished)) {
+            return {
+                backgroundColor: "#AFAFAF",
+                color: "#FFFFFF"
+            };
+        }
+        return {}; // Default styles
+    };
+
     const renderMatchCard = (game, gameIndex, isFinished = false) => {
         const showCountControls = !isFinished && selectedGames[gameIndex] !== null;
         const isConfirmed = isFinished || confirmedGames[gameIndex];
+        const isNotParticipated = game.myGambleResult === null && !(game.gameStatus === "PENDING" && !isFinished);
 
         return (
             <MatchCardContainer key={`game-${isFinished ? "finished-" : ""}${gameIndex}`}>
                 <StyledTopContainer>
                     <LeftText>{isFinished ? finishedData.name : proceedingData.name}</LeftText>
-                    <RightBadge>{isConfirmed ? "참여 완료" : game.gameStatus}</RightBadge>
+                    <RightBadge style={getBadgeStyles(game, isFinished)}>
+                        {getStatusText(game, isFinished)}
+                    </RightBadge>
                 </StyledTopContainer>
-                <RightText>마감 50분전</RightText>
+                {!isFinished && <RightText>{getRemainingTime(game.startAt)}</RightText>}
                 <TimeGuide>
                     <TimeTitle>경기 {isFinished ? "이후" : "전"}</TimeTitle>
                     <TimeText>{formatKoreanDate(game.startAt)}</TimeText>
@@ -375,7 +504,8 @@ const MatchCard = ({league}) => {
                                     style={{
                                         backgroundColor: isFinished
                                             ? getFinishedScoreColor(game, optionIndex)
-                                            : getCountDisplayColor(gameIndex, optionIndex)
+                                            : getCountDisplayColor(gameIndex, optionIndex),
+                                        color: isNotParticipated && isFinished ? "#FFFFFF" : undefined
                                     }}
                                 >
                                     {getScoreValue(game, gameIndex, optionIndex, isFinished)}
