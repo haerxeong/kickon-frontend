@@ -183,7 +183,6 @@ const PostDetail = () => {
         kickCount: 0,
         createdAt: new Date().toISOString()
       };
-
       setCommentsCount(prevCount => prevCount + 1);
       setCommentInput("");
       if (apiPost) {
@@ -575,7 +574,7 @@ const PostDetail = () => {
                                                 src={
                                                   likedReplies[reply.pk] ? RKickIcon : KickIcon
                                                 }
-                                                alt="좋아요 아이콘"
+                                                alt="醫뗭븘�� �꾩씠肄�"
                                                 width={12}
                                                 height={12}
                                             />
