@@ -100,3 +100,21 @@ export const ButtonText = styled.span`
   font-weight: 400;
   line-height: 1rem;
 `;
+
+export const ResultChance = styled.div`
+  color: #000;
+  font-size: 5.71rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 0.9rem;
+`;
+
+export const ResultMessage = styled.div`
+  color: #000;
+  text-align: center;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 400;
+  margin-top: 0.5rem;
+`;
