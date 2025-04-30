@@ -156,13 +156,3 @@ export const TeamLogo = styled.img`
   margin-right: 0.5rem;
   object-fit: contain;
 `;
-
-export const TeamName = styled.span`
-  color: #000;
-  font-size: 0.65rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.125rem;
-  text-align: left;
-`;
-

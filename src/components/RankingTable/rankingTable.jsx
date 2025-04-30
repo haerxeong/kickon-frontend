@@ -123,11 +123,10 @@ const RankingTable = ({ title, type = "season" }) => {
           ))}
         </S.DropdownMenu>
       )}
-      
       <S.Divider />
-      
       <S.Table>
-        <S.HeaderRow>
+        <thead>
+        <S.HeaderRow type={type}>
           <S.TableHeader>순위</S.TableHeader>
           <S.TableHeader></S.TableHeader>
           {type === "season" ? (
@@ -138,11 +137,14 @@ const RankingTable = ({ title, type = "season" }) => {
             </>
           ) : (
             <>
+              <S.TableHeader />
               <S.TableHeader>경기</S.TableHeader>
               <S.TableHeader>점수</S.TableHeader>
             </>
           )}
         </S.HeaderRow>
+        </thead>
+        <tbody>
         
         {loading ? (
           <div style={{ textAlign: 'center', padding: '1rem' }}>로딩 중...</div>
@@ -158,7 +160,7 @@ const RankingTable = ({ title, type = "season" }) => {
                   alt={item.teamName}
                   onError={(e) => {e.target.src = '/path/to/default-logo.png'}}
                 />
-                <S.TeamName>{item.teamName}</S.TeamName>
+                <S.TableData>{item.teamName}</S.TableData>
               </S.TeamCell>
               {type === "season" ? (
                 <>
@@ -168,6 +170,7 @@ const RankingTable = ({ title, type = "season" }) => {
                 </>
               ) : (
                 <>
+                  <S.TableData />
                   <S.TableData>{item.gameNum}</S.TableData>
                   <S.TableData>{item.points}</S.TableData>
                 </>
@@ -175,6 +178,7 @@ const RankingTable = ({ title, type = "season" }) => {
             </S.TableRow>
           ))
         )}
+        </tbody>
       </S.Table>
     </S.TableContainer>
   );
