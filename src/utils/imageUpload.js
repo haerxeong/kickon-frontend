@@ -30,8 +30,8 @@ export const uploadImageToS3 = async (file) => {
             size: file.size,
         });
 
-        await axios.put(
-            presignedUrl, // Presigned URL 그대로 사용
+        await axiosInstance.put(
+            presignedUrl,
             file,
             {
                 headers: {
