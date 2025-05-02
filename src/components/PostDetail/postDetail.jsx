@@ -584,6 +584,7 @@ const PostDetail = () => {
                                 }}
                             >
 
+
                     {comment.user.nickname}
                   </span>
                             <span style={{fontSize: "0.7rem", color: "#888"}}>
