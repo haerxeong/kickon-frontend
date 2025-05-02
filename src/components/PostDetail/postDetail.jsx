@@ -406,6 +406,13 @@ const PostDetail = () => {
     }
   };
 
+  const toggleReReplyBox = (replyId) => {
+    setOpenReReplyIds((prev) => ({
+      ...prev,
+      [replyId]: !prev[replyId],
+    }));
+  };
+
   const toggleKick = async ({ isLiked, newsPk, boardPk }) => {
     try {
       if (newsPk) {
@@ -430,13 +437,6 @@ const PostDetail = () => {
     } catch (error) {
       console.error("Failed to toggle 킥:", error);
     }
-  };
-
-  const toggleReReplyBox = (replyId) => {
-    setOpenReReplyIds((prev) => ({
-      ...prev,
-      [replyId]: !prev[replyId],
-    }));
   };
 
   // 로딩 중일 때 표시
@@ -583,6 +583,7 @@ const PostDetail = () => {
                                   color: "#000",
                                 }}
                             >
+
                     {comment.user.nickname}
                   </span>
                             <span style={{fontSize: "0.7rem", color: "#888"}}>
