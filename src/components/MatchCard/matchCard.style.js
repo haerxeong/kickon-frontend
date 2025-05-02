@@ -8,7 +8,8 @@ export const MatchCardContainer = styled.div`
     gap: 0.5rem;
     border-radius: 0.5rem;
     background: #FFF;
-    box-shadow: 0px 0px 12.8px 0px rgba(0, 0, 0, 0.10);
+    box-shadow: ${props => props.isFinished ? 'none' : '0px 0px 12.8px 0px rgba(0, 0, 0, 0.10)'};
+    border: 1px solid #F0F0F0;
     position: relative;
 `;
 
@@ -111,12 +112,11 @@ export const MatchButtonContainer = styled.div`
     height: 3.3rem;
     flex-shrink: 0;
     border-radius: 0.4rem;
-    border: 1px solid #F0F0F0;
+    border: 1px solid #DCDCDC;
     background: #FFF;
     box-shadow: 0px 3.2px 8px 0px rgba(0, 0, 0, 0.10);
     margin-top: 1.7rem;
     margin-left: 2.77rem;
-    
 `;
 
 export const MatchButton = styled.button`
@@ -137,7 +137,7 @@ export const MatchButton = styled.button`
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
 
     &:not(:last-child) {
-        border-right: 1px solid #F0F0F0;
+        border-right: 1px solid #E6E6E6;
     }
 
     &:hover {
