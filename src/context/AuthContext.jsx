@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchUserInfo } from "../apis/domains/auth/fetchUserInfo";
+import {useLeagueTeamStore} from "../store/useLeagueTeamStore.js";
 
 export const AuthContext = createContext();
 
@@ -11,6 +12,19 @@ const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
+
+    // 로그인 시 선호팀 반영
+    if (userData.team) {
+      useLeagueTeamStore.getState().setSelectedTeam({
+        pk: userData.team.pk,
+        nameKr: userData.team.nameKr
+      });
+
+      useLeagueTeamStore.getState().setSelectedLeague({
+        pk: userData.team.league.pk,
+        nameKr: userData.team.league.nameKr
+      });
+    }
   };
 
   const logout = () => {
@@ -18,6 +32,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("refreshToken");
     setUser(null);
     setIsAuthenticated(false);
+    useLeagueTeamStore.getState().reset();
   };
 
   useEffect(() => {
