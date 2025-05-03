@@ -1,16 +1,24 @@
 import styled from 'styled-components';
 
+export const ContentWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Container = styled.div`
     width: 30rem;
     height: 37rem;
-    flex-shrink: 0;
     border-radius: 0.45rem;
     border: 1px solid #DCDCDC;
     background: #FFF;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* 버튼을 하단으로 */
     align-items: center;
-    padding-top: 1.35rem;
+    padding: 1.35rem 1rem;
+    box-sizing: border-box;
 `;
 
 export const Title = styled.div`
@@ -107,7 +115,7 @@ export const ResultChance = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-top: 0.9rem;
+  margin: 7rem 0 3.5rem 0;
 `;
 
 export const ResultMessage = styled.div`
@@ -116,5 +124,21 @@ export const ResultMessage = styled.div`
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
-  margin-top: 0.5rem;
+  margin-bottom: 3rem;
+`;
+
+
+export const Spinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #000;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+  margin: 40px auto;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 `;

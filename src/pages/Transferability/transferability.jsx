@@ -1,18 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Container,
-    Title,
-    Divider,
-    InputBox,
-    Input,
-    ClearButton,
-    PlayerImage,
-    PredictButton,
-    BallIcon,
-    ButtonText,
-    ResultChance,
-    ResultMessage,
-} from './transferability.style.js';
+import * as S from './transferability.style.js';
 import ballIcon from '../../assets/good_black.svg';
 import playerImage from '../../assets/player.png';
 
@@ -26,12 +13,13 @@ const Transferability = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(
-                `https://w7ufflahpf.execute-api.ap-northeast-2.amazonaws.com/default/kickon-transfer-predict?player_name=${encodeURIComponent(
-                    inputValue
-                )}`
-            );
-            const data = await response.json();
+            const response = await fetch(`/api/predict?player_name=${encodeURIComponent(inputValue)}`);
+            const text = await response.text(); // JSON 파싱 전에 원본 확인
+            console.log("예측 응답 원문:", text);
+
+            // '와 " 자동 치환해서 파싱 시도 (임시 fix, 보안 주의)
+            const safeText = text.replace(/'/g, '"'); // ' → "로 교체
+            const data = JSON.parse(safeText);
             setTransferResult(data);
         } catch (error) {
             console.error('예측 요청 실패:', error);
@@ -48,38 +36,42 @@ const Transferability = () => {
     };
 
     return (
-        <Container>
-            <Title>킥온과 선수 이적 예측을 해보세요!</Title>
-            <Divider />
-            <InputBox>
-                <Input
-                    placeholder="선수 이름을 입력해주세요"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-                {inputValue && (
-                    <ClearButton onClick={() => setInputValue('')}>×</ClearButton>
+        <S.Container>
+            <S.ContentWrapper>
+                <S.Title>킥온과 선수 이적 예측을 해보세요!</S.Title>
+                <S.Divider />
+                <S.InputBox>
+                    <S.Input
+                        placeholder="선수 이름을 입력해주세요"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                    />
+                    {inputValue && (
+                        <S.ClearButton onClick={() => setInputValue('')}>×</S.ClearButton>
+                    )}
+                </S.InputBox>
+
+                {isLoading ? (
+                    <S.Spinner />
+                ) : !transferResult ? (
+                    <S.PlayerImage src={playerImage} alt="선수 이미지" />
+                ) : (
+                    <>
+                        <S.ResultChance>
+                            {(transferResult.transfer_chance * 100).toFixed(1)}%
+                        </S.ResultChance>
+                        <S.ResultMessage>
+                            {getMessage(transferResult.transfer_chance)}
+                        </S.ResultMessage>
+                    </>
                 )}
-            </InputBox>
+            </S.ContentWrapper>
 
-            {!transferResult ? (
-                <PlayerImage src={playerImage} alt="선수 이미지" />
-            ) : (
-                <>
-                    <ResultChance>
-                        {(transferResult.transfer_chance * 100).toFixed(1)}%
-                    </ResultChance>
-                    <ResultMessage>
-                        {getMessage(transferResult.transfer_chance)}
-                    </ResultMessage>
-                </>
-            )}
-
-            <PredictButton onClick={handlePredict} disabled={isLoading}>
-                <BallIcon src={ballIcon} alt="축구공" />
-                <ButtonText>갈까? 말까?</ButtonText>
-            </PredictButton>
-        </Container>
+            <S.PredictButton onClick={handlePredict} disabled={isLoading}>
+                <S.BallIcon src={ballIcon} alt="축구공" />
+                <S.ButtonText>갈까? 말까?</S.ButtonText>
+            </S.PredictButton>
+        </S.Container>
     );
 };
 
