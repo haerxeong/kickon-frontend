@@ -11,6 +11,7 @@ import { uploadImageToS3 } from "../../utils/imageUpload";
 import { getTeams } from "../../apis/domains/common/getTeams";
 import axiosInstance from "../../apis/axios-instance.js";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
+import { useNavigate } from "react-router-dom";
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
@@ -25,6 +26,7 @@ const PostEditor = ({ type = "news" }) => {
     const [selectedTeamId, setSelectedTeamId] = useState(null);
     const fileInputRef = useRef(null);
     const teamSearchRef = useRef(null);
+    const navigate = useNavigate();
 
     const { selectedTeam, selectedLeague } = useLeagueTeamStore();
 
@@ -36,6 +38,13 @@ const PostEditor = ({ type = "news" }) => {
     ];
 
     const communityTabs = ["전체", selectedTeam?.nameKr || ""];
+
+    useEffect(() => {
+        if (selectedTeam?.pk) {
+            setSelectedTeamId(selectedTeam.pk);
+            setTeamName(selectedTeam.nameKr);
+        }
+    }, [selectedTeam]);
 
     // Handle outside click to close suggestions
     useEffect(() => {
@@ -152,9 +161,15 @@ const PostEditor = ({ type = "news" }) => {
             ...(isNews && { thumbnailUrl: uploadedImageUrl, category: selectedTab }),
         };
 
+        if (!selectedTeamId) {
+            alert("팀을 선택해주세요.");
+            return;
+        }
+
         try {
             const response = await axiosInstance.post(endpoint, payload);
-            alert("Post submitted successfully!");
+            alert("글 작성이 완료되었습니다.");
+            navigate(type === "news" ? "/news" : "/community"); // Navigate after success
         } catch (error) {
             console.error("Failed to submit post:", error);
             alert("Failed to submit post.");
