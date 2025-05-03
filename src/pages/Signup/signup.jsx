@@ -12,6 +12,7 @@ import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgr
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
+import { fetchUserInfo } from "../../apis/domains/auth/fetchUserInfo";
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -30,6 +31,8 @@ const Signup = () => {
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const { login } = useContext(AuthContext);
   const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useLeagueTeamStore();
+  const isNoTeam = selectedTeam?.nameKr === "응원팀이 없어요.";
+  const isTeamValid = isNoTeam || selectedTeam.pk;
 
   useEffect(() => {
     let queryStr = location.search;
@@ -44,7 +47,6 @@ const Signup = () => {
     const accessToken = queryParams.get("accessToken");
     const refreshToken = queryParams.get("refreshToken");
 
-    // provider가 제대로 파싱되지 않았을 때 대비
     if (provider) {
       setIsNaverLogin(provider === "naver");
     }
@@ -52,6 +54,18 @@ const Signup = () => {
     if (accessToken && refreshToken) {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+
+      // 유저 정보 조회
+      (async () => {
+        try {
+          const user = await fetchUserInfo();
+          if (user?.nickname && user?.privacyAgreedAt) {
+            navigate("/");
+          }
+        } catch (err) {
+          console.error("가입 여부 판단 실패:", err);
+        }
+      })();
     }
   }, [location.search]);
 
@@ -369,7 +383,7 @@ const Signup = () => {
             disabled={
                 !nickname ||
                 !selectedLeague.pk ||
-                !selectedTeam.pk ||
+                !isTeamValid ||
                 !isAgeAgreed ||
                 !isServiceTermsAgreed ||
                 !isPrivacyPolicyAgreed
