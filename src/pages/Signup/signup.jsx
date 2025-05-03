@@ -32,7 +32,6 @@ const Signup = () => {
   const { login } = useContext(AuthContext);
   const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useLeagueTeamStore();
   const isNoTeam = selectedTeam?.nameKr === "응원팀이 없어요.";
-  const isTeamValid = isNoTeam || selectedTeam.pk;
 
   useEffect(() => {
     let queryStr = location.search;
@@ -131,7 +130,7 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    if (!nickname || !selectedLeague.pk || !selectedTeam.pk) {
+    if (!nickname || !selectedLeague.nameKr || !selectedTeam.nameKr) {
       alert("모든 필수 항목을 입력해주세요.");
       return;
     }
@@ -163,7 +162,7 @@ const Signup = () => {
 
       const userInfoBody = {
         nickname: nickname,
-        team: selectedTeam.pk,
+        team: selectedTeam.nameKr === "응원팀이 없어요." ? null : selectedTeam.pk,
       };
 
       const userInfoResponse = await updateUserInfo(userInfoBody);
@@ -386,8 +385,7 @@ const Signup = () => {
             onClick={handleSignup}
             disabled={
                 !nickname ||
-                !selectedLeague.pk ||
-                !isTeamValid ||
+                selectedTeam.pk === undefined ||
                 !isAgeAgreed ||
                 !isServiceTermsAgreed ||
                 !isPrivacyPolicyAgreed

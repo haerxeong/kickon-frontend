@@ -13,8 +13,8 @@ const AuthProvider = ({ children }) => {
     setUser(userData);
     setIsAuthenticated(true);
 
-    // 로그인 시 선호팀 반영
-    if (userData.teamPk) {
+    // 응원팀 있을 때만 설정
+    if (userData?.teamPk && userData?.teamName && userData?.leaguePk && userData?.leagueName) {
       useLeagueTeamStore.getState().setSelectedTeam({
         pk: userData.teamPk,
         nameKr: userData.teamName,
@@ -25,6 +25,9 @@ const AuthProvider = ({ children }) => {
         pk: userData.leaguePk,
         nameKr: userData.leagueName,
       });
+    } else {
+      // 응원팀 없는 경우 null로 초기화
+      useLeagueTeamStore.getState().reset();
     }
   };
 
