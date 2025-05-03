@@ -77,6 +77,7 @@ export const ArticleMeta = styled.div`
 
 export const ArticleContent = styled.div`
   padding: 0;
+  overflow: hidden;
 `;
 
 export const ArticleImage = styled.img`
@@ -96,7 +97,17 @@ export const ArticleText = styled.p`
   font-size: 0.718rem;
   line-height: 1.6;
   color: #333;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.7rem auto;
+    border-radius: 0.625rem;
+    object-fit: contain;
+  }
 `;
+
 
 export const ArticleActions = styled.div`
   padding: 0 1rem 2.1rem;
