@@ -32,27 +32,24 @@ const News = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const isTeamTab = activeTab === selectedTeam?.nameKr;
+                const isTeamTab = selectedTeam?.nameKr && activeTab === selectedTeam.nameKr;
                 const isPopularTab = activeTab === "인기";
+                const isAllTab = activeTab === "전체";
 
                 const hasTeam = selectedTeam?.pk !== null;
                 const hasLeagueFromTeam = selectedTeam?.leaguePk !== null;
-                const hasLeagueFromDropdown = selectedLeague?.pk !== null;
+                console.log("selectedTeam", selectedTeam);
 
                 const params = {
                     size: 10,
                     page: activePage,
                     order: isPopularTab ? "hot" : "recent",
                     ...(isTeamTab && hasTeam && hasLeagueFromTeam
-                        ? {
-                            team: selectedTeam.pk,
-                            league: selectedTeam.leaguePk,
-                        }
-                        : hasLeagueFromDropdown
-                            ? {
-                                league: selectedLeague.pk,
-                            }
-                            : {}),
+                            ? { team: selectedTeam.pk, league: selectedTeam.leaguePk }
+                            : !isAllTab && !isPopularTab && selectedLeague?.pk
+                                ? { league: selectedLeague.pk }
+                                : {}
+                    ),
                 };
 
                 const response = await getNewsList(params);

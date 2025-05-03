@@ -55,12 +55,16 @@ const Signup = () => {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-      // 유저 정보 조회
       (async () => {
         try {
           const user = await fetchUserInfo();
           if (user?.nickname && user?.privacyAgreedAt) {
-            navigate("/");
+            login(user);
+
+            // ✅ 상태 반영 이후에 navigate (딜레이)
+            setTimeout(() => {
+              navigate("/");
+            }, 0);
           }
         } catch (err) {
           console.error("가입 여부 판단 실패:", err);
@@ -260,7 +264,7 @@ const Signup = () => {
                         key={league.pk}
                         onClick={() => {
                           setSelectedLeague({ pk: league.pk, nameKr: league.nameKr });
-                          setSelectedTeam({ pk: null, nameKr: null });
+                          setSelectedTeam({ pk: null, nameKr: null, leaguePk: null });
                           setIsLeagueDropdownOpen(false);
                         }}
                     >
@@ -271,7 +275,7 @@ const Signup = () => {
                 <S.DropdownItem
                     onClick={() => {
                       setSelectedLeague({ pk: 0, nameKr: "응원팀이 없어요."});
-                      setSelectedTeam({ pk: 0, nameKr: "응원팀이 없어요."});
+                      setSelectedTeam({ pk: 0, nameKr: "응원팀이 없어요.", leaguePk: 0 });
                       setIsLeagueDropdownOpen(false);
                       setIsTeamDropdownOpen(false);
                     }}
@@ -312,7 +316,7 @@ const Signup = () => {
                   <S.DropdownItem
                       key={team.pk}
                       onClick={() => {
-                        setSelectedTeam({ pk: team.pk, nameKr: team.nameKr });
+                        setSelectedTeam({ pk: team.pk, nameKr: team.nameKr, leaguePk: team.leaguePk });
                         setIsTeamDropdownOpen(false);
                       }}
                   >

@@ -14,15 +14,16 @@ const AuthProvider = ({ children }) => {
     setIsAuthenticated(true);
 
     // 로그인 시 선호팀 반영
-    if (userData.team) {
+    if (userData.teamPk) {
       useLeagueTeamStore.getState().setSelectedTeam({
-        pk: userData.team.pk,
-        nameKr: userData.team.nameKr
+        pk: userData.teamPk,
+        nameKr: userData.teamName,
+        leaguePk: userData.leaguePk,
       });
 
       useLeagueTeamStore.getState().setSelectedLeague({
-        pk: userData.team.league.pk,
-        nameKr: userData.team.league.nameKr
+        pk: userData.leaguePk,
+        nameKr: userData.leagueName,
       });
     }
   };
