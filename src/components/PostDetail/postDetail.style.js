@@ -260,12 +260,12 @@ export const CommentInput = styled.textarea`
 `;
 
 export const SubmitButton = styled.button`
-  background: rgba(192, 12, 11, 0.9);
+  background: var(--Primary-primary_900, #C00C0B);
   color: white;
   border: none;
-  height: 4rem; /* 기존 50px -> 64px (입력란과 동일) */
-  font-size: 0.85rem; /* 기존 0.8rem -> 0.85rem */
-  padding: 0 1.125rem; /* 기존 16px -> 18px */
+  height: 4rem; 
+  font-size: 0.85rem; 
+  padding: 0 1.125rem; 
   cursor: pointer;
   font-weight: 500;
   white-space: nowrap;
@@ -418,7 +418,7 @@ export const ReplyInput = styled.textarea`
 `;
 
 export const ReplySubmitButton = styled.button`
-  background: rgba(192, 12, 11, 0.9);
+  background: var(--Primary-primary_900, #C00C0B);
   color: white;
   border: none;
   font-size: 0.75rem;
