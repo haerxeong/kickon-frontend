@@ -254,53 +254,46 @@ const PostDetail = () => {
       return;
     }
     try {
-      // optimistic UI: 임시 댓글 추가
-      const tempComment = {
-        pk: `temp-${Date.now()}`,
-        user: userProfile,
-        contents: commentInput,
-        replies: [],
-        kicked: false,
-        kickCount: 0,
-        createdAt: new Date().toISOString()
-      };
-      setCommentsCount(prevCount => prevCount + 1);
+      // 현재 전체 댓글 수 계산
+      const totalCommentsBeforeAdd = commentsCount;
+
+      // 새 댓글이 위치할 페이지 계산
+      const targetPage = Math.ceil((totalCommentsBeforeAdd + 1) / COMMENTS_PER_PAGE);
+
+      // 실제 API 요청
+      const response = await axiosInstance.post("/api/news-reply", {
+        news: parseInt(newsPk),
+        contents: commentInput
+      });
+
+      // 댓글 입력창 초기화
       setCommentInput("");
+
+      // 댓글 카운트 업데이트
+      setCommentsCount(prevCount => prevCount + 1);
       if (apiPost) {
         setApiPost(prev => ({
           ...prev,
           replies: prev.replies + 1
         }));
       }
-      // 실제 API 요청
-      const response = await axiosInstance.post("/api/news-reply", {
-        news: parseInt(newsPk),
-        contents: tempComment.contents
-      });
-      if (response.data) {
-        setComments(prevComments => prevComments.map(comment =>
-            comment.pk === tempComment.pk
-                ? { ...response.data, user: userProfile, replies: [] }
-                : comment
-        ));
-        // 새로고침 없이 최신 댓글 목록 유지
+
+      // 현재 페이지와 타겟 페이지 비교 후 필요시 페이지 변경
+      if (activePage !== targetPage) {
+        // 타겟 페이지로 이동 (페이지 상태 변경)
+        setActivePage(targetPage);
+        // fetchComments는 useEffect를 통해 activePage가 변경될 때 자동으로 호출됨
+      } else {
+        // 현재 페이지에 댓글이 추가되는 경우 현재 페이지 데이터만 다시 불러오기
         fetchComments();
       }
+
     } catch (error) {
-      // 오류 발생 시 UI 롤백
-      setComments(prevComments =>
-          prevComments.filter(comment => !comment.pk.toString().startsWith('temp-'))
-      );
-      setCommentsCount(prevCount => Math.max(0, prevCount - 1));
-      if (apiPost) {
-        setApiPost(prev => ({
-          ...prev,
-          replies: Math.max(0, prev.replies - 1)
-        }));
-      }
+      console.error("댓글 등록 실패:", error);
       alert("댓글 작성에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
 
   // 댓글 킥(좋아요) 토글 함수
   const toggleCommentKick = async (commentId) => {
