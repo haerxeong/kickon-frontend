@@ -18,6 +18,7 @@
     "dayjs": "^1.11.13",
     "html-react-parser": "^5.2.3",
     "lucide-react": "^0.484.0",
+    "quill": "^2.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",

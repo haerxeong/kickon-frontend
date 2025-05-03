@@ -12,6 +12,7 @@ import { getTeams } from "../../apis/domains/common/getTeams";
 import axiosInstance from "../../apis/axios-instance.js";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
 import { useNavigate } from "react-router-dom";
+import Quill from "quill";
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
@@ -176,14 +177,42 @@ const PostEditor = ({ type = "news" }) => {
         }
     };
 
+    const imageHandler = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (!file) return;
+
+            try {
+                const imageUrl = await uploadImageToS3(file);
+                const quill = Quill.find(document.querySelector(".ql-editor")); // 현재 에디터 인스턴스
+                const range = quill.getSelection(true);
+
+                quill.insertEmbed(range.index, "image", imageUrl);
+                quill.setSelection(range.index + 1); // 커서 다음 줄로 이동
+            } catch (error) {
+                alert("이미지 업로드에 실패했습니다.");
+            }
+        };
+    };
+
     const modules = {
-        toolbar: [
-            [{ header: [1, 2, false] }],
-            ["bold", "italic", "underline"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["blockquote", "link", "image", "video"],
-            ["clean"]
-        ]
+        toolbar: {
+            container: [
+                [{ header: [1, 2, false] }],
+                ["bold", "italic", "underline"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["blockquote", "link", "image", "video"],
+                ["clean"]
+            ],
+            handlers: {
+                image: imageHandler,
+            }
+        }
     };
 
     const formats = [
