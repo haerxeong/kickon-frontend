@@ -3,7 +3,7 @@ import { fetchUserInfo } from "../apis/domains/auth/fetchUserInfo";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // 인증 여부 로딩 완료 여부
@@ -23,12 +23,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("accessToken");
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
       const refreshToken = localStorage.getItem("refreshToken");
+
       if (!token || !refreshToken) {
         setLoading(false);
         return;
@@ -45,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    checkAuth();
+    checkAuth(); // Promise 무시 경고는 신경 안 써도 OK (top-level await 없으므로)
   }, []);
 
   return (
@@ -54,6 +50,8 @@ export const AuthProvider = ({ children }) => {
       </AuthContext.Provider>
   );
 };
+
+export { AuthProvider };
 
 // 활용 방법: AuthContext 호출 후
 // const { isAuthenticated, login } = useContext(AuthContext);
