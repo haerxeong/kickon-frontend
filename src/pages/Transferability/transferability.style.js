@@ -115,7 +115,7 @@ export const ResultChance = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin: 7rem 0 3.5rem 0;
+  margin: 5rem 0 3.5rem 0;
 `;
 
 export const ResultMessage = styled.div`
