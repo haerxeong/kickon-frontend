@@ -16,8 +16,9 @@ import { openReportModal } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 import { getNewsDetail } from "../../apis/domains/news/news.js";
 import { getBoardDetail } from "../../apis/domains/community/community.js";
-import { getNewsCommentList } from "../../apis/domains/news/getNewsCommentList.js"; // 뉴스 댓글 API 가져오기
-import { getProfilecard } from "../../apis/domains/common/getProfilecard.js"; // 프로필 카드 정보 가져오기
+import { getNewsCommentList } from "../../apis/domains/news/getNewsCommentList.js";
+import { getCommunityCommentList } from "../../apis/domains/community/getCommunityCommentList.js";
+import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import parse from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
 
@@ -172,55 +173,57 @@ const PostDetail = () => {
 
   // 댓글 목록 가져오기
   const fetchComments = async () => {
-    // 뉴스 경로이고 newsPk가 있을 때만 댓글 API 호출
-    if (location.pathname.includes('/news/') && newsPk) {
-      try {
-        setCommentLoading(true);
-        const response = await getNewsCommentList({
+    try {
+      setCommentLoading(true);
+
+      let response;
+      if (location.pathname.includes('/news/') && newsPk) {
+        response = await getNewsCommentList({
           news: newsPk,
           size: COMMENTS_PER_PAGE,
           page: activePage
         });
-
-        console.log("댓글 API 응답:", response);
-
-        if (response && response.data) {
-          setComments(response.data);
-          setTotalCommentPages(response.meta?.totalPages || 1);
-          setCommentsCount(response.meta?.totalItems || 0);
-
-          // 댓글 좋아요 상태 초기화
-          const initialLikedComments = {};
-          const initialLikedReplies = {};
-
-          response.data.forEach(comment => {
-            initialLikedComments[comment.pk] = comment.kicked || false;
-
-            // 답글 좋아요 상태 초기화
-            if (comment.replies && comment.replies.length > 0) {
-              comment.replies.forEach(reply => {
-                initialLikedReplies[reply.pk] = reply.kicked || false;
-              });
-            }
-          });
-
-          setLikedComments(initialLikedComments);
-          setLikedReplies(initialLikedReplies);
-        }
-      } catch (err) {
-        console.error("댓글 가져오기 실패:", err);
-        setCommentError("댓글을 불러오는데 실패했습니다.");
-      } finally {
-        setCommentLoading(false);
+      } else if (location.pathname.includes('/community/') && boardPk) {
+        response = await getCommunityCommentList({
+          board: boardPk,
+          size: COMMENTS_PER_PAGE,
+          page: activePage
+        });
       }
+
+      if (response && response.data) {
+        setComments(response.data);
+        setTotalCommentPages(response.meta?.totalPages || 1);
+        setCommentsCount(response.meta?.totalItems || 0);
+
+        // 댓글 좋아요 상태 초기화
+        const initialLikedComments = {};
+        const initialLikedReplies = {};
+        response.data.forEach(comment => {
+          initialLikedComments[comment.pk] = comment.kicked || false;
+          if (comment.replies && comment.replies.length > 0) {
+            comment.replies.forEach(reply => {
+              initialLikedReplies[reply.pk] = reply.kicked || false;
+            });
+          }
+        });
+        setLikedComments(initialLikedComments);
+        setLikedReplies(initialLikedReplies);
+      }
+    } catch (err) {
+      setCommentError("댓글을 불러오는데 실패했습니다.");
+    } finally {
+      setCommentLoading(false);
     }
   };
 
   useEffect(() => {
-    if (location.pathname.includes('/news/') && newsPk) {
+    if ((location.pathname.includes('/news/') && newsPk) ||
+        (location.pathname.includes('/community/') && boardPk)) {
       fetchComments();
     }
-  }, [newsPk, activePage, location.pathname]);
+  }, [newsPk, boardPk, activePage, location.pathname]);
+
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -254,22 +257,23 @@ const PostDetail = () => {
       return;
     }
     try {
-      // 현재 전체 댓글 수 계산
       const totalCommentsBeforeAdd = commentsCount;
-
-      // 새 댓글이 위치할 페이지 계산
       const targetPage = Math.ceil((totalCommentsBeforeAdd + 1) / COMMENTS_PER_PAGE);
 
-      // 실제 API 요청
-      const response = await axiosInstance.post("/api/news-reply", {
-        news: parseInt(newsPk),
-        contents: commentInput
-      });
+      let response;
+      if (location.pathname.includes('/news/') && newsPk) {
+        response = await axiosInstance.post("/api/news-reply", {
+          news: parseInt(newsPk),
+          contents: commentInput
+        });
+      } else if (location.pathname.includes('/community/') && boardPk) {
+        response = await axiosInstance.post("/api/board-reply", {
+          board: parseInt(boardPk),
+          contents: commentInput
+        });
+      }
 
-      // 댓글 입력창 초기화
       setCommentInput("");
-
-      // 댓글 카운트 업데이트
       setCommentsCount(prevCount => prevCount + 1);
       if (apiPost) {
         setApiPost(prev => ({
@@ -278,22 +282,15 @@ const PostDetail = () => {
         }));
       }
 
-      // 현재 페이지와 타겟 페이지 비교 후 필요시 페이지 변경
       if (activePage !== targetPage) {
-        // 타겟 페이지로 이동 (페이지 상태 변경)
         setActivePage(targetPage);
-        // fetchComments는 useEffect를 통해 activePage가 변경될 때 자동으로 호출됨
       } else {
-        // 현재 페이지에 댓글이 추가되는 경우 현재 페이지 데이터만 다시 불러오기
         fetchComments();
       }
-
     } catch (error) {
-      console.error("댓글 등록 실패:", error);
       alert("댓글 작성에 실패했습니다. 다시 시도해주세요.");
     }
   };
-
 
   // 댓글 킥(좋아요) 토글 함수
   const toggleCommentKick = async (commentId) => {
@@ -473,10 +470,8 @@ const PostDetail = () => {
   if (error) return <div>{error}</div>;
   if (!apiPost) return <div>데이터가 없습니다.</div>;
 
-  // 댓글 데이터가 없을 경우 빈 배열 설정
-  const displayComments = location.pathname.includes('/news/')
-      ? comments
-      : [];
+  const displayComments = comments;
+
 
   return (
       <S.ArticleContainer>
@@ -566,7 +561,7 @@ const PostDetail = () => {
           </S.LikeButton>
         </S.ArticleActions>
 
-        {canComment && (
+        {(location.pathname.includes('/community/') || canComment) && (
             <S.CommentInputBox>
               <S.CommentInputLabel>댓글 쓰기</S.CommentInputLabel>
               <S.CommentInputContainer>
@@ -751,7 +746,7 @@ const PostDetail = () => {
             <Pagination
                 activePage={activePage}
                 setActivePage={setActivePage}
-                totalPages={location.pathname.includes('/news/') ? totalCommentPages : 10}
+                totalPages={totalCommentPages}
             />
         )}
 
