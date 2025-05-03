@@ -11,6 +11,7 @@ import { FaRegComment, FaCheckCircle } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Pagination from "../Pagination/pagination";
 import { MdExpandMore, MdExpandLess, MdIosShare } from "react-icons/md";
+import { LuSiren } from "react-icons/lu";
 import { openReportModal } from "../../features/modal/modalSlice.js";
 import { useDispatch } from "react-redux";
 import { getNewsDetail } from "../../apis/domains/news/news.js";
@@ -58,6 +59,41 @@ const PostDetail = () => {
   const handleClickOutside = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
       setIsMenuOpen(false);
+    }
+  };
+
+  const handleReport = () => {
+    setIsMenuOpen(false); // 메뉴 닫기
+
+    // 현재 경로에 따라 신고 타입 결정
+    const reportType = location.pathname.includes('/news/') ? 'news' : 'board';
+    const contentId = reportType === 'news' ? Number(newsPk) : Number(boardPk);
+
+    // 신고 모달 열기
+    dispatch(openReportModal({ type: reportType, id: contentId }));
+  };
+
+  const copyToClipboard = () => {
+    const currentUrl = window.location.href;
+
+    // 모던 브라우저에서는 Clipboard API 사용
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(currentUrl)
+          .then(() => {
+            alert("URL이 클립보드에 복사되었습니다.");
+          })
+          .catch((err) => {
+            console.error('클립보드 복사 실패:', err);
+          });
+    } else {
+      // 구형 브라우저를 위한 대체 방법
+      const tempInput = document.createElement('input');
+      tempInput.value = currentUrl;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      alert("URL이 클립보드에 복사되었습니다.");
     }
   };
 
@@ -493,12 +529,12 @@ const PostDetail = () => {
               />
               {isMenuOpen && (
                   <S.MoreMenu ref={menuRef}>
-                    <S.MenuItem>
-                      <MdIosShare size={16}/>
+                    <S.MenuItem onClick={copyToClipboard}>
+                      <MdIosShare alt="공유 아이콘" size={15} />
                       공유하기
                     </S.MenuItem>
-                    <S.MenuItem onClick={() => dispatch(openReportModal())}>
-                      <img src={SirenIcon} alt="신고 아이콘" width={16} height={16}/>
+                    <S.MenuItem onClick={handleReport}>
+                      <LuSiren alt="신고 아이콘" size={15} />
                       신고하기
                     </S.MenuItem>
                   </S.MoreMenu>
@@ -586,8 +622,6 @@ const PostDetail = () => {
                                   color: "#000",
                                 }}
                             >
-
-
                     {comment.user.nickname}
                   </span>
                             <span style={{fontSize: "0.7rem", color: "#888"}}>

@@ -99,7 +99,7 @@ export const ArticleText = styled.p`
 `;
 
 export const ArticleActions = styled.div`
-  padding: 0 1rem 1rem;
+  padding: 0 1rem 2.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -203,7 +203,6 @@ export const MenuItem = styled.div`
 `;
 
 export const CommentInputBox = styled.div`
-  //position: absolute;
   left: 0.8rem;
   display: flex;
   width: 28rem;
@@ -214,7 +213,7 @@ export const CommentInputBox = styled.div`
   border-radius: 0.625rem;
   background: #f0f0f0;
   color: black;
-    margin-left: 0.7rem;
+    margin: 0 auto 3.32rem auto;
 `;
 
 export const CommentInputLabel = styled.div`
@@ -266,7 +265,6 @@ export const SubmitButton = styled.button`
 `;
 
 export const CommentsSection = styled.div`
-  margin-top: 10rem;
 `;
 
 export const CommentsSectionTitle = styled.div`
