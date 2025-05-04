@@ -30,6 +30,7 @@ const PostEditor = ({ type = "news" }) => {
     const teamSearchRef = useRef(null);
     const navigate = useNavigate();
     const categoryMap = newsCategoryMap;
+    const [isTyping, setIsTyping] = useState(false);
 
     const { selectedTeam, selectedLeague } = useLeagueTeamStore();
 
@@ -66,6 +67,7 @@ const PostEditor = ({ type = "news" }) => {
     useEffect(() => {
         if (teamName.trim() === "") {
             setTeamSuggestions([]);
+            setShowSuggestions(false); // 빈 문자열이면 닫기
             return;
         }
 
@@ -78,7 +80,6 @@ const PostEditor = ({ type = "news" }) => {
 
                 const teams = await getTeams(queryParams);
 
-
                 // Teams are directly in the response from getTeams
                 if (Array.isArray(teams)) {
                     const formattedTeams = teams.map(team => ({
@@ -88,9 +89,11 @@ const PostEditor = ({ type = "news" }) => {
                     }));
 
                     setTeamSuggestions(formattedTeams);
-                    setShowSuggestions(true);
+                    // 직접 타이핑한 경우에만 열기
+                    if (isTyping) {
+                        setShowSuggestions(true);
+                    }
                 } else {
-                    console.error("Unexpected team data format:", teams);
                     setTeamSuggestions([]);
                 }
             } catch (error) {
@@ -111,6 +114,7 @@ const PostEditor = ({ type = "news" }) => {
         setTeamName(team.name);
         setSelectedTeamId(team.id);
         setShowSuggestions(false);
+        setIsTyping(false); // 직접 선택한 경우엔 false로 설정
     };
 
     const handleTeamNameClear = () => {
@@ -280,9 +284,12 @@ const PostEditor = ({ type = "news" }) => {
                                     type="text"
                                     placeholder="팀명 검색"
                                     value={teamName}
-                                    onChange={(e) => setTeamName(e.target.value)}
+                                    onChange={(e) => {
+                                        setTeamName(e.target.value);
+                                        setIsTyping(true); // 사용자가 타이핑한 경우에만 true
+                                    }}
                                     onFocus={() => {
-                                        if (teamName && teamSuggestions.length > 0) {
+                                        if (teamName && teamSuggestions.length > 0 && isTyping) {
                                             setShowSuggestions(true);
                                         }
                                     }}
