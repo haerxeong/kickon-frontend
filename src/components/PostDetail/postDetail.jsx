@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {useParams, useLocation} from "react-router-dom"; // 추가된 부분
+import {useParams, useLocation} from "react-router-dom";
 import dayjs from 'dayjs';
 import * as S from "./postDetail.style.js";
 import RKickIcon from "../../assets/good_red.svg";
@@ -19,8 +19,20 @@ import { getBoardDetail } from "../../apis/domains/community/community.js";
 import { getNewsCommentList } from "../../apis/domains/news/getNewsCommentList.js";
 import { getCommunityCommentList } from "../../apis/domains/community/getCommunityCommentList.js";
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
-import parse from 'html-react-parser';
+import parse, { domToReact } from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
+
+// 유튜브 링크를 iframe으로 변환하는 함수
+function youtubeUrlToIframe(html) {
+  if (!html) return "";
+  // 다양한 유튜브 URL 패턴을 iframe으로 변환
+  return html.replace(
+    // watch?v=, youtu.be, embed 등 다양한 패턴 지원
+    /(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/g,
+    (match, p1, p2, p3, videoId) =>
+      `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen class="youtube-iframe" title="YouTube video"></iframe>`
+  );
+}
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +43,7 @@ const PostDetail = () => {
   const [openReplyIds, setOpenReplyIds] = useState({});
   const [showReplies, setShowReplies] = useState({});
   const [openReReplyIds, setOpenReReplyIds] = useState({});
-  const [commentInput, setCommentInput] = useState(""); // 추가: 댓글 입력 상태
+  const [commentInput, setCommentInput] = useState("");
 
   // API 연동을 위한 상태 추가
   const [apiPost, setApiPost] = useState(null);
@@ -52,7 +64,7 @@ const PostDetail = () => {
   const menuRef = useRef(null);
   const dispatch = useDispatch();
 
-  // 추가된 부분: URL 파라미터와 현재 경로 가져오기
+  // URL 파라미터와 현재 경로 가져오기
   const { newsPk, boardPk } = useParams();
   const location = useLocation();
   const COMMENTS_PER_PAGE = 10; // 페이지당 댓글 수
@@ -223,7 +235,6 @@ const PostDetail = () => {
       fetchComments();
     }
   }, [newsPk, boardPk, activePage, location.pathname]);
-
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -472,13 +483,12 @@ const PostDetail = () => {
 
   const displayComments = comments;
 
-
   return (
       <S.ArticleContainer>
-        {location.pathname.includes('/news/') && (
-            <S.ArticleImage src={apiPost.thumbnailUrl || apiPost.image} alt="뉴스 이미지"/>
+        {location.pathname.includes('/news/') && apiPost.thumbnailUrl && (
+            <S.ArticleImage src={apiPost.thumbnailUrl} alt="뉴스 이미지"/>
         )}
-        {apiPost.hasImage && (
+        {location.pathname.includes('/community/') && apiPost.hasImage && (
             <S.ArticleImage src={apiPost.imageUrl} alt="게시글 이미지"/>
         )}
         {location.pathname.includes('/news/') && (
@@ -532,12 +542,28 @@ const PostDetail = () => {
         </S.ArticleHeader>
 
         <S.ArticleContent>
-          {location.pathname.includes('/community/') && apiPost.hasImage &&
-              <S.ArticleImage src={apiPost.image}/>
-          }
-          <S.ArticleText>{parse(apiPost.content)}</S.ArticleText>
+          <S.ArticleText as="div">
+            {parse(
+                youtubeUrlToIframe(apiPost.content), // post.content를 apiPost.content로 변경
+                {
+                  replace: domNode => {
+                    if (
+                        domNode.name === 'iframe' &&
+                        domNode.attribs &&
+                        domNode.attribs.src &&
+                        domNode.attribs.src.includes('youtube.com')
+                    ) {
+                      return (
+                          <S.YoutubeResponsive>
+                            {domToReact([domNode])}
+                          </S.YoutubeResponsive>
+                      );
+                    }
+                  }
+                }
+            )}
+          </S.ArticleText>
         </S.ArticleContent>
-
 
         <S.ArticleActions>
           <S.LikeButton
@@ -610,11 +636,11 @@ const PostDetail = () => {
                                   color: "#000",
                                 }}
                             >
-                    {comment.user.nickname}
-                  </span>
+                              {comment.user.nickname}
+                            </span>
                             <span style={{fontSize: "0.7rem", color: "#888"}}>
-                    {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
-                  </span>
+                              {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
+                            </span>
                           </S.CommentHeader>
                           <S.CommentLikes
                               key={comment.pk || comment.id}
@@ -689,13 +715,13 @@ const PostDetail = () => {
                                                   color: "#000",
                                                 }}
                                             >
-                              {reply.user.nickname}
-                            </span>
+                                              {reply.user.nickname}
+                                            </span>
                                             <span
                                                 style={{fontSize: "0.65rem", color: "#888"}}
                                             >
-                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
-                            </span>
+                                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
+                                            </span>
                                           </S.ReplyHeader>
                                           <S.ReplyLikes
                                               key={reply.pk}
@@ -714,7 +740,6 @@ const PostDetail = () => {
                                           </S.ReplyLikes>
                                         </S.ReplyHeaderWrapper>
                                         <S.ReplyContent>{reply.contents}</S.ReplyContent>
-
                                         {/* New ReplyActions component */}
                                         <S.ReplyActions>
                                           {location.pathname.includes('/community/') && canComment && (
@@ -749,7 +774,6 @@ const PostDetail = () => {
                 totalPages={totalCommentPages}
             />
         )}
-
       </S.ArticleContainer>
   );
 };

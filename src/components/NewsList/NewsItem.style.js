@@ -10,6 +10,7 @@ export const NewsItemContainer = styled.div`
   width: 100%;
   padding-bottom: 1rem;
   border-bottom: 0.0625rem solid #f0f0f0;
+  cursor: pointer;
 `;
 
 export const ContentWrapper = styled.div`
@@ -84,7 +85,7 @@ export const Thumbnail = styled.img`
   flex-shrink: 0;
   border-radius: 0.36rem;
   object-fit: cover; // 이미지 비율 유지를 위해 추가
-  margin: 2rem 0 0 1rem;
+  margin: 1rem 0 0 1rem;
 `;
 
 export const ProfileIcon = styled.img.attrs({

@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   NewsItemContainer,
   NewsBadge,
@@ -24,16 +26,29 @@ import {
 } from "./NewsItem.style";
 import {timeAgo} from "../../utils/timeUtils.js";
 
-const NewsItem = ({ title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
+const stripHtml = (html) => {
+  const tmp = document.createElement("DIV");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};
+
+const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
+  const navigate = useNavigate();
+  const plainTextContent = stripHtml(content).substring(0, 100) + (stripHtml(content).length > 100 ? "..." : "");
+
+  const handleClick = () => {
+    navigate(`/news/${pk}`);
+  };
+
   return (
-      <NewsItemContainer>
+      <NewsItemContainer onClick={handleClick}>
         <ContentWrapper>
           <TextContentWrapper>
             <TopSection>
               <div>
                 <NewsBadge>{category}</NewsBadge>
                 <NewsTitle>{title}</NewsTitle>
-                <NewsContent>{content}</NewsContent>
+                <NewsContent>{plainTextContent}</NewsContent>
                 <LeftInfo>
                   <ProfileIcon src={user.profileImageUrl} alt="Profile" />
                   <Nickname>{user.nickname}</Nickname>

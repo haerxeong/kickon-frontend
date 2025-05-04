@@ -2,42 +2,69 @@ import React, { useState, useEffect } from "react";
 import * as S from "./ProfileSettings.style";
 import { League } from "../../mocks/league";
 import naverLogo from "../../assets/naver.svg";
+import kakaoLogo from "../../assets/kakao.svg"; 
+import profile_image from "../../assets/profile_image.svg"; 
 import ProfileImageDefault from "../../assets/profile.svg";
 import CameraIcon from "../../assets/camera.png";
 import { BsQuestionCircle } from "react-icons/bs";
+import { getUserProfile } from "../../apis/domains/profile/getUserProfile";
+import { updateUserProfile } from "../../apis/domains/profile/updateUserProfile";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSettings = () => {
+  const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [selectedLeague, setSelectedLeague] = useState("");
+  const [teamLogoUrl, setTeamLogoUrl] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
+  const [teamPk, setTeamPk] = useState(null);
   const [profileImage, setProfileImage] = useState(ProfileImageDefault);
+  const [email, setEmail] = useState("");
+  const [providerType, setProviderType] = useState("");
+  const [loading, setLoading] = useState(true);
   const fileInputRef = React.useRef(null);
+
   const leagues = League;
+
+  const getProviderLogo = () => {
+    if (providerType === "KAKAO") {
+      return kakaoLogo;
+    } else if (providerType === "NAVER") {
+      return naverLogo;
+    }
+    // 기본값 또는 다른 provider 타입에 대한 처리
+    return profile_image;
+  };
 
   // 서버에서 사용자 데이터를 가져오는 효과
   useEffect(() => {
-    // 여기서 서버 API 호출을 통해 사용자 정보를 가져옵니다
-    // 예시로 하드코딩된 데이터를 사용합니다
     const fetchUserData = async () => {
       try {
-        // 실제로는 API 호출이 들어갈 자리
-        // const response = await fetch('/api/user/profile');
-        // const userData = await response.json();
+        setLoading(true);
+        const response = await getUserProfile();
         
-        // 임시 데이터
-        const userData = {
-          league: "프리미어리그",
-          team: "맨체스터 유나이티드"
-        };
+        if (response.code === "GET_SUCCESS") {
+          const userData = response.data;
+          setNickname(userData.nickname);
+          setProfileImage(userData.profileImageUrl || ProfileImageDefault);
+          setEmail(userData.email);
+          setProviderType(userData.providerType);
         
-        setSelectedLeague(userData.league);
-        setSelectedTeam(userData.team);
+          // league는 바로 userData에서 뽑기!
+          setSelectedLeague(userData.leagueName);
+          // 팀도 바로 userData에서!
+          setSelectedTeam(userData.teamName);
+          setTeamPk(userData.teamPk);
+          setTeamLogoUrl(userData.teamLogoUrl);
+        }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
-    
+
     fetchUserData();
   }, []);
 
@@ -67,52 +94,80 @@ const ProfileSettings = () => {
     setNickname(value);
     if (!value.length) {
       setNicknameError("닉네임을 입력해 주세요.");
+    } else if (value.length > 10) {
+      setNicknameError("닉네임은 10자 이하로 작성해주세요.");
     } else {
       setNicknameError("");
     }
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!nickname) {
-      alert("모든 필수 항목을 입력해주세요.");
+      alert("닉네임을 입력해주세요.");
       return;
     }
-    console.log("Profile update submitted", {
-      nickname,
-      profileImage: profileImage !== ProfileCamera ? profileImage : null,
-    });
+
+    try {
+      const userData = {
+        nickname,
+        team: teamPk
+      };
+
+      const response = await updateUserProfile(userData);
+      
+      if (response.code === "POST_OR_PATCH_SUCCESS") {
+        alert("프로필이 성공적으로 업데이트되었습니다.");
+        navigate("/"); // 프로필 페이지로 이동
+      } else if (response.code === "DUPLICATED_NICKNAME") {
+        setNicknameError("이미 사용중인 닉네임입니다.");
+      } else if (response.code === "INVALID_REQUEST") {
+        // 유효성 검사 실패 메시지 처리
+        setNicknameError(response.data[0]);
+      }
+    } catch (error) {
+      console.error("Profile update failed:", error);
+      alert("프로필 업데이트에 실패했습니다.");
+    }
   };
+
+  const handleCancel = () => {
+    navigate("/");
+  };
+  
 
   const selectedLeagueData = leagues.find(
     (league) => league.krName === selectedLeague
   );
 
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
   return (
     <S.ProfileSettingsContainer>
       <S.ProfileImageContainer>
-        <S.ProfileImage src={profileImage} alt="Profile" />
-        <S.CameraIcon 
-          src={CameraIcon} 
-          alt="Change profile" 
-          onClick={handleImageClick} 
-        />
+        <S.ProfileImage src={profileImage} alt="프로필 이미지" />
+        <S.CameraIcon src={CameraIcon} alt="카메라" onClick={handleImageClick} />
         <input
           type="file"
           ref={fileInputRef}
+          onChange={handleImageChange}
           style={{ display: "none" }}
           accept="image/*"
-          onChange={handleImageChange}
         />
       </S.ProfileImageContainer>
 
       <S.InputGroup>
-        <S.InputLabel>닉네임</S.InputLabel>
+        <S.InputLabel>
+          닉네임
+          <BsQuestionCircle onClick={handleIconClick} />
+        </S.InputLabel>
         <S.InputWrapper>
           <S.InputField
             type="text"
             value={nickname}
             onChange={handleNicknameChange}
-            placeholder="닉네임을 입력해 주세요"
+            placeholder="닉네임을 입력해주세요"
             hasError={!!nicknameError}
           />
           {nickname && (
@@ -123,54 +178,43 @@ const ProfileSettings = () => {
       </S.InputGroup>
 
       <S.InputGroup>
-        <S.InputLabel>
-          리그
-          <BsQuestionCircle onClick={handleIconClick}/>
-        </S.InputLabel>
+        <S.InputLabel>리그</S.InputLabel>
         <S.AccountInfoContainer>
-          <S.LeftContent>
-            {selectedLeagueData && (
-              <>
-                <S.SelectedImage src={selectedLeagueData.image} alt={selectedLeagueData.krName} />
-                <S.SelectedName>{selectedLeagueData.krName}</S.SelectedName>
-              </>
-            )}
-          </S.LeftContent>
+          {selectedLeagueData && (
+            <S.LeftContent>
+              <S.SelectedImage src={selectedLeagueData.logoUrl} alt={selectedLeagueData.krName} />
+              <S.SelectedName>{selectedLeagueData.krName}</S.SelectedName>
+            </S.LeftContent>
+          )}
         </S.AccountInfoContainer>
       </S.InputGroup>
 
       <S.InputGroup>
         <S.InputLabel>응원팀</S.InputLabel>
         <S.AccountInfoContainer>
-          <S.LeftContent>
-            {selectedTeam && (
-              <>
-              <S.SelectedImage src={selectedLeagueData.image} alt={selectedLeagueData.krName} />
+          {selectedTeam && (
+            <S.LeftContent>
+              <S.SelectedImage src={teamLogoUrl} alt={selectedTeam} />
               <S.SelectedName>{selectedTeam}</S.SelectedName>
-              </>
-            )}
-          </S.LeftContent>
+            </S.LeftContent>
+          )}
         </S.AccountInfoContainer>
       </S.InputGroup>
 
-      <S.InputGroup>
-        <S.ManageTitle>계정 관리</S.ManageTitle>
-        <S.AccountInfoContainer>
-          {/* 네이버 또는 카카오 로고 표시 (예시로 네이버 사용) */}
-          <S.AccountLogo src={naverLogo} alt="Naver" />
-          <S.AccountEmail>email.naver.com</S.AccountEmail>
-        </S.AccountInfoContainer>
-      </S.InputGroup>
+      <S.ManageTitle>계정 관리</S.ManageTitle>
+      <S.AccountInfoContainer>
+        <S.AccountLogo 
+          src={getProviderLogo()} 
+          alt={`${providerType} 로고`} 
+        />
+        <S.AccountEmail>{email}</S.AccountEmail>
+      </S.AccountInfoContainer>
 
       <S.ButtonGroup>
-        <S.CancelButton onClick={() => console.log("취소")}>
+        <S.CancelButton onClick={handleCancel}>
           취소
         </S.CancelButton>
-        <S.UpdateButton
-          onClick={handleUpdate}
-          disabled={
-          !nickname}
-          >
+        <S.UpdateButton onClick={handleUpdate} disabled={!nickname || !!nicknameError}>
           수정 완료
         </S.UpdateButton>
       </S.ButtonGroup>
