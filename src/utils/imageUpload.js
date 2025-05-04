@@ -30,7 +30,7 @@ export const uploadImageToS3 = async (file) => {
             size: file.size,
         });
 
-        await axiosInstance.put(
+        await axios.put(
             presignedUrl,
             file,
             {
