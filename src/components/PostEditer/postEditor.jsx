@@ -70,10 +70,13 @@ const PostEditor = ({ type = "news" }) => {
 
         const fetchTeams = async () => {
             try {
-                const teams = await getTeams({
-                    league: selectedLeague?.pk,
-                    keyword: teamName,
-                });
+                // keyword가 있을 경우 league는 제외
+                const queryParams = teamName
+                    ? { keyword: teamName }
+                    : { league: selectedLeague?.pk };
+
+                const teams = await getTeams(queryParams);
+
 
                 // Teams are directly in the response from getTeams
                 if (Array.isArray(teams)) {
