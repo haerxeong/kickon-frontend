@@ -13,6 +13,7 @@ import axiosInstance from "../../apis/axios-instance.js";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
 import { useNavigate } from "react-router-dom";
 import Quill from "quill";
+import newsCategoryMap  from "../../utils/newsCategoryMap.js";
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
@@ -28,6 +29,7 @@ const PostEditor = ({ type = "news" }) => {
     const fileInputRef = useRef(null);
     const teamSearchRef = useRef(null);
     const navigate = useNavigate();
+    const categoryMap = newsCategoryMap;
 
     const { selectedTeam, selectedLeague } = useLeagueTeamStore();
 
@@ -157,21 +159,38 @@ const PostEditor = ({ type = "news" }) => {
     };
 
     const handleSubmit = async () => {
-        const endpoint = isNews ? "/api/news" : "/api/board";
-        const payload = {
-            team: selectedTeamId,
-            title,
-            contents: content,
-            ...(isNews && { thumbnailUrl: uploadedImageUrl, category: selectedTab }),
-        };
-
         if (!selectedTeamId) {
             alert("팀을 선택해주세요.");
             return;
         }
 
+        if (!title.trim() || !content.trim()) {
+            alert("제목과 내용을 입력해주세요.");
+            return;
+        }
+
+        if (isNews && !selectedTab) {
+            alert("카테고리를 설정해주세요.");
+            return;
+        }
+
+        const endpoint = isNews ? "/api/news" : "/api/board";
+
+        // 기본 payload
+        const payload = {
+            team: selectedTeamId,
+            title: title.trim(),
+            contents: content.trim(),
+            category: categoryMap[selectedTab],
+        };
+
+        // 썸네일이 있다면 추가
+        if (isNews && uploadedImageUrl) {
+            payload.thumbnailUrl = uploadedImageUrl;
+        }
+
         try {
-            const response = await axiosInstance.post(endpoint, payload);
+            await axiosInstance.post(endpoint, payload);
             alert("글 작성이 완료되었습니다.");
             navigate(type === "news" ? "/news" : "/community"); // Navigate after success
         } catch (error) {
