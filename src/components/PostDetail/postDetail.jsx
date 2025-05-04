@@ -638,7 +638,7 @@ const PostDetail = () => {
                         </S.CommentHeaderWrapper>
                         <S.CommentContent>{comment.contents || comment.content}</S.CommentContent>
                         <S.CommentActions>
-                          {location.pathname.includes('/community/') && canComment && (
+                          {(location.pathname.includes('/community/') || canComment) && (
                               <S.ReplyButton
                                   isActive={openReplyIds[comment.pk || comment.id]}
                                   onClick={() => toggleReplyBox(comment.pk || comment.id)}
@@ -723,7 +723,7 @@ const PostDetail = () => {
 
                                         {/* New ReplyActions component */}
                                         <S.ReplyActions>
-                                          {location.pathname.includes('/community/') && canComment && (
+                                          {(location.pathname.includes('/community/') || canComment) && (
                                               <S.ReplyActionButton
                                                   isActive={openReReplyIds[reply.pk]}
                                                   onClick={() => toggleReReplyBox(reply.pk)}
