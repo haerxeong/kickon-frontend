@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     display: flex;
-    width: 31rem;
+    width: 31.5rem;
     padding: 1.4rem 0.74rem 4.625rem 0.74rem;
     flex-direction: column;
     align-items: flex-start;
@@ -78,7 +78,6 @@ export const TabSelector = styled.div`
     padding: 0.416rem 0.74rem;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 1.48rem;
     align-self: stretch;
     border-radius: 0.37rem;
     border: 1px solid #DCDCDC;
@@ -130,7 +129,8 @@ export const CommunityTabSelector = styled.div`
 
 export const CommunityTabDropdown = styled.div`
     position: absolute;
-    width: 6.75rem;
+    //width: 6.75rem;
+    width: auto;
     top: 100%;
     left: 0;
     display: flex;
@@ -181,87 +181,6 @@ export const TitleInput = styled.input`
     font-style: normal;
 `;
 
-export const EditorToolbar = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-`;
-
-export const FormatDropdown = styled.div`
-    display: inline-flex;
-    height: 1.572rem;
-    padding: 0.416rem 0.37rem;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 0.277rem;
-    flex-shrink: 0;
-    border-radius: 0.185rem;
-    border: 1px solid #D9D9D9;
-    background: #FFF;
-    font-size: 0.65rem;
-    font-weight: 300;
-    cursor: pointer;
-
-    span {
-        color: #8F8F8F;
-    }
-`;
-
-export const Divider = styled.div`
-    width: 1px;
-    height: 0.83rem;
-    margin: 0 0.5rem;
-    background-color: #D9D9D9;
-`;
-
-export const FormattingToolsContainer = styled.div`
-    display: flex;
-    width: 5.55rem;
-    height: 1.572rem;
-    padding: 0.323rem 0.37rem;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 0.37rem;
-    flex-shrink: 0;
-    border-radius: 0.185rem;
-    border: 1px solid #D9D9D9;
-    background: #FFF;
-`;
-
-export const ToolIcon = styled.div`
-    display: flex;
-    width: 1.572rem;
-    height: 1.572rem;
-    padding: 0.323rem;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: 0.185rem;
-    border: 1px solid #D9D9D9;
-    background: #FFF;
-    cursor: pointer;
-    margin-right: 0.2rem;
-`;
-
-export const ContentTextarea = styled.textarea`
-    display: flex;
-    width: 100%;
-    height: 21.275rem;
-    padding: 1.1rem 0.7rem;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 0.462rem;
-    border-radius: 0.462rem;
-    border: 1px solid #D9D9D9;
-    background: #FFF;
-    resize: none;
-    outline: none;
-    color: #000;
-    font-size: 0.6rem;
-    font-weight: 300;
-    line-height: 0.68rem;
-`;
-
 export const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -301,4 +220,133 @@ export const SubmitButton = styled.button`
     cursor: pointer;
     font-size: 0.7rem;
     font-weight: 500;
+`;
+
+export const QuillWrapper = styled.div`
+    margin-bottom: 24px;
+    color: #000;
+    font-size: 0.6rem;
+    font-style: normal;
+    line-height: 0.8rem;
+
+    .quill {
+        border-radius: 4px;
+        overflow: scroll;
+        border: 1px solid #dcdcdc;
+    }
+
+    .ql-toolbar {
+        border: none !important;
+        border-bottom: 1px solid #dcdcdc !important;
+        background-color: #f9f9f9;
+        padding: 8px !important;
+
+        .ql-formats {
+            margin-right: 12px !important;
+        }
+
+        button {
+            height: 28px;
+            width: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background-color: #e9e9e9;
+            }
+
+            &.ql-active {
+                background-color: #e0e0e0;
+            }
+        }
+    }
+
+    .ql-container {
+        border: none !important;
+        font-family: inherit;
+        font-size: 1rem;
+        min-height: 250px;
+    }
+
+    .ql-editor {
+        min-height: 250px;
+        line-height: 1.6;
+        padding: 16px !important;
+
+        &.ql-blank::before {
+            font-style: normal;
+            color: #8f8f8f;
+            font-size: 0.95rem;
+        }
+    }
+`;
+
+export const TeamSearchWrapper = styled.div`
+  position: relative;
+  min-width: 0;
+`;
+
+export const SuggestionDropdown = styled.div`
+  width: 13rem;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.37rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 0.185rem;
+`;
+
+export const SuggestionItem = styled.div`
+    padding: 0.416rem 0.74rem;
+    font-size: 0.65rem;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+  &:hover {
+    background-color: #f3f3f3;
+  }
+`;
+
+export const ImagePreviewContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #f3f3f3;
+`;
+
+export const ImagePreview = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+export const RemoveImageButton = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
 `;
