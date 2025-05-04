@@ -12,6 +12,7 @@ import { updatePrivacyAgreement } from "../../apis/domains/auth/updatePrivacyAgr
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
+import { fetchUserInfo } from "../../apis/domains/auth/fetchUserInfo";
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -30,6 +31,7 @@ const Signup = () => {
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const { login } = useContext(AuthContext);
   const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useLeagueTeamStore();
+  const isNoTeam = selectedTeam?.nameKr === "응원팀이 없어요.";
 
   useEffect(() => {
     let queryStr = location.search;
@@ -44,7 +46,6 @@ const Signup = () => {
     const accessToken = queryParams.get("accessToken");
     const refreshToken = queryParams.get("refreshToken");
 
-    // provider가 제대로 파싱되지 않았을 때 대비
     if (provider) {
       setIsNaverLogin(provider === "naver");
     }
@@ -52,6 +53,22 @@ const Signup = () => {
     if (accessToken && refreshToken) {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+
+      (async () => {
+        try {
+          const user = await fetchUserInfo();
+          if (user?.nickname && user?.privacyAgreedAt) {
+            login(user);
+
+            // ✅ 상태 반영 이후에 navigate (딜레이)
+            setTimeout(() => {
+              navigate("/");
+            }, 0);
+          }
+        } catch (err) {
+          console.error("가입 여부 판단 실패:", err);
+        }
+      })();
     }
   }, [location.search]);
 
@@ -113,7 +130,7 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    if (!nickname || !selectedLeague.pk || !selectedTeam.pk) {
+    if (!nickname || !selectedLeague.nameKr || !selectedTeam.nameKr) {
       alert("모든 필수 항목을 입력해주세요.");
       return;
     }
@@ -145,7 +162,7 @@ const Signup = () => {
 
       const userInfoBody = {
         nickname: nickname,
-        team: selectedTeam.pk,
+        team: selectedTeam.nameKr === "응원팀이 없어요." ? null : selectedTeam.pk,
       };
 
       const userInfoResponse = await updateUserInfo(userInfoBody);
@@ -246,7 +263,7 @@ const Signup = () => {
                         key={league.pk}
                         onClick={() => {
                           setSelectedLeague({ pk: league.pk, nameKr: league.nameKr });
-                          setSelectedTeam({ pk: null, nameKr: null });
+                          setSelectedTeam({ pk: null, nameKr: null, leaguePk: null });
                           setIsLeagueDropdownOpen(false);
                         }}
                     >
@@ -257,7 +274,7 @@ const Signup = () => {
                 <S.DropdownItem
                     onClick={() => {
                       setSelectedLeague({ pk: 0, nameKr: "응원팀이 없어요."});
-                      setSelectedTeam({ pk: 0, nameKr: "응원팀이 없어요."});
+                      setSelectedTeam({ pk: 0, nameKr: "응원팀이 없어요.", leaguePk: 0 });
                       setIsLeagueDropdownOpen(false);
                       setIsTeamDropdownOpen(false);
                     }}
@@ -298,7 +315,7 @@ const Signup = () => {
                   <S.DropdownItem
                       key={team.pk}
                       onClick={() => {
-                        setSelectedTeam({ pk: team.pk, nameKr: team.nameKr });
+                        setSelectedTeam({ pk: team.pk, nameKr: team.nameKr, leaguePk: team.leaguePk });
                         setIsTeamDropdownOpen(false);
                       }}
                   >
@@ -368,8 +385,7 @@ const Signup = () => {
             onClick={handleSignup}
             disabled={
                 !nickname ||
-                !selectedLeague.pk ||
-                !selectedTeam.pk ||
+                selectedTeam.pk === undefined ||
                 !isAgeAgreed ||
                 !isServiceTermsAgreed ||
                 !isPrivacyPolicyAgreed
