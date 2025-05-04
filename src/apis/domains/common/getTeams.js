@@ -18,7 +18,7 @@ export const getTeams = async ({ league, keyword }) => {
             console.error(response);
             return response.message;
         }
-        console.log(response.message);
+
         return response.data; // Return the team data
     } catch (error) {
         console.error('팀 정보 가져오기 실패: ', error.toJSON());
