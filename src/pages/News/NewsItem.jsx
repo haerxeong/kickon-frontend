@@ -4,6 +4,7 @@ import {timeAgo} from "../../utils/timeUtils.js";
 import { truncateText } from "../../utils/textUtils.js";
 import ProfileSvg from "../../assets/profile.svg";
 import axiosInstance from "../../apis/axios-instance";
+import { stripHtml} from "../../utils/stripHtml.js";
 
 const NewsItem = ({ title, content, onClick, ...props }) => {
   const handleClick = async () => {
@@ -32,7 +33,7 @@ const NewsItem = ({ title, content, onClick, ...props }) => {
                 <S.NewsBadge>{props.category}</S.NewsBadge>
                 </S.TeamBadgeWrapper>
                 <S.NewsTitle>{title}</S.NewsTitle>
-                <S.NewsContent>{truncateText(content)}</S.NewsContent>
+                <S.NewsContent>{stripHtml(truncateText(content))}</S.NewsContent>
                 <S.LeftInfo>
                   <S.ProfileIcon src={props.user.profileImageUrl || ProfileSvg} alt="Profile" />
                   <S.Nickname>{props.user.nickname}</S.Nickname>
