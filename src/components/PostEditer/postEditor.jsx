@@ -45,7 +45,6 @@ const PostEditor = ({ type = "news" }) => {
     useEffect(() => {
         if (selectedTeam?.pk) {
             setSelectedTeamId(selectedTeam.pk);
-            setTeamName(selectedTeam.nameKr);
         }
     }, [selectedTeam]);
 
