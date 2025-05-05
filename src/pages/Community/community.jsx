@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {
-    NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
-    PostItem, PostLikes, PostsWrapper, PostTitle, PostViews
-} from "./community.style.js";
+import * as S from "./community.style.js";
 import GoodIcon from "../../assets/good_black.svg";
 import ProfileIcon from "../../assets/profile.svg";
-import * as S from "../../components/Pagination/pagination.style.js";
+import * as PS from "../../components/Pagination/pagination.style.js";
 import { getBoardList } from "../../apis/domains/community/getBoardList";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
+import NoData from "../../components/NoData/noData.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -64,10 +62,10 @@ const Community = () => {
     };
 
     return (
-        <NewsContainer>
-            <TabContainer>
+        <S.NewsContainer>
+            <S.TabContainer>
                 {tabs.map((tab) => (
-                    <Tab
+                    <S.Tab
                         key={tab}
                         active={activeTab === tab}
                         onClick={() => {
@@ -76,11 +74,11 @@ const Community = () => {
                         }}
                     >
                         {tab}
-                    </Tab>
+                    </S.Tab>
                 ))}
-            </TabContainer>
+            </S.TabContainer>
 
-            <TableHeader>
+            <S.TableHeader>
                 <div className="title">제목</div>
                 <div className="author">글쓴이</div>
                 <div className="date">날짜</div>
@@ -89,46 +87,52 @@ const Community = () => {
                     <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
                     킥
                 </div>
-            </TableHeader>
+            </S.TableHeader>
 
-            <PostsWrapper>
-                {posts.map((post) => (
-                    <PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
-                        <PostTitle>
-                            {post.title}
-                            {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
-                        </PostTitle>
-                        <PostAuthor>
-                            <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
-                            {post.user.nickname}
-                        </PostAuthor>
-                        <PostDate>{new Date(post.createdAt).toLocaleDateString()}</PostDate>
-                        <PostViews>{post.views}</PostViews>
-                        <PostLikes>{post.likes}</PostLikes>
-                    </PostItem>
-                ))}
-            </PostsWrapper>
+            <S.PostsWrapper>
+                {posts.length === 0 ? (
+                    <S.NoDataWrapper>
+                        <NoData onRetry={() => window.location.reload()} />
+                    </S.NoDataWrapper>
+                ) : (
+                    posts.map((post) => (
+                        <S.PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
+                            <S.PostTitle>
+                                {post.title}
+                                {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                            </S.PostTitle>
+                            <S.PostAuthor>
+                                <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
+                                {post.user.nickname}
+                            </S.PostAuthor>
+                            <S.PostDate>{new Date(post.createdAt).toLocaleDateString()}</S.PostDate>
+                            <S.PostViews>{post.views}</S.PostViews>
+                            <S.PostLikes>{post.likes}</S.PostLikes>
+                        </S.PostItem>
+                    ))
+                )}
+            </S.PostsWrapper>
 
-            <S.PaginationWrapper>
-                <S.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
+            <PS.PaginationWrapper>
+                <PS.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
                              disabled={activePage === 1}>
                     <GrFormPrevious /> 이전
-                </S.NavButton>
+                </PS.NavButton>
                 {Array.from({ length: totalPages }, (_, i) => (
-                    <S.PageButton
+                    <PS.PageButton
                         key={i + 1}
                         active={activePage === i + 1}
                         onClick={() => setActivePage(i + 1)}
                     >
                         {i + 1}
-                    </S.PageButton>
+                    </PS.PageButton>
                 ))}
-                <S.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
+                <PS.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
                              disabled={activePage === totalPages}>
                     다음 <GrFormNext />
-                </S.NavButton>
-            </S.PaginationWrapper>
-        </NewsContainer>
+                </PS.NavButton>
+            </PS.PaginationWrapper>
+        </S.NewsContainer>
     );
 };
 
