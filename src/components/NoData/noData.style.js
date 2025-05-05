@@ -11,6 +11,7 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
+  height: 5rem;
   margin-bottom: 1.3rem;
 `;
 
