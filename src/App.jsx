@@ -36,7 +36,6 @@ function App() {
                             <Route path="community/detail" element={<CommunityDetailPage />} />
                             <Route path="community/:boardPk" element={<CommunityDetailPage />} />
                             <Route path="/transferability" element={<Transferability />} />
-                            <Route path="/no" element={<NoData />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
