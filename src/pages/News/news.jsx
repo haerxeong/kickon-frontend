@@ -7,6 +7,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { getNewsList } from "../../apis/domains/news/getNewsList";
+import NoData from "../../components/NoData/noData";
 
 const News = () => {
     const [newsList, setNewsList] = useState([]);
@@ -106,12 +107,16 @@ const News = () => {
                 </S.Divider>
 
                 <S.NewsList>
-                    {newsList.map((item) => (
-                        <NewsItem key={item.pk} {...item} onClick={() => {
-                            console.log(`Navigating to /news/${item.pk}`);
-                            navigate(`/news/${item.pk}`)
-                        }}/>
-                    ))}
+                    {newsList.length === 0 ? (
+                        <NoData onRetry={() => window.location.reload()} />
+                    ) : (
+                        newsList.map((item) => (
+                            <NewsItem key={item.pk} {...item} onClick={() => {
+                                console.log(`Navigating to /news/${item.pk}`);
+                                navigate(`/news/${item.pk}`);
+                            }} />
+                        ))
+                    )}
                 </S.NewsList>
 
                 <PS.PaginationWrapper>
