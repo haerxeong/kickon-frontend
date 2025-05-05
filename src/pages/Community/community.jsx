@@ -63,6 +63,14 @@ const Community = () => {
         }
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}.${month}.${day}`;
+    };
+
     return (
         <NewsContainer>
             <TabContainer>
@@ -102,7 +110,8 @@ const Community = () => {
                             <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
                             {post.user.nickname}
                         </PostAuthor>
-                        <PostDate>{new Date(post.createdAt).toLocaleDateString()}</PostDate>
+                        <PostDate>{formatDate(post.createdAt)}</PostDate>
+
                         <PostViews>{post.views}</PostViews>
                         <PostLikes>{post.likes}</PostLikes>
                     </PostItem>

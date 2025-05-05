@@ -57,7 +57,7 @@ export const TableHeader = styled.div`
         text-align: center;
     }
     .date {
-        flex: 1.5;
+        flex: 2;
         text-align: center;
     }
     
@@ -97,12 +97,13 @@ export const PostItem = styled.div`
 `;
 
 export const PostTitle = styled.div`
-    flex: 4;
+    flex: 3.5;
     font-size: 0.65rem;
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0.5rem;
+    padding-right: 1.25rem;
     color: black;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
@@ -128,7 +129,7 @@ export const PostAuthor = styled.div`
   color: #000;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.25rem;
   font-weight: 350;
 
@@ -141,22 +142,30 @@ export const PostAuthor = styled.div`
 `;
 
 export const PostDate = styled.div`
-  flex: 2;
-  font-size: 0.6rem;
-  color: #8c8c8c;
-  text-align: center;
+    flex: 2;
+    font-size: 0.6rem;
+    color: #8c8c8c;
+    text-align: center;
 `;
 
 export const PostLikes = styled.div`
-  flex: 1;
-  font-size: 0.6rem;
-  color: #8f8f8f;
-  text-align: center;
+    width: auto;
+    flex: 1;
+    min-width: 2rem;
+    font-size: 0.6rem;
+    color: #8f8f8f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const PostViews = styled.div`
-  flex: 1;
-  font-size: 0.6rem;
-  color: #8f8f8f;
-  text-align: center;
+    width: auto;
+    flex: 1;
+    min-width: 2rem;
+    font-size: 0.6rem;
+    color: #8f8f8f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
