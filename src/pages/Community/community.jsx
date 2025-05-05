@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-    NewsContainer,  NavContainer, TabButton, Divider, ActiveIndicator, PostAuthor, PostDate,
-    PostItem, PostLikes, PostsWrapper, PostTitle, PostViews, TableHeader
+    NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
+    PostItem, PostLikes, PostsWrapper, PostTitle, PostViews
 } from "./community.style.js";
 import GoodIcon from "../../assets/good_black.svg";
 import ProfileIcon from "../../assets/profile.svg";
@@ -21,11 +21,7 @@ const Community = () => {
 
     const { selectedTeam } = useLeagueTeamStore();
 
-    const tabs = [
-        { type: "text", label: "전체", value: "전체" },
-        { type: "text", label: "인기", value: "인기" },
-        selectedTeam?.nameKr && { type: "text", label: selectedTeam.nameKr, value: selectedTeam.nameKr },
-    ].filter(Boolean);
+    const tabs = ["전체", "인기", selectedTeam?.nameKr || ""];
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -67,33 +63,22 @@ const Community = () => {
         }
     };
 
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-        setActivePage(1); // Reset to the first page when switching tabs
-    };
-
     return (
         <NewsContainer>
-            {/* Replace old tab styling with News component tab styling */}
-            <NavContainer>
+            <TabContainer>
                 {tabs.map((tab) => (
-                    <TabButton
-                        key={tab.value}
-                        isActive={activeTab === tab.value}
-                        onClick={() => handleTabClick(tab.value)}
+                    <Tab
+                        key={tab}
+                        active={activeTab === tab}
+                        onClick={() => {
+                            setActiveTab(tab);
+                            setActivePage(1); // Reset page on tab change
+                        }}
                     >
-                        {tab.label}
-                    </TabButton>
+                        {tab}
+                    </Tab>
                 ))}
-            </NavContainer>
-
-            <Divider>
-                {tabs.map((tab, idx) =>
-                        tab.value === activeTab && (
-                            <ActiveIndicator key={tab.value} left={`calc(${idx} * 3rem + 0.7rem)`} />
-                        )
-                )}
-            </Divider>
+            </TabContainer>
 
             <TableHeader>
                 <div className="title">제목</div>
