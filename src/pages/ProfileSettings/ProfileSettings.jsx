@@ -7,8 +7,8 @@ import profile_image from "../../assets/profile_image.svg";
 import ProfileImageDefault from "../../assets/profile.svg";
 import CameraIcon from "../../assets/camera.png";
 import { BsQuestionCircle } from "react-icons/bs";
-import { getUserProfile } from "../../apis/domains/profile/getUserProfile";
-import { updateUserProfile } from "../../apis/domains/profile/updateUserProfile";
+import { getUserInfo } from "../../apis/domains/main/getUserInfo";
+import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { useNavigate } from "react-router-dom";
 
 const ProfileSettings = () => {
@@ -42,15 +42,15 @@ const ProfileSettings = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await getUserProfile();
+        const response = await getUserInfo();
         
-        if (response.code === "GET_SUCCESS") {
-          const userData = response.data;
+        if (response.isLoggedIn && response.userData) {
+          const userData = response.userData;
           setNickname(userData.nickname);
           setProfileImage(userData.profileImageUrl || ProfileImageDefault);
           setEmail(userData.email);
           setProviderType(userData.providerType);
-        
+          
           // league는 바로 userData에서 뽑기!
           setSelectedLeague(userData.leagueName);
           // 팀도 바로 userData에서!
@@ -113,16 +113,18 @@ const ProfileSettings = () => {
         team: teamPk
       };
 
-      const response = await updateUserProfile(userData);
+      const response = await updateUserInfo(userData);
       
-      if (response.code === "POST_OR_PATCH_SUCCESS") {
+      if (response.code && response.code.split('_').includes('SUCCESS')) {
         alert("프로필이 성공적으로 업데이트되었습니다.");
-        navigate("/"); // 프로필 페이지로 이동
-      } else if (response.code === "DUPLICATED_NICKNAME") {
+        navigate("/");
+      } else if (response === "DUPLICATED_NICKNAME") {
         setNicknameError("이미 사용중인 닉네임입니다.");
-      } else if (response.code === "INVALID_REQUEST") {
-        // 유효성 검사 실패 메시지 처리
-        setNicknameError(response.data[0]);
+      } else if (response === "INVALID_REQUEST") {
+        setNicknameError("유효하지 않은 요청입니다.");
+      } else {
+        console.error(response);
+        alert("프로필 업데이트에 실패했습니다.");
       }
     } catch (error) {
       console.error("Profile update failed:", error);
@@ -134,7 +136,6 @@ const ProfileSettings = () => {
     navigate("/");
   };
   
-
   const selectedLeagueData = leagues.find(
     (league) => league.krName === selectedLeague
   );

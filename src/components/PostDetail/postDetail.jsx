@@ -21,18 +21,7 @@ import { getCommunityCommentList } from "../../apis/domains/community/getCommuni
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import parse, { domToReact } from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
-
-// 유튜브 링크를 iframe으로 변환하는 함수
-function youtubeUrlToIframe(html) {
-  if (!html) return "";
-  // 다양한 유튜브 URL 패턴을 iframe으로 변환
-  return html.replace(
-    // watch?v=, youtu.be, embed 등 다양한 패턴 지원
-    /(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/g,
-    (match, p1, p2, p3, videoId) =>
-      `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen class="youtube-iframe" title="YouTube video"></iframe>`
-  );
-}
+import { youtubeUrlToIframe } from "../../utils/youtubeUtils.js";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

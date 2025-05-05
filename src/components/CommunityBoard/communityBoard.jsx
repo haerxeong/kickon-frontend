@@ -50,7 +50,7 @@ const CommunityBoard = ({ type }) => {
     <CommunityBoardContainer>
       <CommunityHeader>
         <div className="title">
-          <span>함께 볼 만한 게시글</span>
+          <span>클럽 커뮤니티</span>
         </div>
         <MoreLink as={Link} to="/community">
           더보기 <MoreIcon />

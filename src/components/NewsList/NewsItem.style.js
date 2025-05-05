@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import ProfileSvg from "../../assets/profile.svg";
 import { FaRegComment } from "react-icons/fa";
 import { PiSoccerBallFill } from "react-icons/pi";
 import { FaCheckCircle } from "react-icons/fa";
@@ -89,12 +88,12 @@ export const Thumbnail = styled.img`
 `;
 
 export const ProfileIcon = styled.img.attrs({
-  src: ProfileSvg,
   alt: "프로필"
 })`
   width: 1rem;
   height: 1rem;
   margin-right: 0.25rem;
+  border-radius: 50%;
 `;
 
 export const ProfileCheckIcon = styled(FaCheckCircle)`

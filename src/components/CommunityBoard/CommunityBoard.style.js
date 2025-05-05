@@ -52,7 +52,6 @@ export const MoreLink = styled.a`
   
   &:hover {
   text-decoration: underline;
-  text-decoration: underline;
   }
 `;
 

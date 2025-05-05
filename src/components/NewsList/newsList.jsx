@@ -4,11 +4,13 @@ import NewsItem from "./NewsItem";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
 import { getUserInfo } from "../../apis/domains/main/getUserInfo";
+import { useLeagueTeamStore } from "../../store/useLeagueTeamStore"; // 추가된 import
 
 const NewsList = ({ type }) => {
   const [newsItems, setNewsItems] = useState([]);
   const [userInfo, setUserInfo] = useState({ isLoggedIn: false });
   const [loading, setLoading] = useState(true);
+  const { selectedTeam } = useLeagueTeamStore(); // Zustand 스토어에서 선택된 팀 정보 가져오기
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,8 +39,16 @@ const NewsList = ({ type }) => {
 
   // 헤더 텍스트 생성 함수
   const getHeaderText = () => {
-    // 로그인 상태이고 응원팀 정보가 있는 경우
-    if (userInfo.isLoggedIn && userInfo.userData?.favoriteTeam) {
+    // 선택된 팀 정보가 있는 경우 (Zustand 스토어 사용)
+    if (selectedTeam && selectedTeam.nameKr) {
+      return (
+        <>
+          함께 볼 만한 <span style={{ color: 'red' }}>{selectedTeam.nameKr}</span> 뉴스
+        </>
+      );
+    }
+    // 로그인 상태이고 응원팀 정보가 있는 경우 (기존 방식 백업)
+    else if (userInfo.isLoggedIn && userInfo.userData?.favoriteTeam) {
       return (
         <>
           함께 볼 만한 <span style={{ color: 'red' }}>{userInfo.userData.favoriteTeam.nameKr}</span> 뉴스
