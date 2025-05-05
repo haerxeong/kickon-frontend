@@ -3,20 +3,19 @@ import styled from "styled-components";
 
 export const NewsContainer = styled.div`
     width: 30rem;
-    min-height: 55.625rem;
     flex-shrink: 0;
     border-radius: 0.45rem;
     border: 1px solid #DCDCDC;
     background: #FFF;
     display: flex;
     flex-direction: column;
-    padding: 1.33rem 0.7rem 1.77rem 0.7rem;
+    padding: 0.7rem;
 `;
 
 export const TabContainer = styled.div`
     display: flex;
     border-bottom: 1px solid #F0F0F0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 `;
 
 export const Tab = styled.div`
@@ -24,7 +23,7 @@ export const Tab = styled.div`
     font-family: Pretendard;
     font-size: 0.7rem;
     font-weight: ${props => props.active ? '500' : '400'};
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.7rem;
     cursor: pointer;
     position: relative;
     &:after {
@@ -48,12 +47,12 @@ export const TableHeader = styled.div`
     font-size: 0.6rem;
     font-weight: 400;
     .title {
-        flex: 4;
+        flex: 6;
         text-align: center;
     }
     
     .author {
-        flex: 2;
+        flex: 2.2;
         text-align: center;
     }
     .date {
@@ -87,7 +86,7 @@ export const PostItem = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.75rem 0;
+  padding: 0.55rem 0;
   border-bottom: 0.0625rem solid #f0f0f0;
   cursor: pointer;
   
@@ -97,35 +96,39 @@ export const PostItem = styled.div`
 `;
 
 export const PostTitle = styled.div`
-    flex: 3.5;
-    font-size: 0.65rem;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    flex: 5.5;
+    font-size: 0.6rem;
+    font-weight: 350;
+    color: black;
     padding-left: 0.5rem;
     padding-right: 1.25rem;
-    color: black;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
-    -webkit-box-orient: vertical;
-    word-break: break-word;
+    min-width: 0;
 
-  img {
-    width: 0.6rem;
-    height: 0.6rem;
-    margin-left: 0.25rem;
-  }
+    .clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+        white-space: normal;
+        min-width: 0;
+        max-width: 100%;
+    }
 
-  .reply-count {
-    color: #000;
-    font-weight: normal;
-    margin-left: 0.25rem
-  }
+    .reply-count {
+        color: #000;
+        font-weight: normal;
+        margin-left: 0.15rem;
+        white-space: nowrap;
+    }
 `;
 
+
+
 export const PostAuthor = styled.div`
-  flex: 2;
-  font-size: 0.6rem;
+  flex: 2.2;
+  font-size: 0.55rem;
   color: #000;
   display: flex;
   align-items: center;
@@ -143,7 +146,7 @@ export const PostAuthor = styled.div`
 
 export const PostDate = styled.div`
     flex: 2;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: #8c8c8c;
     text-align: center;
 `;
@@ -152,7 +155,7 @@ export const PostLikes = styled.div`
     width: auto;
     flex: 1;
     min-width: 2rem;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: #8f8f8f;
     display: flex;
     align-items: center;
@@ -163,7 +166,7 @@ export const PostViews = styled.div`
     width: auto;
     flex: 1;
     min-width: 2rem;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     color: #8f8f8f;
     display: flex;
     align-items: center;

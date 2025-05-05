@@ -11,6 +11,7 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
+import {formatDate} from "../../utils/formatDate.js";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -63,14 +64,6 @@ const Community = () => {
         }
     };
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}.${month}.${day}`;
-    };
-
     return (
         <NewsContainer>
             <TabContainer>
@@ -103,9 +96,12 @@ const Community = () => {
                 {posts.map((post) => (
                     <PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
                         <PostTitle>
-                            {post.title}
-                            {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                            <span className="clamp">
+                                {post.title}
+                                {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                            </span>
                         </PostTitle>
+
                         <PostAuthor>
                             <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
                             {post.user.nickname}

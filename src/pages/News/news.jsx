@@ -94,6 +94,7 @@ const News = () => {
                             activeTab={activeTab}
                         />
                     </S.LeagueTab>
+
                 </S.TabContainer>
 
                 <S.NewsList>
