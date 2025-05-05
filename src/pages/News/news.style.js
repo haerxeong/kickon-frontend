@@ -13,7 +13,7 @@ export const NewsContainer = styled.div`
     border-radius: 0.44rem;
     border: 1px solid #DCDCDC;
     background: #FFF;
-    padding: 1.33rem 0.7rem 1.77rem 0.7rem;
+    padding: 0.7rem;
     margin-bottom: 6.19rem;
     position: relative;
 `;
@@ -29,7 +29,7 @@ export const Tab = styled.div`
     font-family: Pretendard;
     font-size: 0.7rem;
     font-weight: ${props => props.active ? '500' : '400'};
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.7rem;
     cursor: pointer;
     position: relative;
     &:after {
@@ -43,36 +43,10 @@ export const Tab = styled.div`
     }
 `;
 
-// 리그 드롭다운을 위한 특별 탭 스타일
 export const LeagueTab = styled(Tab)`
     display: flex;
     align-items: center;
     
-    /* 레이아웃 조정을 위한 스타일 */
-    & > div {
-        display: flex;
-        align-items: center;
-        margin: 0;
-        padding: 0;
-        transform: translateY(0);
-        line-height: normal;
-        font-size: 0.8rem;
-    }
-    
-    /* 드롭다운 컴포넌트 내부 스타일 조정 */
-    & > div > * {
-        font-size: 0.8rem;
-        font-weight: inherit;
-        margin: 0;
-        padding: 0;
-        vertical-align: middle;
-    }
-    
-    /* 텍스트가 중앙에 위치하도록 조정 */
-    & div {
-        display: flex;
-        align-items: center;
-    }
 `;
 
 export const NewsList = styled.div`
