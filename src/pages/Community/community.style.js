@@ -20,10 +20,10 @@ export const TabContainer = styled.div`
 `;
 
 export const Tab = styled.div`
-    color: ${props => props.active ? '#C00C0B' : '#676767'};
+    color: ${props => props.active ? '#C00C0B' : '#000'};
     font-family: Pretendard;
-    font-size: 0.8rem;
-    font-weight: ${props => props.active ? '600' : '500'};
+    font-size: 0.7rem;
+    font-weight: ${props => props.active ? '500' : '400'};
     padding: 0.5rem 1rem;
     cursor: pointer;
     position: relative;

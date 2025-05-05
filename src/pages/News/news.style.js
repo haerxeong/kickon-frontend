@@ -25,10 +25,10 @@ export const TabContainer = styled.div`
 `;
 
 export const Tab = styled.div`
-    color: ${props => props.active ? '#C00C0B' : '#676767'};
+    color: ${props => props.active ? '#C00C0B' : '#000'};
     font-family: Pretendard;
-    font-size: 0.8rem;
-    font-weight: ${props => props.active ? '600' : '500'};
+    font-size: 0.7rem;
+    font-weight: ${props => props.active ? '500' : '400'};
     padding: 0.5rem 1rem;
     cursor: pointer;
     position: relative;
@@ -54,9 +54,9 @@ export const LeagueTab = styled(Tab)`
         align-items: center;
         margin: 0;
         padding: 0;
-        /* 텍스트 위치 조정 */
         transform: translateY(0);
         line-height: normal;
+        font-size: 0.8rem;
     }
     
     /* 드롭다운 컴포넌트 내부 스타일 조정 */
