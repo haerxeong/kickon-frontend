@@ -9,6 +9,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
 import NoData from "../../components/NoData/noData.jsx";
+import CommunityBoard from "../../components/CommunityBoard/communityBoard.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -62,77 +63,80 @@ const Community = () => {
     };
 
     return (
-        <S.NewsContainer>
-            <S.TabContainer>
-                {tabs.map((tab) => (
-                    <S.Tab
-                        key={tab}
-                        active={activeTab === tab}
-                        onClick={() => {
-                            setActiveTab(tab);
-                            setActivePage(1); // Reset page on tab change
-                        }}
-                    >
-                        {tab}
-                    </S.Tab>
-                ))}
-            </S.TabContainer>
+        <>
+            <S.NewsContainer>
+                <S.TabContainer>
+                    {tabs.map((tab) => (
+                        <S.Tab
+                            key={tab}
+                            active={activeTab === tab}
+                            onClick={() => {
+                                setActiveTab(tab);
+                                setActivePage(1); // Reset page on tab change
+                            }}
+                        >
+                            {tab}
+                        </S.Tab>
+                    ))}
+                </S.TabContainer>
 
-            <S.TableHeader>
-                <div className="title">제목</div>
-                <div className="author">글쓴이</div>
-                <div className="date">날짜</div>
-                <div className="views">조회</div>
-                <div className="likes">
-                    <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
-                    킥
-                </div>
-            </S.TableHeader>
+                <S.TableHeader>
+                    <div className="title">제목</div>
+                    <div className="author">글쓴이</div>
+                    <div className="date">날짜</div>
+                    <div className="views">조회</div>
+                    <div className="likes">
+                        <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
+                        킥
+                    </div>
+                </S.TableHeader>
 
-            <S.PostsWrapper>
-                {posts.length === 0 ? (
-                    <S.NoDataWrapper>
-                        <NoData onRetry={() => window.location.reload()} />
-                    </S.NoDataWrapper>
-                ) : (
-                    posts.map((post) => (
-                        <S.PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
-                            <S.PostTitle>
-                                {post.title}
-                                {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
-                            </S.PostTitle>
-                            <S.PostAuthor>
-                                <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
-                                {post.user.nickname}
-                            </S.PostAuthor>
-                            <S.PostDate>{new Date(post.createdAt).toLocaleDateString()}</S.PostDate>
-                            <S.PostViews>{post.views}</S.PostViews>
-                            <S.PostLikes>{post.likes}</S.PostLikes>
-                        </S.PostItem>
-                    ))
-                )}
-            </S.PostsWrapper>
+                <S.PostsWrapper>
+                    {posts.length === 0 ? (
+                        <S.NoDataWrapper>
+                            <NoData onRetry={() => window.location.reload()} />
+                        </S.NoDataWrapper>
+                    ) : (
+                        posts.map((post) => (
+                            <S.PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
+                                <S.PostTitle>
+                                    {post.title}
+                                    {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                                </S.PostTitle>
+                                <S.PostAuthor>
+                                    <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
+                                    {post.user.nickname}
+                                </S.PostAuthor>
+                                <S.PostDate>{new Date(post.createdAt).toLocaleDateString()}</S.PostDate>
+                                <S.PostViews>{post.views}</S.PostViews>
+                                <S.PostLikes>{post.likes}</S.PostLikes>
+                            </S.PostItem>
+                        ))
+                    )}
+                </S.PostsWrapper>
 
-            <PS.PaginationWrapper>
-                <PS.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
-                             disabled={activePage === 1}>
-                    <GrFormPrevious /> 이전
-                </PS.NavButton>
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <PS.PageButton
-                        key={i + 1}
-                        active={activePage === i + 1}
-                        onClick={() => setActivePage(i + 1)}
-                    >
-                        {i + 1}
-                    </PS.PageButton>
-                ))}
-                <PS.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
-                             disabled={activePage === totalPages}>
-                    다음 <GrFormNext />
-                </PS.NavButton>
-            </PS.PaginationWrapper>
-        </S.NewsContainer>
+                <PS.PaginationWrapper>
+                    <PS.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
+                                  disabled={activePage === 1}>
+                        <GrFormPrevious /> 이전
+                    </PS.NavButton>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <PS.PageButton
+                            key={i + 1}
+                            active={activePage === i + 1}
+                            onClick={() => setActivePage(i + 1)}
+                        >
+                            {i + 1}
+                        </PS.PageButton>
+                    ))}
+                    <PS.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
+                                  disabled={activePage === totalPages}>
+                        다음 <GrFormNext />
+                    </PS.NavButton>
+                </PS.PaginationWrapper>
+            </S.NewsContainer>
+            <CommunityBoard type="communityDetail" />
+        </>
     );
 };
 
