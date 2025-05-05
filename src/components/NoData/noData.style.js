@@ -4,6 +4,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;  // 중앙 정렬
+  height: 100%;
+  width: 100%;
+  padding: 1.5rem;
 `;
 
 const Image = styled.img`
@@ -28,7 +32,7 @@ const RetryButton = styled.button`
   gap: 0.375rem;
   border-radius: 1rem;
   background: #000;
-  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   border: none;
   cursor: pointer;
 `;
