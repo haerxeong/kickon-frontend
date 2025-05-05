@@ -5,7 +5,7 @@ import RootLayout from "./layout/root-layout";
 import Home from "./pages/Home/home";
 import Community from "./pages/Community/community.jsx";
 import News from "./pages/News/news.jsx";
-import NotFound from "./pages/not-found";
+import NotFound from "./pages/notFound.jsx";
 import LoginModal from "./components/LoginModal/loginModal.jsx";
 import Signup from "./pages/Signup/signup.jsx";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings.jsx";
@@ -15,7 +15,6 @@ import NewsDetailPage from "./pages/News/newsDetail.jsx";
 import CommunityDetailPage from "./pages/Community/communityDetail.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import Transferability from "./pages/Transferability/transferability.jsx";
-import NoData from "./components/NoData/noData.jsx";
 
 function App() {
     return (
