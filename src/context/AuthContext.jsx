@@ -9,11 +9,17 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // 인증 여부 로딩 완료 여부
 
-  const login = (userData) => {
+  const login = (userData, tokens) => {
     setUser(userData);
     setIsAuthenticated(true);
 
-    // 응원팀 있을 때만 설정
+    // accessToken, refreshToken이 넘어오면 저장
+    if (tokens?.accessToken && tokens?.refreshToken) {
+      localStorage.setItem("accessToken", tokens.accessToken);
+      localStorage.setItem("refreshToken", tokens.refreshToken);
+    }
+
+    // 응원팀 저장
     if (userData?.teamPk && userData?.teamName && userData?.leaguePk && userData?.leagueName) {
       useLeagueTeamStore.getState().setSelectedTeam({
         pk: userData.teamPk,
@@ -26,7 +32,6 @@ const AuthProvider = ({ children }) => {
         nameKr: userData.leagueName,
       });
     } else {
-      // 응원팀 없는 경우 null로 초기화
       useLeagueTeamStore.getState().reset();
     }
   };

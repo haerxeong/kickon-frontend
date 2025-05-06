@@ -37,18 +37,23 @@ const Profile = () => {
         const fetchUserData = async () => {
             setIsLoading(true);
             try {
-                // Fetch profile data
                 const profileData = await getProfilecard();
                 setUserData(profileData);
 
-                // Fetch ranking data (will return default values if not found)
                 const ranking = await getUserRanking();
                 setRankingData(ranking);
 
                 setError(null);
             } catch (err) {
-                setError("프로필 정보를 불러오는데 실패했습니다.");
                 console.error("프로필 데이터 가져오기 오류:", err);
+
+                // 403일 경우 강제 로그아웃
+                if (err?.response?.status === 403) {
+                    logout();
+                    return;
+                }
+
+                setError("프로필 정보를 불러오는데 실패했습니다.");
             } finally {
                 setIsLoading(false);
             }

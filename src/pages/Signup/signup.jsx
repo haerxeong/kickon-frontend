@@ -31,51 +31,39 @@ const Signup = () => {
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const { login } = useContext(AuthContext);
   const { selectedLeague, setSelectedLeague, selectedTeam, setSelectedTeam } = useLeagueTeamStore();
-  const isNoTeam = selectedTeam?.nameKr === "응원팀이 없어요.";
+  const [accessToken, setAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
   useEffect(() => {
-    let queryStr = location.search;
-
-    if (queryStr.includes("?accessToken=")) {
-      queryStr = queryStr.replace("?accessToken=", "&accessToken=");
-    }
+    // useEffect 내에서 토큰 추출 후 상태 저장
+    const queryStr = location.search.includes("?accessToken=")
+        ? location.search.replace("?accessToken=", "&accessToken=")
+        : location.search;
 
     const queryParams = new URLSearchParams(queryStr);
+    const _accessToken = queryParams.get("accessToken");
+    const _refreshToken = queryParams.get("refreshToken");
+
+    if (_accessToken && _refreshToken) {
+      setAccessToken(_accessToken);
+      setRefreshToken(_refreshToken);
+    }
 
     const provider = queryParams.get("provider");
-    const accessToken = queryParams.get("accessToken");
-    const refreshToken = queryParams.get("refreshToken");
 
     if (provider) {
       setIsNaverLogin(provider === "naver");
     }
 
     if (accessToken && refreshToken) {
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-
       (async () => {
         try {
           const user = await fetchUserInfo();
-          if (user) {
-            login(user);
-
-            if (user.team) {
-              setSelectedTeam({
-                pk: user.team.pk,
-                nameKr: user.team.nameKr,
-                leaguePk: user.team.leaguePk,
-              });
-            }
-
-            if (user.team?.league) {
-              setSelectedLeague({
-                pk: user.team.league.pk,
-                nameKr: user.team.league.nameKr,
-              });
-            }
-
-            navigate("/");
+          if (user?.nickname && user?.privacyAgreedAt) {
+            login(user, { accessToken, refreshToken });
+            setTimeout(() => {
+              navigate("/");
+            }, 0);
           }
         } catch (err) {
           console.error("가입 여부 판단 실패:", err);
@@ -186,7 +174,7 @@ const Signup = () => {
       // 회원가입 완료 후 유저 정보 다시 가져와서 로그인 처리
       const user = await fetchUserInfo();
       if (user) {
-        login(user); // 로그인 상태 설정
+        login(user, { accessToken, refreshToken });
       }
 
       alert("회원가입 성공!");
