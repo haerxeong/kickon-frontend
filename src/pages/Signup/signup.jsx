@@ -57,13 +57,25 @@ const Signup = () => {
       (async () => {
         try {
           const user = await fetchUserInfo();
-          if (user?.nickname && user?.privacyAgreedAt) {
+          if (user) {
             login(user);
 
-            // ✅ 상태 반영 이후에 navigate (딜레이)
-            setTimeout(() => {
-              navigate("/");
-            }, 0);
+            if (user.team) {
+              setSelectedTeam({
+                pk: user.team.pk,
+                nameKr: user.team.nameKr,
+                leaguePk: user.team.leaguePk,
+              });
+            }
+
+            if (user.team?.league) {
+              setSelectedLeague({
+                pk: user.team.league.pk,
+                nameKr: user.team.league.nameKr,
+              });
+            }
+
+            navigate("/");
           }
         } catch (err) {
           console.error("가입 여부 판단 실패:", err);
