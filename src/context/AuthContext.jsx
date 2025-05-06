@@ -11,25 +11,21 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true); // 인증 여부 로딩 완료 여부
 
   const login = (userData, tokens) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-
-    // accessToken, refreshToken이 넘어오면 저장
     if (tokens?.accessToken && tokens?.refreshToken) {
       localStorage.setItem("accessToken", tokens.accessToken);
       localStorage.setItem("refreshToken", tokens.refreshToken);
-
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${tokens.accessToken}`;
     }
 
-    // 응원팀 저장
+    setUser(userData);
+    setIsAuthenticated(true);
+
     if (userData?.teamPk && userData?.teamName && userData?.leaguePk && userData?.leagueName) {
       useLeagueTeamStore.getState().setSelectedTeam({
         pk: userData.teamPk,
         nameKr: userData.teamName,
         leaguePk: userData.leaguePk,
       });
-
       useLeagueTeamStore.getState().setSelectedLeague({
         pk: userData.leaguePk,
         nameKr: userData.leagueName,
