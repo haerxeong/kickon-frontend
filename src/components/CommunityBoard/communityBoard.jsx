@@ -86,7 +86,7 @@ const CommunityBoard = ({ type }) => {
                   width: '0.78rem',
                   height: '0.78rem',
                   borderRadius: '50%',
-                  marginRight: '0.3rem'
+                  marginRight: '0.1rem'
                 }}
               />
               {post.user.nickname}
