@@ -81,14 +81,14 @@ export const ArticleContent = styled.div`
 `;
 
 export const ArticleImage = styled.img`
-  width: 28.5rem;
-  height: 14.14rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-self: stretch;
-  border-radius: 0.625rem;
-  margin: 0.7rem;
+    width: 28.5rem;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 0.625rem;
+    margin: 0.7rem;
 `;
 
 export const ArticleText = styled.div`
