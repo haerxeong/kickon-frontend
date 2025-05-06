@@ -30,7 +30,7 @@ jobs:
           yarn build
       - name: 파일 압축
         run: |
-          zip -r build.zip .dist
+          zip -r build.zip dist
 
       - name: S3에 업로드
         run: aws s3 cp build.zip s3://dev.kickon.net/dev/latest-build.zip
