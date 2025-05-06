@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { getHomeNewsList } from "../../apis/domains/main/getHomeNewsList.js";
 import { useLeagueTeamStore } from "../../store/useLeagueTeamStore";
 import NoData from "../../components/NoData/noData.jsx";
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const NewsList = ({ type }) => {
   const [newsItems, setNewsItems] = useState([]);
@@ -46,7 +47,7 @@ const NewsList = ({ type }) => {
     return "함께 볼 만한 뉴스";
   };
 
-  if (loading) return <div>로딩 중...</div>;
+  if (loading) return <LoadingSpinner />;
 
   return (
       <NewsListContainer>

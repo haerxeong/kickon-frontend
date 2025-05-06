@@ -10,6 +10,7 @@ import {useLocation} from "react-router-dom";
 import {getNewsCommentList} from "../../apis/domains/news/getNewsCommentList.js";
 import {getCommunityCommentList} from "../../apis/domains/community/getCommunityCommentList.js";
 import axiosInstance from "../../apis/axios-instance.js";
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const Comment = ({postType, postPk, canComment}) => {
 
@@ -220,7 +221,7 @@ const Comment = ({postType, postPk, canComment}) => {
     };
 
     // 로딩 중일 때 표시
-    if (loading) return <div>로딩 중...</div>;
+    if (loading) return <LoadingSpinner />;
 
     // 댓글 렌더링 함수 (재귀적으로 대댓글 처리)
     const renderReplies = (replies, parentId, level = 1) => {

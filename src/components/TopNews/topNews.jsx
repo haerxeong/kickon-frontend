@@ -3,6 +3,7 @@ import * as S from "./topNews.style.js";
 import {getTopNews} from "../../apis/domains/news/getTopNews.js";
 import {useNavigate} from "react-router-dom";
 import defaultImage from "../../assets/xCard.svg"
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const TopNews = () => {
     const [newsItems, setNewsItems] = useState([]);
@@ -33,7 +34,7 @@ const TopNews = () => {
     }, []);
 
     if (isLoading) {
-        return <div>로딩 중...</div>;
+        return <LoadingSpinner />;
     }
 
     if (error) {

@@ -20,6 +20,7 @@ import { getBoardHome } from "../../apis/domains/main/getBoardHome";
 import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
 import { increaseViewCount } from "../../utils/increaseViewCount";
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
@@ -55,7 +56,7 @@ const CommunityBoard = ({ type }) => {
   }, []);
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

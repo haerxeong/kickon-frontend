@@ -11,6 +11,7 @@ import { getUserInfo } from "../../apis/domains/main/getUserInfo";
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { useNavigate } from "react-router-dom";
 import { BsBan } from "react-icons/bs";
+import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const ProfileSettings = () => {
   );
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

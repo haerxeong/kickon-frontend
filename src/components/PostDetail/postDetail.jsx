@@ -19,6 +19,7 @@ import axiosInstance from "../../apis/axios-instance.js";
 import { youtubeUrlToIframe } from "../../utils/youtubeUtils.js";
 import NoData from "../../components/NoData/noData.jsx";
 import Comment from "../../components/Comment/comment.jsx";
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -185,7 +186,7 @@ const PostDetail = () => {
   };
 
   // 로딩 중일 때 표시
-  if (loading) return <div>로딩 중...</div>;
+  if (loading) return <LoadingSpinner />;
 
   if (error || !apiPost) {
     return (

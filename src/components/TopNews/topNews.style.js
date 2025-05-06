@@ -58,7 +58,7 @@ export const NewsTitle = styled.div`
     width: 8.94rem;
     padding-left: 0.4rem;
     color: #000;
-    font-family: Pretendard, serif;
+    font-family: Pretendard;
     font-size: 0.6rem;
     font-style: normal;
     font-weight: 500;
