@@ -39,12 +39,19 @@ export const TNews = styled.div`
     }
 `;
 
+export const NewsImageWrapper = styled.div`
+  width: 4rem;
+  height: 3rem;
+  border-radius: 0.175rem;
+  overflow: hidden;
+  margin-left: 0.6rem;
+  background-color: #DCDCDC;
+`;
+
 export const NewsImage = styled.img`
-    width: 4rem;
-    height: 3rem;
-    object-fit: cover;
-    margin-left: 0.6rem;
-    border-radius: 0.175rem;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 export const NewsTitle = styled.div`

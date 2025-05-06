@@ -5,7 +5,7 @@ import RootLayout from "./layout/root-layout";
 import Home from "./pages/Home/home";
 import Community from "./pages/Community/community.jsx";
 import News from "./pages/News/news.jsx";
-import NotFound from "./pages/not-found";
+import NotFound from "./pages/notFound.jsx";
 import LoginModal from "./components/LoginModal/loginModal.jsx";
 import Signup from "./pages/Signup/signup.jsx";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings.jsx";
