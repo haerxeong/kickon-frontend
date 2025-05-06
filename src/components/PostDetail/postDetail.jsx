@@ -1,12 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useParams, useLocation} from "react-router-dom";
-import dayjs from 'dayjs';
 import * as S from "./postDetail.style.js";
 import RKickIcon from "../../assets/good_red.svg";
 import BKickIcon from "../../assets/good_black.svg";
 import KickIcon from "../../assets/good.svg";
 import ProfileIcon from "../../assets/profile.svg";
-import SirenIcon from "../../assets/report.svg";
 import { FaRegComment, FaCheckCircle } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Pagination from "../Pagination/pagination";
@@ -23,6 +21,7 @@ import parse, { domToReact } from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
 import { youtubeUrlToIframe } from "../../utils/youtubeUtils.js";
 import NoData from "../../components/NoData/noData.jsx";
+import { Comment } from "../../components/Comment/comment.jsx";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -584,194 +583,8 @@ const PostDetail = () => {
           </S.LikeButton>
         </S.ArticleActions>
 
-        {(location.pathname.includes('/community/') || canComment) && (
-            <S.CommentInputBox>
-              <S.CommentInputLabel>댓글 쓰기</S.CommentInputLabel>
-              <S.CommentInputContainer>
-                <S.CommentInput
-                    placeholder="댓글을 입력하세요..."
-                    value={commentInput}
-                    onChange={handleCommentInputChange}
-                />
-                <S.SubmitButton onClick={handleCommentSubmit}>등록</S.SubmitButton>
-              </S.CommentInputContainer>
-            </S.CommentInputBox>
-        )}
+        <Comment />
 
-        {displayComments.length > 0 && (
-            <S.CommentsSection>
-              <S.CommentsSectionTitle>댓글 {commentsCount}개</S.CommentsSectionTitle>
-
-              {/* 댓글 로딩 중 표시 */}
-              {commentLoading && <div>댓글 로딩 중...</div>}
-              {commentError && <div>{commentError}</div>}
-
-              {/* 댓글이 없는 경우 빈 화면 표시 */}
-              {!commentLoading && !commentError && displayComments.length === 0 && (
-                  <S.EmptyComments>댓글이 없습니다.</S.EmptyComments>
-              )}
-
-              {displayComments.length > 0 &&
-                  displayComments.map((comment) => (
-                      <S.CommentItem key={comment.pk || comment.id}>
-                        <S.CommentHeaderWrapper>
-                          <S.CommentHeader>
-                            <img
-                                src={comment.user.profileImageUrl || ProfileIcon}
-                                alt="프로필 아이콘"
-                                width={24}
-                                height={24}
-                                style={{
-                                  borderRadius: '50%',
-                                  objectFit: 'cover'
-                                }}
-                            />
-                            <span
-                                style={{
-                                  fontSize: "0.75rem",
-                                  marginRight: "0.3rem",
-                                  color: "#000",
-                                }}
-                            >
-                    {comment.user.nickname}
-                  </span>
-                            <span style={{fontSize: "0.7rem", color: "#888"}}>
-                    {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
-                  </span>
-                          </S.CommentHeader>
-                          <S.CommentLikes
-                              key={comment.pk || comment.id}
-                              active={likedComments[comment.pk || comment.id] || false}
-                              onClick={() => toggleCommentKick(comment.pk || comment.id)}
-                          >
-                            <img
-                                src={likedComments[comment.pk || comment.id] ? RKickIcon : KickIcon}
-                                alt="좋아요 아이콘"
-                                width={12}
-                                height={12}
-                            />
-                            {comment.kickCount || 0}
-                          </S.CommentLikes>
-                        </S.CommentHeaderWrapper>
-                        <S.CommentContent>{comment.contents || comment.content}</S.CommentContent>
-                        <S.CommentActions>
-                          {(location.pathname.includes('/community/') || canComment) && (
-                              <S.ReplyButton
-                                  isActive={openReplyIds[comment.pk || comment.id]}
-                                  onClick={() => toggleReplyBox(comment.pk || comment.id)}
-                              >
-                                답글
-                              </S.ReplyButton>
-                          )}
-                          {/* 답글 입력 박스 - 답글 버튼 클릭시 표시 */}
-                          {openReplyIds[comment.pk || comment.id] && (
-                              <S.ReplyInputWrapper>
-                                <S.ReplyInput placeholder="답글을 입력하세요..."/>
-                                <S.ReplySubmitButton>등록</S.ReplySubmitButton>
-                              </S.ReplyInputWrapper>
-                          )}
-                          {(comment.replies?.length ?? 0) > 0 && (
-                              <S.MoreButton onClick={() => toggleReplies(comment.pk || comment.id)}>
-                                {showReplies[comment.pk || comment.id] ? (
-                                    <>
-                                      <MdExpandLess size={16}/> 답글 숨기기
-                                    </>
-                                ) : (
-                                    <>
-                                      <MdExpandMore size={16}/> 답글 {comment.replies.length}
-                                      개
-                                    </>
-                                )}
-                              </S.MoreButton>
-                          )}
-                        </S.CommentActions>
-
-                        {/* 답글 표시 - 토글 상태에 따라 표시 */}
-                        {comment.replies &&
-                            comment.replies.length > 0 &&
-                            showReplies[comment.pk || comment.id] && (
-                                <S.RepliesContainer>
-                                  {comment.replies.map((reply) => (
-                                      <S.ReplyItem key={reply.pk}>
-                                        <S.ReplyHeaderWrapper>
-                                          <S.ReplyHeader>
-                                            <img
-                                                src={reply.user.profileImageUrl || ProfileIcon}
-                                                alt="프로필 아이콘"
-                                                width={24}
-                                                height={24}
-                                                style={{
-                                                  borderRadius: "50%",
-                                                  objectFit: "cover",
-                                                }}
-                                            />
-                                            <span
-                                                style={{
-                                                  fontSize: "0.7rem",
-                                                  marginRight: "0.3rem",
-                                                  color: "#000",
-                                                }}
-                                            >
-                              {reply.user.nickname}
-                            </span>
-                                            <span
-                                                style={{fontSize: "0.65rem", color: "#888"}}
-                                            >
-                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
-                            </span>
-                                          </S.ReplyHeader>
-                                          <S.ReplyLikes
-                                              key={reply.pk}
-                                              active={likedReplies[reply.pk] || false}
-                                              onClick={() => toggleReplyKick(reply.pk)}
-                                          >
-                                            <img
-                                                src={
-                                                  likedReplies[reply.pk] ? RKickIcon : KickIcon
-                                                }
-                                                alt="좋아요 아이콘"
-                                                width={12}
-                                                height={12}
-                                            />
-                                            {reply.kickCount || 0}
-                                          </S.ReplyLikes>
-                                        </S.ReplyHeaderWrapper>
-                                        <S.ReplyContent>{reply.contents}</S.ReplyContent>
-
-                                        {/* New ReplyActions component */}
-                                        <S.ReplyActions>
-                                          {(location.pathname.includes('/community/') || canComment) && (
-                                              <S.ReplyActionButton
-                                                  isActive={openReReplyIds[reply.pk]}
-                                                  onClick={() => toggleReReplyBox(reply.pk)}
-                                              >
-                                                답글
-                                              </S.ReplyActionButton>
-                                          )}
-                                          {/* Re-reply input box */}
-                                          {openReReplyIds[reply.pk] && (
-                                              <S.ReplyInputWrapper>
-                                                <S.ReplyInput placeholder="답글을 입력하세요..."/>
-                                                <S.ReplySubmitButton>등록</S.ReplySubmitButton>
-                                              </S.ReplyInputWrapper>
-                                          )}
-                                        </S.ReplyActions>
-                                      </S.ReplyItem>
-                                  ))}
-                                </S.RepliesContainer>
-                            )}
-                      </S.CommentItem>
-                  ))}
-            </S.CommentsSection>
-        )}
-        {/* 댓글이 있을 때만 페이지네이션 표시 */}
-        {commentsCount > 0 && (
-            <Pagination
-                activePage={activePage}
-                setActivePage={setActivePage}
-                totalPages={totalCommentPages}
-            />
-        )}
 
       </S.ArticleContainer>
   );
