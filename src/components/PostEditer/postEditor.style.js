@@ -228,10 +228,17 @@ export const QuillWrapper = styled.div`
     font-size: 0.6rem;
     font-style: normal;
     line-height: 0.8rem;
+    width: 100%;
+
+    .ql-editor.ql-blank::before {
+        content: "내용을 입력하세요";
+        //color: #8f8f8f;
+        //font-size: 0.95rem;
+    }
 
     .quill {
         border-radius: 4px;
-        overflow: scroll;
+        //overflow: scroll;
         border: 1px solid #dcdcdc;
     }
 
@@ -349,4 +356,34 @@ export const RemoveImageButton = styled.button`
   &:hover {
     background-color: rgba(0, 0, 0, 0.8);
   }
+`;
+
+export const QuillInnerWrapper = styled.div`
+    width: 100%;
+
+    .quill {
+        width: 100%;
+    }
+
+    .ql-container {
+        font-size: 1rem;
+        min-height: 250px;
+    }
+
+    .ql-editor {
+        min-height: 250px;
+        padding: 16px;
+        line-height: 1.6;
+
+        &.ql-blank::before {
+            color: #8f8f8f;
+            font-style: normal;
+            font-size: 0.95rem;
+        }
+    }
+
+    .ql-toolbar {
+        border-bottom: 1px solid #dcdcdc;
+        background: #f9f9f9;
+    }
 `;
