@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchUserInfo } from "../apis/domains/auth/fetchUserInfo";
 import {useLeagueTeamStore} from "../store/useLeagueTeamStore.js";
+import axiosInstance from "../apis/axios-instance";
 
 export const AuthContext = createContext();
 
@@ -17,6 +18,8 @@ const AuthProvider = ({ children }) => {
     if (tokens?.accessToken && tokens?.refreshToken) {
       localStorage.setItem("accessToken", tokens.accessToken);
       localStorage.setItem("refreshToken", tokens.refreshToken);
+
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${tokens.accessToken}`;
     }
 
     // 응원팀 저장

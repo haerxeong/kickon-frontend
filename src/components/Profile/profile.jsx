@@ -45,7 +45,7 @@ const Profile = () => {
 
                 setError(null);
             } catch (err) {
-                console.error("프로필 데이터 가져오기 오류:", err);
+                console.error("프로필 데이터 가져오기 오류:", err?.response?.data || err.message || err);
 
                 // 403일 경우 강제 로그아웃
                 if (err?.response?.status === 403) {

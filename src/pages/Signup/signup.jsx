@@ -35,12 +35,12 @@ const Signup = () => {
   const [refreshToken, setRefreshToken] = useState(null);
 
   useEffect(() => {
-    // useEffect 내에서 토큰 추출 후 상태 저장
     const queryStr = location.search.includes("?accessToken=")
         ? location.search.replace("?accessToken=", "&accessToken=")
         : location.search;
 
     const queryParams = new URLSearchParams(queryStr);
+
     const _accessToken = queryParams.get("accessToken");
     const _refreshToken = queryParams.get("refreshToken");
 
@@ -56,11 +56,16 @@ const Signup = () => {
     }
 
     if (accessToken && refreshToken) {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
       (async () => {
         try {
           const user = await fetchUserInfo();
           if (user?.nickname && user?.privacyAgreedAt) {
-            login(user, { accessToken, refreshToken });
+            login(user);
+
+            // ✅ 상태 반영 이후에 navigate (딜레이)
             setTimeout(() => {
               navigate("/");
             }, 0);
@@ -174,7 +179,7 @@ const Signup = () => {
       // 회원가입 완료 후 유저 정보 다시 가져와서 로그인 처리
       const user = await fetchUserInfo();
       if (user) {
-        login(user, { accessToken, refreshToken });
+        login(user); // 로그인 상태 설정
       }
 
       alert("회원가입 성공!");
