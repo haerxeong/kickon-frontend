@@ -14,10 +14,9 @@ import {
   PostLikes,
   TableHeader,
   ProfileIcon,
-  GoodIcon,
 } from "./CommunityBoard.style";
-import ImageIcon from "../../assets/image.svg";
 import {Link} from "react-router-dom";
+import GoodIcon from "../../assets/good.svg";
 
 const CommunityBoard = ({ type }) => {
   const initialPosts = [
@@ -64,7 +63,7 @@ const CommunityBoard = ({ type }) => {
         <div className="title">
           {type === "communityDetail" ? "함께 볼 만한 게시글" : "클럽 커뮤니티"}
         </div>
-        <MoreLink as={Link} to="/community">
+        <MoreLink to="/community">
           더 보기
           <MoreIcon />
         </MoreLink>
@@ -75,14 +74,17 @@ const CommunityBoard = ({ type }) => {
         <div className="author">글쓴이</div>
         <div className="date">날짜</div>
         <div className="views">조회</div>
-        <div className="likes"><GoodIcon/>킥</div>
+        <div className="likes">
+          <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
+          킥
+        </div>
       </TableHeader>
       <PostsWrapper>
         {initialPosts.map((post, index) => (
           <PostItem key={index}>
             <PostTitle>
               {post.title} 
-              {post.profileImageUrl && <img src={ImageIcon} alt="이미지 있음" />} 
+              {/*{post.profileImageUrl && <img src={ImageIcon} alt="이미지 있음" />} */}
               <span className="reply-count">({post.replyCount})</span>
             </PostTitle>
             <PostAuthor>

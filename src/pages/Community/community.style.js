@@ -54,11 +54,11 @@ export const TableHeader = styled.div`
     }
     
     .author {
-        flex: 2.2;
+        flex: 2.14;
         text-align: center;
     }
     .date {
-        flex: 2;
+        flex: 1.5;
         text-align: center;
     }
     
@@ -129,7 +129,7 @@ export const PostTitle = styled.div`
 
 
 export const PostAuthor = styled.div`
-  flex: 2.2;
+  flex: 2.14;
   font-size: 0.55rem;
   color: #000;
   display: flex;
@@ -147,7 +147,7 @@ export const PostAuthor = styled.div`
 `;
 
 export const PostDate = styled.div`
-    flex: 2;
+    flex: 1.5;
     font-size: 0.55rem;
     color: #8c8c8c;
     text-align: center;
