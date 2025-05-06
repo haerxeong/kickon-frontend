@@ -147,16 +147,9 @@ export const PostTitle = styled.div`
     min-width: 0;
     max-width: 100%;
   flex: 4;
-  font-size: 0.65rem;
-  font-weight: 500;
-  padding-left: 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 400;
   color: black;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
 
   img {
     width: 0.6rem;

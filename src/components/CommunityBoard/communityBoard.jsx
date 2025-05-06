@@ -74,9 +74,10 @@ const CommunityBoard = ({ type }) => {
             onClick={() => navigate(`/community/${post.pk}`)}
           >
             <PostTitle>
-              {post.title}
-              {/*{post.hasImage && <img src={ImageIcon} alt="이미지" />}*/}
-              {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+              <span className="clamp">
+                {post.title}
+                {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+              </span>
             </PostTitle>
             <PostAuthor>
               <img
