@@ -564,7 +564,7 @@ const MatchCard = ({league}) => {
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <></>;
     }
 
     return (
