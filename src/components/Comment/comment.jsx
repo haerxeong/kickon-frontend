@@ -6,7 +6,7 @@ import KickIcon from "../../assets/good.svg";
 import {MdExpandLess, MdExpandMore} from "react-icons/md";
 import Pagination from "../Pagination/pagination.jsx";
 import React, {useEffect, useState} from "react";
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {getNewsCommentList} from "../../apis/domains/news/getNewsCommentList.js";
 import {getCommunityCommentList} from "../../apis/domains/community/getCommunityCommentList.js";
 import axiosInstance from "../../apis/axios-instance.js";
@@ -27,8 +27,6 @@ const Comment = ({postType, postPk, canComment}) => {
 
     // 댓글 API 연동을 위한 상태 추가
     const [comments, setComments] = useState([]);
-    const [commentLoading, setCommentLoading] = useState(false);
-    const [commentError, setCommentError] = useState(null);
     const [totalCommentPages, setTotalCommentPages] = useState(1);
     const [commentsCount, setCommentsCount] = useState(0);
 
@@ -47,6 +45,7 @@ const Comment = ({postType, postPk, canComment}) => {
             setTotalCommentPages(response.meta?.totalPages || 1);
         } catch (e) {
             setError("댓글을 불러오는 데 실패했습니다.");
+            console.log(error);
         } finally {
             setLoading(false);
         }
@@ -266,15 +265,6 @@ const Comment = ({postType, postPk, canComment}) => {
             {displayComments.length > 0 && (
                 <S.CommentsSection>
                     <S.CommentsSectionTitle>댓글 {commentsCount}개</S.CommentsSectionTitle>
-
-                    {/* 댓글 로딩 중 표시 */}
-                    {commentLoading && <div>댓글 로딩 중...</div>}
-                    {commentError && <div>{commentError}</div>}
-
-                    {/* 댓글이 없는 경우 빈 화면 표시 */}
-                    {!commentLoading && !commentError && displayComments.length === 0 && (
-                        <S.EmptyComments>댓글이 없습니다.</S.EmptyComments>
-                    )}
 
                     {displayComments.length > 0 &&
                         displayComments.map((comment) => (
