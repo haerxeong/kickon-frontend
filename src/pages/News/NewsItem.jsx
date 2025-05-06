@@ -5,6 +5,7 @@ import { truncateText } from "../../utils/textUtils.js";
 import ProfileSvg from "../../assets/profile.svg";
 import axiosInstance from "../../apis/axios-instance";
 import { stripHtml} from "../../utils/stripHtml.js";
+import GoodIcon from "../../assets/good.svg"
 
 const NewsItem = ({ title, content, onClick, ...props }) => {
   const handleClick = async () => {
@@ -50,7 +51,7 @@ const NewsItem = ({ title, content, onClick, ...props }) => {
               {props.thumbnailUrl && <S.Thumbnail src={props.thumbnailUrl} alt="Thumbnail" />}
             </S.TopSection>
             <S.RightInfo>
-              <S.GoodIcon />
+              <img src={GoodIcon} alt="좋아요" style={{ width: '0.8rem', height: '0.8rem'}} />
               <S.Likes>{props.likes}</S.Likes>
               <S.CommentIcon />
               <S.Comments>{props.replies}</S.Comments>
