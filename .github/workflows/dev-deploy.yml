@@ -33,7 +33,7 @@ jobs:
           zip -r build.zip dist
 
       - name: S3에 업로드
-        run: aws s3 cp build.zip s3://dev.kickon.net/dev/latest-build.zip
+        run: aws s3 cp dist s3://dev.kickon.net/ --recursive
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
