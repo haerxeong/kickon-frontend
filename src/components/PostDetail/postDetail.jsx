@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {useParams, useLocation} from "react-router-dom"; // 추가된 부분
+import {useParams, useLocation} from "react-router-dom";
 import dayjs from 'dayjs';
 import * as S from "./postDetail.style.js";
 import RKickIcon from "../../assets/good_red.svg";
@@ -19,8 +19,9 @@ import { getBoardDetail } from "../../apis/domains/community/community.js";
 import { getNewsCommentList } from "../../apis/domains/news/getNewsCommentList.js";
 import { getCommunityCommentList } from "../../apis/domains/community/getCommunityCommentList.js";
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
-import parse from 'html-react-parser';
+import parse, { domToReact } from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
+import { youtubeUrlToIframe } from "../../utils/youtubeUtils.js";
 import NoData from "../../components/NoData/noData.jsx";
 
 const PostDetail = () => {
@@ -32,7 +33,7 @@ const PostDetail = () => {
   const [openReplyIds, setOpenReplyIds] = useState({});
   const [showReplies, setShowReplies] = useState({});
   const [openReReplyIds, setOpenReReplyIds] = useState({});
-  const [commentInput, setCommentInput] = useState(""); // 추가: 댓글 입력 상태
+  const [commentInput, setCommentInput] = useState("");
 
   // API 연동을 위한 상태 추가
   const [apiPost, setApiPost] = useState(null);
@@ -224,7 +225,6 @@ const PostDetail = () => {
       fetchComments();
     }
   }, [newsPk, boardPk, activePage, location.pathname]);
-
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -481,10 +481,10 @@ const PostDetail = () => {
 
   return (
       <S.ArticleContainer>
-        {location.pathname.includes('/news/') && (
-            <S.ArticleImage src={apiPost.thumbnailUrl || apiPost.image} alt="뉴스 이미지"/>
+        {location.pathname.includes('/news/') && apiPost.thumbnailUrl && (
+            <S.ArticleImage src={apiPost.thumbnailUrl} alt="뉴스 이미지"/>
         )}
-        {apiPost.hasImage && (
+        {location.pathname.includes('/community/') && apiPost.hasImage && (
             <S.ArticleImage src={apiPost.imageUrl} alt="게시글 이미지"/>
         )}
         {location.pathname.includes('/news/') && (
@@ -538,10 +538,27 @@ const PostDetail = () => {
         </S.ArticleHeader>
 
         <S.ArticleContent>
-          {location.pathname.includes('/community/') && apiPost.hasImage &&
-              <S.ArticleImage src={apiPost.image}/>
-          }
-          <S.ArticleText>{parse(apiPost.content)}</S.ArticleText>
+          <S.ArticleText as="div">
+            {parse(
+                youtubeUrlToIframe(apiPost.content), // post.content를 apiPost.content로 변경
+                {
+                  replace: domNode => {
+                    if (
+                        domNode.name === 'iframe' &&
+                        domNode.attribs &&
+                        domNode.attribs.src &&
+                        domNode.attribs.src.includes('youtube.com')
+                    ) {
+                      return (
+                          <S.YoutubeResponsive>
+                            {domToReact([domNode])}
+                          </S.YoutubeResponsive>
+                      );
+                    }
+                  }
+                }
+            )}
+          </S.ArticleText>
         </S.ArticleContent>
 
 

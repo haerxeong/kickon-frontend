@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   CommunityBoardContainer,
   CommunityHeader,
@@ -15,47 +15,35 @@ import {
   TableHeader,
   ProfileIcon,
 } from "./CommunityBoard.style";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import GoodIcon from "../../assets/good.svg";
 
 const CommunityBoard = ({ type }) => {
-  const initialPosts = [
-    {
-      title: "(속보) 손흥민 더비 부상 ㄷㄷ",
-      replyCount: 20,
-      author: "닉네임확인하기",
-      date: "2025.01.20",
-      likes: "56,245",
-      views: "24,564",
-      profileImageUrl: "https://example.com/profile.jpg", // 예시 URL
-    },
-    {
-      title: "(속보) 손흥민 더비 부상 ㄷㄷ",
-      replyCount: 20,
-      author: "닉네임확인하기",
-      date: "2025.01.20",
-      likes: "56,245",
-      views: "24,564",
-      profileImageUrl: "https://example.com/profile.jpg", // 예시 URL
-    },
-    {
-      title: "(속보) 손흥민 더비 부상 ㄷㄷ",
-      replyCount: 20,
-      author: "닉네임확인하기",
-      date: "2025.01.20",
-      likes: "56,245",
-      views: "24,564",
-      profileImageUrl: "https://example.com/profile.jpg", // 예시 URL
-    },
-    {
-      title: "(속보) 손흥민 더비 부상 ㄷㄷ",
-      replyCount: 20,
-      author: "닉네임확인하기",
-      date: "2025.01.20",
-      likes: "56,245",
-      views: "24,564",
-    },
-  ];
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getBoardHome();
+        console.log('게시판 홈 API:', response);
+        if (response.code === "GET_SUCCESS") {
+          setPosts(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("게시글 데이터 로딩 실패:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <CommunityBoardContainer>
@@ -63,9 +51,8 @@ const CommunityBoard = ({ type }) => {
         <div className="title">
           {type === "communityDetail" ? "함께 볼 만한 게시글" : "클럽 커뮤니티"}
         </div>
-        <MoreLink to="/community">
-          더 보기
-          <MoreIcon />
+        <MoreLink as={Link} to="/community">
+          더보기 <MoreIcon />
         </MoreLink>
       </CommunityHeader>
       <TableHeaderSeparator />
@@ -80,18 +67,30 @@ const CommunityBoard = ({ type }) => {
         </div>
       </TableHeader>
       <PostsWrapper>
-        {initialPosts.map((post, index) => (
-          <PostItem key={index}>
+        {posts.map((post) => (
+          <PostItem
+            key={post.pk}
+            onClick={() => navigate(`/community/${post.pk}`)}
+          >
             <PostTitle>
-              {post.title} 
-              {/*{post.profileImageUrl && <img src={ImageIcon} alt="이미지 있음" />} */}
-              <span className="reply-count">({post.replyCount})</span>
+              {post.title}
+              {/*{post.hasImage && <img src={ImageIcon} alt="이미지" />}*/}
+              {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
             </PostTitle>
             <PostAuthor>
-              <ProfileIcon />
-              {post.author}
+              <img
+                src={post.user.profileImageUrl}
+                alt="프로필"
+                style={{
+                  width: '0.6rem',
+                  height: '0.6rem',
+                  borderRadius: '50%',
+                  marginRight: '0.3rem'
+                }}
+              />
+              {post.user.nickname}
             </PostAuthor>
-            <PostDate>{post.date}</PostDate>
+            <PostDate>{new Date(post.createdAt).toLocaleDateString()}</PostDate>
             <PostViews>{post.views}</PostViews>
             <PostLikes>{post.likes}</PostLikes>
           </PostItem>

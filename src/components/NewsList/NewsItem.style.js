@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import ProfileSvg from "../../assets/profile.svg";
 import { FaRegComment } from "react-icons/fa";
 import { PiSoccerBallFill } from "react-icons/pi";
 import { FaCheckCircle } from "react-icons/fa";
@@ -10,6 +9,7 @@ export const NewsItemContainer = styled.div`
   width: 100%;
   padding-bottom: 1rem;
   border-bottom: 0.0625rem solid #f0f0f0;
+  cursor: pointer;
 `;
 
 export const ContentWrapper = styled.div`
@@ -84,16 +84,16 @@ export const Thumbnail = styled.img`
   flex-shrink: 0;
   border-radius: 0.36rem;
   object-fit: cover; // 이미지 비율 유지를 위해 추가
-  margin: 2rem 0 0 1rem;
+  margin: 1rem 0 0 1rem;
 `;
 
 export const ProfileIcon = styled.img.attrs({
-  src: ProfileSvg,
   alt: "프로필"
 })`
   width: 1rem;
   height: 1rem;
   margin-right: 0.25rem;
+  border-radius: 50%;
 `;
 
 export const ProfileCheckIcon = styled(FaCheckCircle)`

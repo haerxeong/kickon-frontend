@@ -47,9 +47,10 @@ export const MoreLink = styled.a`
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  text-decoration: none;
   
   &:hover {
-    text-decoration: underline;
+  text-decoration: underline;
   }
 `;
 
@@ -119,6 +120,7 @@ export const PostItem = styled.div`
   width: 100%;
   padding: 0.55rem 0;
   border-bottom: 0.0625rem solid #f0f0f0;
+  cursor: pointer;
   
   &:last-child {
     border-bottom: none;
@@ -144,6 +146,22 @@ export const PostTitle = styled.div`
     white-space: normal;
     min-width: 0;
     max-width: 100%;
+  flex: 4;
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding-left: 0.5rem;
+  color: black;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+
+  img {
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-left: 0.25rem;
   }
 
   .reply-count {
@@ -153,8 +171,6 @@ export const PostTitle = styled.div`
     white-space: nowrap;
   }
 `;
-
-
 
 export const PostAuthor = styled.div`
   flex: 2.14;
@@ -172,7 +188,12 @@ export const PostAuthor = styled.div`
     border-radius: 50%;
     object-fit: cover;
   }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 `;
+
 
 export const PostDate = styled.div`
   flex: 1.5;

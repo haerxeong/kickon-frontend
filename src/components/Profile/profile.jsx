@@ -14,6 +14,7 @@ import { openLoginModal } from "../../features/modal/modalSlice.js";
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import { getUserRanking } from "../../apis/domains/common/getUserRanking.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const [userData, setUserData] = useState({
@@ -84,6 +85,7 @@ const Profile = () => {
 };
 
 const UserCard = ({ userData, isLoading, error, onLogout }) => {
+    const navigate = useNavigate();
     if (isLoading) {
         return <CardContainer>로딩 중...</CardContainer>;
     }
@@ -108,7 +110,10 @@ const UserCard = ({ userData, isLoading, error, onLogout }) => {
                             <MyTeam src={userData.teamLogoUrl} alt="팀 로고" />
                         )}
                     </Username>
-                    <ProfileEdit>
+                    <ProfileEdit
+                        onClick={() => navigate("/profile")} // 클릭 시 페이지 이동!
+                        style={{ cursor: "pointer" }} // 마우스 오버 시 손가락 모양
+                    >
                         프로필 설정 <MdNavigateNext size={10} />
                     </ProfileEdit>
                 </UserDetails>
