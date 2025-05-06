@@ -4,7 +4,6 @@ import { PiImageSquare } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa6";
 import { FiHelpCircle } from "react-icons/fi";
-import { IoImageOutline } from "react-icons/io5";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { uploadImageToS3 } from "../../utils/imageUpload";
@@ -14,6 +13,7 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
 import { useNavigate } from "react-router-dom";
 import Quill from "quill";
 import newsCategoryMap  from "../../utils/newsCategoryMap.js";
+import MyQuill from "./myQuill.jsx";
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
@@ -31,6 +31,8 @@ const PostEditor = ({ type = "news" }) => {
     const navigate = useNavigate();
     const categoryMap = newsCategoryMap;
     const [isTyping, setIsTyping] = useState(false);
+    const [isComposing, setIsComposing] = useState(false);
+    const quillRef = useRef();
 
     const { selectedTeam, selectedLeague } = useLeagueTeamStore();
 
@@ -108,7 +110,6 @@ const PostEditor = ({ type = "news" }) => {
 
         return () => clearTimeout(debounceTimer);
     }, [teamName, selectedLeague?.pk]);
-
 
     const handleTeamSelect = (team) => {
         setTeamName(team.name);
@@ -225,28 +226,28 @@ const PostEditor = ({ type = "news" }) => {
         };
     };
 
-    const modules = {
-        toolbar: {
-            container: [
-                [{ header: [1, 2, false] }],
-                ["bold", "italic", "underline"],
-                [{ list: "ordered" }, { list: "bullet" }],
-                ["blockquote", "link", "image", "video"],
-                ["clean"]
-            ],
-            handlers: {
-                image: imageHandler,
-            }
-        }
-    };
-
-    const formats = [
-        "header",
-        "bold", "italic", "underline",
-        "list", "bullet",
-        "blockquote",
-        "link", "image", "video"
-    ];
+    // const modules = {
+    //     toolbar: {
+    //         container: [
+    //             [{ header: [1, 2, false] }],
+    //             ["bold", "italic", "underline"],
+    //             [{ list: "ordered" }, { list: "bullet" }],
+    //             ["blockquote", "link", "image", "video"],
+    //             ["clean"]
+    //         ],
+    //         handlers: {
+    //             image: imageHandler,
+    //         }
+    //     }
+    // };
+    //
+    // const formats = [
+    //     "header",
+    //     "bold", "italic", "underline",
+    //     "list", "bullet",
+    //     "blockquote",
+    //     "link", "image", "video"
+    // ];
 
     return (
         <S.Container>
@@ -368,14 +369,7 @@ const PostEditor = ({ type = "news" }) => {
 
             {/* 글 작성 영역 (ReactQuill 적용) */}
             <S.QuillWrapper>
-                <ReactQuill
-                    theme="snow"
-                    value={content}
-                    onChange={setContent}
-                    modules={modules}
-                    formats={formats}
-                    placeholder="내용을 입력하세요"
-                />
+                <MyQuill content={content} setContent={setContent} />
             </S.QuillWrapper>
 
             {/* 버튼 영역 */}

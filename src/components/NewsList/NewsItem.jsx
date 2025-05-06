@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import defaultProfileImage from "../../assets/profile.svg"; // 기본 프로필 이미지 import
-
 import {
   NewsItemContainer,
   NewsBadge,
@@ -27,13 +26,20 @@ import {
 import {timeAgo} from "../../utils/timeUtils.js";
 import GoodIcon from "../../assets/good.svg";
 import {stripHtml} from "../../utils/stripHtml.js";
+import { increaseViewCount } from "../../utils/increaseViewCount";
 
 const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
   const navigate = useNavigate();
   const plainTextContent = stripHtml(content).substring(0, 100) + (stripHtml(content).length > 100 ? "..." : "");
 
-  const handleClick = () => {
-    navigate(`/news/${pk}`);
+  const handleClick = async () => {
+    try {
+      await increaseViewCount("news", pk);
+      navigate(`/news/${pk}`);
+    } catch (error) {
+      console.error("조회수 증가 실패:", error);
+      navigate(`/news/${pk}`);
+    }
   };
 
   // 프로필 이미지가 없는 경우 기본 이미지 사용

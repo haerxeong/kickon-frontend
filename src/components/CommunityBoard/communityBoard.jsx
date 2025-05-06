@@ -19,11 +19,22 @@ import GoodIcon from "../../assets/good.svg";
 import { getBoardHome } from "../../apis/domains/main/getBoardHome";
 import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
+import { increaseViewCount } from "../../utils/increaseViewCount";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const handlePostClick = async (postId) => {
+    try {
+      await increaseViewCount("board", postId);
+      navigate(`/community/${postId}`);
+    } catch (error) {
+      console.error("조회수 증가 실패:", error);
+      navigate(`/community/${postId}`);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,10 +84,7 @@ const CommunityBoard = ({ type }) => {
             <NoData />
         ) : (
             posts.map((post) => (
-                <PostItem
-                    key={post.pk}
-                    onClick={() => navigate(`/community/${post.pk}`)}
-                >
+                <PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
                   <PostTitle>
                     <span className="clamp">
                       {post.title}
