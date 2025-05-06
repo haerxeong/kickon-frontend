@@ -91,7 +91,7 @@ export const ArticleImage = styled.img`
   margin: 0.7rem;
 `;
 
-export const ArticleText = styled.p`
+export const ArticleText = styled.div`
   margin: 0.7rem;
   margin-bottom: 5.38rem;
   font-size: 0.718rem;
@@ -514,4 +514,24 @@ export const ReplyActionButton = styled.button`
       ? "var(--Black-black_500, #AFAFAF)"
       : "var(--Black-black_200, #F0F0F0)"};
   cursor: pointer;
+`;
+
+export const YoutubeResponsive = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+
+  iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
 `;
