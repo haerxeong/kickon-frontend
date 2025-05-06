@@ -138,7 +138,6 @@ const Community = () => {
                     </PS.NavButton>
                 </PS.PaginationWrapper>
             </S.NewsContainer>
-            <CommunityBoard type="communityDetail" />
         </>
     );
 };
