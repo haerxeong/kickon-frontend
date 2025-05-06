@@ -5,32 +5,23 @@ import RKickIcon from "../../assets/good_red.svg";
 import KickIcon from "../../assets/good.svg";
 import {MdExpandLess, MdExpandMore} from "react-icons/md";
 import Pagination from "../Pagination/pagination.jsx";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useLocation, useParams} from "react-router-dom";
 import {getNewsCommentList} from "../../apis/domains/news/getNewsCommentList.js";
 import {getCommunityCommentList} from "../../apis/domains/community/getCommunityCommentList.js";
-import {useDispatch} from "react-redux";
-import {openReportModal} from "../../features/modal/modalSlice.js";
-import {getProfilecard} from "../../apis/domains/common/getProfilecard.js";
-import {getNewsDetail} from "../../apis/domains/news/news.js";
-import {getBoardDetail} from "../../apis/domains/community/community.js";
 import axiosInstance from "../../apis/axios-instance.js";
-import NoData from "../NoData/noData.jsx";
 
-const Comment = () => {
+const Comment = ({postType, postPk, canComment}) => {
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [activePage, setActivePage] = useState(1);
     const [likedComments, setLikedComments] = useState({});
     const [likedReplies, setLikedReplies] = useState({});
-    const [isLiked, setIsLiked] = useState(false);
     const [openReplyIds, setOpenReplyIds] = useState({});
     const [showReplies, setShowReplies] = useState({});
     const [openReReplyIds, setOpenReReplyIds] = useState({});
     const [commentInput, setCommentInput] = useState("");
 
     // API 연동을 위한 상태 추가
-    const [apiPost, setApiPost] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -41,188 +32,29 @@ const Comment = () => {
     const [totalCommentPages, setTotalCommentPages] = useState(1);
     const [commentsCount, setCommentsCount] = useState(0);
 
-    // 사용자 프로필 정보 상태 추가
-    const [userProfile, setUserProfile] = useState(null);
-    const [canComment, setCanComment] = useState(false);
-
-    const menuRef = useRef(null);
-    const dispatch = useDispatch();
-
     // 추가된 부분: URL 파라미터와 현재 경로 가져오기
-    const { newsPk, boardPk } = useParams();
     const location = useLocation();
     const COMMENTS_PER_PAGE = 10; // 페이지당 댓글 수
-
-    const handleClickOutside = (e) => {
-        if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
-            setIsMenuOpen(false);
-        }
-    };
-
-    const handleReport = () => {
-        setIsMenuOpen(false); // 메뉴 닫기
-
-        // 현재 경로에 따라 신고 타입 결정
-        const reportType = location.pathname.includes('/news/') ? 'news' : 'board';
-        const contentId = reportType === 'news' ? Number(newsPk) : Number(boardPk);
-
-        // 신고 모달 열기
-        dispatch(openReportModal({ type: reportType, id: contentId }));
-    };
-
-    const copyToClipboard = () => {
-        const currentUrl = window.location.href;
-
-        // 모던 브라우저에서는 Clipboard API 사용
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(currentUrl)
-                .then(() => {
-                    alert("URL이 클립보드에 복사되었습니다.");
-                })
-                .catch((err) => {
-                    console.error('클립보드 복사 실패:', err);
-                });
-        } else {
-            // 구형 브라우저를 위한 대체 방법
-            const tempInput = document.createElement('input');
-            tempInput.value = currentUrl;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert("URL이 클립보드에 복사되었습니다.");
-        }
-    };
-
-    useEffect(() => {
-        // 메뉴 닫기 이벤트 리스너 추가
-        document.addEventListener('click', handleClickOutside);
-        // 컴포넌트 언마운트 시 이벤트 리스너 제거
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
-
-    // 사용자 프로필 정보 가져오기
-    useEffect(() => {
-        const fetchProfileData = async () => {
-            try {
-                const profileData = await getProfilecard();
-                console.log("프로필 데이터:", profileData);
-                setUserProfile(profileData);
-            } catch (err) {
-                console.error("프로필 정보 가져오기 실패:", err);
-            }
-        };
-
-        fetchProfileData();
-    }, []);
-
-    // 게시글 상세 정보 가져오기
-    useEffect(() => {
-        const fetchPostDetail = async () => {
-            try {
-                setLoading(true);
-                let response;
-
-                console.log("현재 경로:", location.pathname);
-                console.log("파라미터:", { newsPk, boardPk });
-
-                if (location.pathname.includes('/news/') && newsPk) {
-                    console.log("뉴스 상세 조회 시도");
-                    response = await getNewsDetail(newsPk);
-                    console.log("뉴스 API 응답:", response);
-                } else if (location.pathname.includes('/community/') && boardPk) {
-                    console.log("게시글 상세 조회 시도");
-                    response = await getBoardDetail(boardPk);
-                    console.log("게시글 API 응답:", response);
-                }
-
-                if (response) {
-                    console.log("API 응답 구조:", typeof response, Object.keys(response));
-
-                    if (response.data) {
-                        setApiPost(response.data);
-                        setIsLiked(response.data.isKicked || false);
-
-                        // 사용자의 팀 정보와 현재 게시글의 팀 정보 비교하여 댓글 작성 가능 여부 설정
-                        if (userProfile && userProfile.teamPk) {
-                            const postTeamPk = response.data.team?.pk;
-                            setCanComment(userProfile.teamPk === postTeamPk);
-                        }
-                    } else {
-                        console.error("API 응답에 data가 없음:", response);
-                    }
-                } else {
-                    console.error("API 응답이 undefined입니다.");
-                }
-            } catch (err) {
-                console.error("상세 정보 가져오기 실패:", err);
-                setError("데이터를 불러오는데 실패했습니다.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchPostDetail();
-    }, [newsPk, boardPk, location.pathname, userProfile]);
 
     // 댓글 목록 가져오기
     const fetchComments = async () => {
         try {
-            setCommentLoading(true);
-
-            let response;
-            if (location.pathname.includes('/news/') && newsPk) {
-                response = await getNewsCommentList({
-                    news: newsPk,
-                    size: COMMENTS_PER_PAGE,
-                    page: activePage
-                });
-            } else if (location.pathname.includes('/community/') && boardPk) {
-                response = await getCommunityCommentList({
-                    board: boardPk,
-                    size: COMMENTS_PER_PAGE,
-                    page: activePage
-                });
-            }
-
-            if (response && response.data) {
-                setComments(response.data);
-                setTotalCommentPages(response.meta?.totalPages || 1);
-                setCommentsCount(response.meta?.totalItems || 0);
-
-                // 댓글 좋아요 상태 초기화
-                const initialLikedComments = {};
-                const initialLikedReplies = {};
-                response.data.forEach(comment => {
-                    initialLikedComments[comment.pk] = comment.kicked || false;
-                    if (comment.replies && comment.replies.length > 0) {
-                        comment.replies.forEach(reply => {
-                            initialLikedReplies[reply.pk] = reply.kicked || false;
-                        });
-                    }
-                });
-                setLikedComments(initialLikedComments);
-                setLikedReplies(initialLikedReplies);
-            }
-        } catch (err) {
-            setCommentError("댓글을 불러오는데 실패했습니다.");
+            setLoading(true);
+            const fetcher = postType === 'news' ? getNewsCommentList : getCommunityCommentList;
+            const response = await fetcher({ [postType]: postPk, page: activePage, size: COMMENTS_PER_PAGE });
+            setComments(response.data);
+            setCommentsCount(response.meta?.totalItems || 0);
+            setTotalCommentPages(response.meta?.totalPages || 1);
+        } catch (e) {
+            setError("댓글을 불러오는 데 실패했습니다.");
         } finally {
-            setCommentLoading(false);
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        if ((location.pathname.includes('/news/') && newsPk) ||
-            (location.pathname.includes('/community/') && boardPk)) {
-            fetchComments();
-        }
-    }, [newsPk, boardPk, activePage, location.pathname]);
-
-    const toggleMenu = () => {
-        setIsMenuOpen((prev) => !prev);
-    };
+        if (postPk) fetchComments();
+    }, [postPk, activePage]);
 
     // 답글 버튼 토글 함수
     const toggleReplyBox = (commentId) => {
@@ -247,45 +79,20 @@ const Comment = () => {
 
     // 댓글 제출 핸들러
     const handleCommentSubmit = async () => {
-        if (!commentInput.trim()) {
-            alert("댓글 내용을 입력해주세요.");
-            return;
-        }
+        if (!commentInput.trim()) return alert("댓글을 입력해주세요.");
         try {
-            const totalCommentsBeforeAdd = commentsCount;
-            const targetPage = Math.ceil((totalCommentsBeforeAdd + 1) / COMMENTS_PER_PAGE);
-
-            let response;
-            if (location.pathname.includes('/news/') && newsPk) {
-                response = await axiosInstance.post("/api/news-reply", {
-                    news: parseInt(newsPk),
-                    contents: commentInput
-                });
-            } else if (location.pathname.includes('/community/') && boardPk) {
-                response = await axiosInstance.post("/api/board-reply", {
-                    board: parseInt(boardPk),
-                    contents: commentInput
-                });
-            }
-
+            const url = postType === 'news' ? "/api/news-reply" : "/api/board-reply";
+            await axiosInstance.post(url, {
+                [postType]: parseInt(postPk),
+                contents: commentInput
+            });
             setCommentInput("");
-            setCommentsCount(prevCount => prevCount + 1);
-            if (apiPost) {
-                setApiPost(prev => ({
-                    ...prev,
-                    replies: prev.replies + 1
-                }));
-            }
-
-            if (activePage !== targetPage) {
-                setActivePage(targetPage);
-            } else {
-                fetchComments();
-            }
-        } catch (error) {
-            alert("댓글 작성에 실패했습니다. 다시 시도해주세요.");
+            fetchComments();
+        } catch (err) {
+            alert("댓글 작성에 실패했습니다.");
         }
     };
+
 
     // 댓글 킥(좋아요) 토글 함수
     const toggleCommentKick = async (commentId) => {
@@ -434,42 +241,8 @@ const Comment = () => {
         }));
     };
 
-    const toggleKick = async ({ isLiked, newsPk, boardPk }) => {
-        try {
-            if (newsPk) {
-                // 뉴스 킥 API
-                const endpoint = "/api/news-kick";
-                const body = { news: newsPk };
-                if (isLiked) {
-                    await axiosInstance.post(endpoint, body); // Create 킥
-                } else {
-                    await axiosInstance.post(endpoint, body); // Delete 킥 (based on PK)
-                }
-            } else if (boardPk) {
-                // 게시글 킥 API
-                const endpoint = "/api/board-kick";
-                const body = { board: boardPk };
-                if (isLiked) {
-                    await axiosInstance.post(endpoint, body); // Create 킥
-                } else {
-                    await axiosInstance.post(endpoint, body); // Delete 킥 (based on PK)
-                }
-            }
-        } catch (error) {
-            console.error("Failed to toggle 킥:", error);
-        }
-    };
-
     // 로딩 중일 때 표시
     if (loading) return <div>로딩 중...</div>;
-
-    if (error || !apiPost) {
-        return (
-            <S.ArticleContainer>
-                <NoData onRetry={() => window.location.reload()} />
-            </S.ArticleContainer>
-        );
-    }
 
     const displayComments = comments;
 
@@ -511,8 +284,8 @@ const Comment = () => {
                                         <img
                                             src={comment.user.profileImageUrl || ProfileIcon}
                                             alt="프로필 아이콘"
-                                            width={24}
-                                            height={24}
+                                            width={20}
+                                            height={20}
                                             style={{
                                                 borderRadius: '50%',
                                                 objectFit: 'cover'
@@ -520,16 +293,16 @@ const Comment = () => {
                                         />
                                         <span
                                             style={{
-                                                fontSize: "0.75rem",
+                                                fontSize: "0.7rem",
                                                 marginRight: "0.3rem",
                                                 color: "#000",
                                             }}
                                         >
-                    {comment.user.nickname}
-                  </span>
+                                            {comment.user.nickname}
+                                        </span>
                                         <span style={{fontSize: "0.7rem", color: "#888"}}>
-                    {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
-                  </span>
+                                            {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
+                                        </span>
                                     </S.CommentHeader>
                                     <S.CommentLikes
                                         key={comment.pk || comment.id}
@@ -590,8 +363,8 @@ const Comment = () => {
                                                             <img
                                                                 src={reply.user.profileImageUrl || ProfileIcon}
                                                                 alt="프로필 아이콘"
-                                                                width={24}
-                                                                height={24}
+                                                                width={20}
+                                                                height={20}
                                                                 style={{
                                                                     borderRadius: "50%",
                                                                     objectFit: "cover",
@@ -604,13 +377,13 @@ const Comment = () => {
                                                                     color: "#000",
                                                                 }}
                                                             >
-                              {reply.user.nickname}
-                            </span>
+                                                                {reply.user.nickname}
+                                                            </span>
                                                             <span
                                                                 style={{fontSize: "0.65rem", color: "#888"}}
                                                             >
-                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
-                            </span>
+                                                                {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
+                                                            </span>
                                                         </S.ReplyHeader>
                                                         <S.ReplyLikes
                                                             key={reply.pk}
