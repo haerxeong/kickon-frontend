@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from "react";
 import * as S from "./topNews.style.js";
 import {getTopNews} from "../../apis/domains/news/getTopNews.js";
+import {useNavigate} from "react-router-dom";
 import defaultImage from "../../assets/xCard.svg"
 
 const TopNews = () => {
     const [newsItems, setNewsItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleClick = (pk) => {
+        navigate(`/news/${pk}`);
+    };
 
     useEffect(() => {
         const fetchTopNews = async () => {
@@ -49,7 +55,11 @@ const TopNews = () => {
             <S.TopNewsContainer>
                 <S.ContainerTitle>많이 본 뉴스 TOP 5</S.ContainerTitle>
                 {newsItems.slice(0, 5).map((news, index) => (
-                    <S.TNews key={news.pk || index}>
+                    <S.TNews
+                        key={news.pk || index}
+                        onClick={() => handleClick(news.pk)}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <S.NewsImageWrapper>
                             <S.NewsImage
                                 src={news.thumbnailUrl || defaultImage}

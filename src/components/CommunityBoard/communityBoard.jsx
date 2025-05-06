@@ -13,11 +13,12 @@ import {
   PostViews,
   PostLikes,
   TableHeader,
-  GoodIcon,
 } from "./CommunityBoard.style";
-import ImageIcon from "../../assets/image.svg";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import GoodIcon from "../../assets/good.svg";
 import { getBoardHome } from "../../apis/domains/main/getBoardHome";
+import {formatDate} from "../../utils/formatDate.js";
+import NoData from "../../components/NoData/noData.jsx";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
@@ -50,49 +51,57 @@ const CommunityBoard = ({ type }) => {
     <CommunityBoardContainer>
       <CommunityHeader>
         <div className="title">
-          <span>클럽 커뮤니티</span>
+          {type === "communityDetail" ? "함께 볼 만한 게시글" : "클럽 커뮤니티"}
         </div>
         <MoreLink as={Link} to="/community">
           더보기 <MoreIcon />
         </MoreLink>
       </CommunityHeader>
+      <TableHeaderSeparator />
       <TableHeader>
         <div className="title">제목</div>
         <div className="author">글쓴이</div>
         <div className="date">날짜</div>
         <div className="views">조회</div>
-        <div className="likes"><GoodIcon/>킥</div>
+        <div className="likes">
+          <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
+          킥
+        </div>
       </TableHeader>
-      <TableHeaderSeparator />
       <PostsWrapper>
-        {posts.map((post) => (
-          <PostItem 
-            key={post.pk} 
-            onClick={() => navigate(`/community/${post.pk}`)}
-          >
-            <PostTitle>
-              {post.title}
-              {post.hasImage && <img src={ImageIcon} alt="이미지" />}
-              {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
-            </PostTitle>
-            <PostAuthor>
-              <img 
-                src={post.user.profileImageUrl} 
-                alt="프로필" 
-                style={{ 
-                  width: '0.6rem', 
-                  height: '0.6rem', 
-                  borderRadius: '50%', 
-                  marginRight: '0.3rem' 
-                }} 
-              />
-              {post.user.nickname}
-            </PostAuthor>
-            <PostDate>{new Date(post.createdAt).toLocaleDateString()}</PostDate>
-            <PostViews>{post.views}</PostViews>
-            <PostLikes>{post.likes}</PostLikes>
-          </PostItem>
-        ))}
+        {posts.length === 0 ? (
+            <NoData />
+        ) : (
+            posts.map((post) => (
+                <PostItem
+                    key={post.pk}
+                    onClick={() => navigate(`/community/${post.pk}`)}
+                >
+                  <PostTitle>
+                    <span className="clamp">
+                      {post.title}
+                      {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                    </span>
+                  </PostTitle>
+                  <PostAuthor>
+                    <img
+                        src={post.user.profileImageUrl}
+                        alt="프로필"
+                        style={{
+                          width: '0.78rem',
+                          height: '0.78rem',
+                          borderRadius: '50%',
+                          marginRight: '0.1rem'
+                        }}
+                    />
+                    {post.user.nickname}
+                  </PostAuthor>
+                  <PostDate>{formatDate(post.createdAt)}</PostDate>
+                  <PostViews>{post.views}</PostViews>
+                  <PostLikes>{post.likes}</PostLikes>
+                </PostItem>
+            ))
+        )}
       </PostsWrapper>
     </CommunityBoardContainer>
   );

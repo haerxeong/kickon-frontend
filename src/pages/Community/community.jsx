@@ -8,8 +8,8 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
+import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
-import CommunityBoard from "../../components/CommunityBoard/communityBoard.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -100,14 +100,16 @@ const Community = () => {
                         posts.map((post) => (
                             <S.PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
                                 <S.PostTitle>
-                                    {post.title}
-                                    {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                                    <span className="clamp">
+                                        {post.title}
+                                        {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                                    </span>
                                 </S.PostTitle>
                                 <S.PostAuthor>
                                     <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
                                     {post.user.nickname}
                                 </S.PostAuthor>
-                                <S.PostDate>{new Date(post.createdAt).toLocaleDateString()}</S.PostDate>
+                                <S.PostDate>{formatDate(post.createdAt)}</S.PostDate>
                                 <S.PostViews>{post.views}</S.PostViews>
                                 <S.PostLikes>{post.likes}</S.PostLikes>
                             </S.PostItem>
@@ -135,7 +137,6 @@ const Community = () => {
                     </PS.NavButton>
                 </PS.PaginationWrapper>
             </S.NewsContainer>
-            <CommunityBoard type="communityDetail" />
         </>
     );
 };

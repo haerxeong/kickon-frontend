@@ -70,8 +70,8 @@ export const ProfileInfo = styled.div`
 `;
 
 export const ProfileImage = styled.img`
-    width: 2.8rem;
-    height: 2.8rem;
+    width: 2.5rem;
+    height: 2.5rem;
     flex-shrink: 0;
     border-radius: 50%;
     object-fit: cover;
@@ -96,7 +96,7 @@ export const Username = styled.div`
     gap: 0.2rem;
     color: #000;
     font-family: Pretendard;
-    font-size: 0.94rem;
+    font-size: 0.8rem;
     font-weight: 600;
     line-height: 1.13rem;
     margin: 0;
