@@ -26,12 +26,7 @@ import {
 } from "./NewsItem.style";
 import {timeAgo} from "../../utils/timeUtils.js";
 import GoodIcon from "../../assets/good.svg";
-
-const stripHtml = (html) => {
-  const tmp = document.createElement("DIV");
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || "";
-};
+import {stripHtml} from "../../utils/stripHtml.js";
 
 const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
   const navigate = useNavigate();
