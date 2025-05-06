@@ -27,7 +27,7 @@ export const CommunityHeader = styled.div`
   font-weight: 500;
   line-height: 0.85rem;
   color: black;
-  
+
   .title {
     display: flex;
     align-items: center;
@@ -48,9 +48,9 @@ export const MoreLink = styled.a`
   align-items: center;
   gap: 0.25rem;
   text-decoration: none;
-  
+
   &:hover {
-  text-decoration: underline;
+    text-decoration: underline;
   }
 `;
 
@@ -121,7 +121,7 @@ export const PostItem = styled.div`
   padding: 0.55rem 0;
   border-bottom: 0.0625rem solid #f0f0f0;
   cursor: pointer;
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -146,23 +146,23 @@ export const PostTitle = styled.div`
     white-space: normal;
     min-width: 0;
     max-width: 100%;
-  flex: 4;
-  font-size: 0.6rem;
-  font-weight: 400;
-  color: black;
+    flex: 4;
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: black;
 
-  img {
-    width: 0.6rem;
-    height: 0.6rem;
-    margin-left: 0.25rem;
-  }
+    img {
+      width: 0.6rem;
+      height: 0.6rem;
+      margin-left: 0.25rem;
+    }
 
-  .reply-count {
-    color: #000;
-    font-weight: normal;
-    margin-left: 0.15rem;
-    white-space: nowrap;
-  }
+    .reply-count {
+      color: #000;
+      font-weight: normal;
+      margin-left: 0.15rem;
+      white-space: nowrap;
+    }
 `;
 
 export const PostAuthor = styled.div`
