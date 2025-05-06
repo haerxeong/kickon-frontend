@@ -19,16 +19,7 @@ const News = () => {
     const navigate = useNavigate();
     const leaguePk = selectedLeague?.pk || undefined;
 
-    const tabs = [
-        { type: "text", label: "전체", value: "전체" },
-        { type: "text", label: "인기", value: "인기" },
-        selectedTeam?.nameKr && { type: "text", label: selectedTeam.nameKr, value: selectedTeam.nameKr },
-    ].filter(Boolean);
-
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-        setActivePage(1); // Reset to the first page when switching tabs
-    };
+    const tabs = ["전체", "인기", selectedTeam?.nameKr || ""].filter(Boolean);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -73,38 +64,39 @@ const News = () => {
     return (
         <S.Container>
             <S.NewsContainer>
-                <S.NavContainer>
-                    {tabs.map((tab, index) => (
-                        <S.TabButton
-                            key={tab.value}
-                            isActive={activeTab === tab.value}
-                            onClick={() => handleTabClick(tab.value)}
+                {/* New Tab Styling from Community */}
+                <S.TabContainer>
+                    {tabs.map((tab) => (
+                        <S.Tab
+                            key={tab}
+                            active={activeTab === tab}
+                            onClick={() => {
+                                setActiveTab(tab);
+                                setActivePage(1); // Reset page on tab change
+                            }}
                         >
-                            {tab.label}
-                        </S.TabButton>
+                            {tab}
+                        </S.Tab>
                     ))}
-
-                    <LeagueDropdown
-                        selectedLeague={selectedLeague}
-                        setSelectedLeague={(league) => {
-                            setSelectedLeague(league);
-                            setActiveTab(league.nameKr);
-                            setActivePage(1);
+                    {/* LeagueTab으로 변경하여 위치 조정 적용 */}
+                    <S.LeagueTab
+                        active={selectedLeague?.nameKr === activeTab}
+                        onClick={() => {
+                            // We will use the dropdown's onClick behavior
                         }}
-                        activeTab={activeTab}
-                    />
-                </S.NavContainer>
+                    >
+                        <LeagueDropdown
+                            selectedLeague={selectedLeague}
+                            setSelectedLeague={(league) => {
+                                setSelectedLeague(league);
+                                setActiveTab(league.nameKr);
+                                setActivePage(1);
+                            }}
+                            activeTab={activeTab}
+                        />
+                    </S.LeagueTab>
 
-                <S.Divider>
-                    {tabs.map((tab, idx) =>
-                            tab.value === activeTab && (
-                                <S.ActiveIndicator key={tab.value} left={`calc(${idx} * 3rem + 0.7rem)`} />
-                            )
-                    )}
-                    {selectedLeague?.nameKr === activeTab && (
-                        <S.ActiveIndicator left={`calc(${tabs.length} * 3rem + 1rem)`} />
-                    )}
-                </S.Divider>
+                </S.TabContainer>
 
                 <S.NewsList>
                     {newsList.length === 0 ? (
@@ -127,7 +119,7 @@ const News = () => {
 
                 <PS.PaginationWrapper>
                     <PS.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
-                                 disabled={activePage === 1}>
+                                  disabled={activePage === 1}>
                         <GrFormPrevious /> 이전
                     </PS.NavButton>
                     {Array.from({ length: totalPages }, (_, i) => (
@@ -140,7 +132,7 @@ const News = () => {
                         </PS.PageButton>
                     ))}
                     <PS.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
-                                 disabled={activePage === totalPages}>
+                                  disabled={activePage === totalPages}>
                         다음 <GrFormNext />
                     </PS.NavButton>
                 </PS.PaginationWrapper>

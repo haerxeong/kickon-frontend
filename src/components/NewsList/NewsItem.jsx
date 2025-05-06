@@ -1,4 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import defaultProfileImage from "../../assets/profile.svg"; // 기본 프로필 이미지 import
+
 import {
   NewsItemContainer,
   NewsBadge,
@@ -13,7 +16,6 @@ import {
   Thumbnail,
   ProfileIcon,
   ProfileCheckIcon,
-  GoodIcon,
   CommentIcon,
   Divider,
   ContentWrapper,
@@ -23,19 +25,31 @@ import {
   TopSection
 } from "./NewsItem.style";
 import {timeAgo} from "../../utils/timeUtils.js";
+import GoodIcon from "../../assets/good.svg";
+import {stripHtml} from "../../utils/stripHtml.js";
 
-const NewsItem = ({ title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
+const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
+  const navigate = useNavigate();
+  const plainTextContent = stripHtml(content).substring(0, 100) + (stripHtml(content).length > 100 ? "..." : "");
+
+  const handleClick = () => {
+    navigate(`/news/${pk}`);
+  };
+
+  // 프로필 이미지가 없는 경우 기본 이미지 사용
+  const profileImage = user.profileImageUrl || defaultProfileImage;
+
   return (
-      <NewsItemContainer>
+      <NewsItemContainer onClick={handleClick}>
         <ContentWrapper>
           <TextContentWrapper>
             <TopSection>
               <div>
                 <NewsBadge>{category}</NewsBadge>
                 <NewsTitle>{title}</NewsTitle>
-                <NewsContent>{content}</NewsContent>
+                <NewsContent>{plainTextContent}</NewsContent>
                 <LeftInfo>
-                  <ProfileIcon src={user.profileImageUrl} alt="Profile" />
+                  <ProfileIcon src={profileImage} alt="Profile" />
                   <Nickname>{user.nickname}</Nickname>
                   <ProfileCheckIcon />
                   <StyledTime>{timeAgo(createdAt)}</StyledTime>
@@ -50,7 +64,7 @@ const NewsItem = ({ title, content, thumbnailUrl, user, createdAt, views, likes,
               {thumbnailUrl && <Thumbnail src={thumbnailUrl} alt="Thumbnail" />}
             </TopSection>
             <RightInfo>
-              <GoodIcon />
+              <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.1rem' }} />
               <Likes>{likes}</Likes>
               <CommentIcon />
               <Comments>{replies}</Comments>

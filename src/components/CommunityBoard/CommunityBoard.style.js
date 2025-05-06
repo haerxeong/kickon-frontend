@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import MoreSvg from "../../assets/more.png";
 import ProfileSvg from "../../assets/profile.svg";
-import { PiSoccerBallFill } from "react-icons/pi";
 
 export const CommunityBoardContainer = styled.div`
   display: flex;
@@ -28,7 +27,7 @@ export const CommunityHeader = styled.div`
   font-weight: 500;
   line-height: 0.85rem;
   color: black;
-  
+
   .title {
     display: flex;
     align-items: center;
@@ -48,7 +47,8 @@ export const MoreLink = styled.a`
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  
+  text-decoration: none;
+
   &:hover {
     text-decoration: underline;
   }
@@ -76,34 +76,34 @@ export const TableHeader = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 1rem; /* 138.462% */
-  
+
   .title {
-    flex: 5;
-    padding-left: 0.5rem;
+    flex: 6;
+    text-align: center;
   }
-  
+
   .author {
-    flex: 2;
+    flex: 2.14;
     text-align: center;
   }
-  
   .date {
-    flex: 2;
+    flex: 1.5;
     text-align: center;
   }
-  
-  .likes {
-    flex: 1;
-    text-align: center;
-  }
-  
+
   .views {
     flex: 1;
     text-align: center;
   }
-`;
 
-export const TableHeaderItem = styled.div``;
+  .likes {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
 
 export const PostsWrapper = styled.div`
   display: flex;
@@ -118,69 +118,103 @@ export const PostItem = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.75rem 0;
+  padding: 0.55rem 0;
   border-bottom: 0.0625rem solid #f0f0f0;
-  
+  cursor: pointer;
+
   &:last-child {
     border-bottom: none;
   }
 `;
 
 export const PostTitle = styled.div`
-  flex: 5;
-  font-size: 0.65rem;
-  font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-left: 0.5rem;
+  flex: 5.5;
+  font-size: 0.6rem;
+  font-weight: 350;
   color: black;
-  display: flex;
-  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 1.25rem;
+  min-width: 0;
 
-  img {
-    width: 0.6rem;
-    height: 0.6rem;
-    margin-left: 0.25rem;
-  }
+  .clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: normal;
+    min-width: 0;
+    max-width: 100%;
+    flex: 4;
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: black;
 
-  .reply-count {
-    color: #000;
-    font-weight: normal;
-    margin-left: 0.25rem
-  }
+    img {
+      width: 0.6rem;
+      height: 0.6rem;
+      margin-left: 0.25rem;
+    }
+
+    .reply-count {
+      color: #000;
+      font-weight: normal;
+      margin-left: 0.15rem;
+      white-space: nowrap;
+    }
 `;
 
 export const PostAuthor = styled.div`
-  flex: 2;
-  font-size: 0.6rem;
+  flex: 2.14;
+  font-size: 0.55rem;
   color: #000;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.25rem;
   font-weight: 350;
+
+  img {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 `;
 
+
 export const PostDate = styled.div`
-  flex: 2;
-  font-size: 0.6rem;
+  flex: 1.5;
+  font-size: 0.55rem;
   color: #8c8c8c;
   text-align: center;
 `;
 
 export const PostLikes = styled.div`
+  width: auto;
   flex: 1;
-  font-size: 0.6rem;
+  min-width: 2rem;
+  font-size: 0.55rem;
   color: #8f8f8f;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const PostViews = styled.div`
+  width: auto;
   flex: 1;
-  font-size: 0.6rem;
+  min-width: 2rem;
+  font-size: 0.55rem;
   color: #8f8f8f;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ProfileIcon = styled.img.attrs({
@@ -190,12 +224,6 @@ export const ProfileIcon = styled.img.attrs({
   width: 0.6rem;
   height: 0.6rem;
   margin-right: 0.3rem;
-`;
-
-export const GoodIcon = styled(PiSoccerBallFill)`
-  width: 0.8rem;
-  height: 0.8rem;
-  color: #8f8f8f; 
 `;
 
 export const TableHeaderSeparator = styled.div`
