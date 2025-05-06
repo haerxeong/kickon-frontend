@@ -162,7 +162,6 @@ const ProfileSettings = () => {
       <S.InputGroup>
         <S.InputLabel>
           닉네임
-          <BsQuestionCircle onClick={handleIconClick} />
         </S.InputLabel>
         <S.InputWrapper>
           <S.InputField
@@ -180,40 +179,42 @@ const ProfileSettings = () => {
       </S.InputGroup>
 
       <S.InputGroup>
-        <S.InputLabel>리그</S.InputLabel>
+        <S.InputLabel>
+          리그
+          <BsQuestionCircle onClick={handleIconClick} />
+        </S.InputLabel>
         <S.AccountInfoContainer>
           {selectedLeagueData ? (
             <S.LeftContent>
-              <S.SelectedImage src={selectedLeagueData.logoUrl || {BsBan}} alt={selectedLeagueData.krName} />
-              <S.SelectedName>{selectedLeagueData.krName || '응원팀이 없습니다' }</S.SelectedName>
+              <S.SelectedImage src={selectedLeagueData.logoUrl} alt={selectedLeagueData.krName} />
+              <S.SelectedName>{selectedLeagueData.krName}</S.SelectedName>
             </S.LeftContent>
           ) : (
               <S.LeftContent>
-                <BsBan size={24} />
-                <S.SelectedName>응원팀이 없습니다</S.SelectedName>
+                <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
+                <S.SelectedName>응원팀이 없어요.</S.SelectedName>
               </S.LeftContent>
           )
           }
         </S.AccountInfoContainer>
       </S.InputGroup>
 
+      {selectedTeam ? (
       <S.InputGroup>
         <S.InputLabel>응원팀</S.InputLabel>
+
         <S.AccountInfoContainer>
-          {selectedTeam ? (
             <S.LeftContent>
-              <S.SelectedImage src={teamLogoUrl || {BsBan}} alt={selectedTeam} />
-              <S.SelectedName>{selectedTeam || '응원팀이 없습니다'}</S.SelectedName>
+              <S.SelectedImage src={teamLogoUrl} alt={selectedTeam} />
+              <S.SelectedName> {selectedTeam} </S.SelectedName>
             </S.LeftContent>
-          ) : (
-              <S.LeftContent>
-                <BsBan size={24} />
-                <S.SelectedName>응원팀이 없습니다</S.SelectedName>
-              </S.LeftContent>
-          )
-          }
         </S.AccountInfoContainer>
+
       </S.InputGroup>
+      ) : (
+          <></>
+      )
+      }
 
       <S.ManageTitle>계정 관리</S.ManageTitle>
       <S.AccountInfoContainer>
