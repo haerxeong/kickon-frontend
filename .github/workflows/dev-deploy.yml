@@ -21,8 +21,8 @@ jobs:
           
       - name: 🔹 .env 파일 생성
         run: |
-          echo "VITE_BASE_URL=https://api-dev.kickon.net" >> .dist/.env
-          echo "VITE_API_PREDICT_URL=https://w7ufflahpf.execute-api.ap-northeast-2.amazonaws.com" >> .dist/.env
+          echo "VITE_BASE_URL=https://api-dev.kickon.net" >> .env
+          echo "VITE_API_PREDICT_URL=https://w7ufflahpf.execute-api.ap-northeast-2.amazonaws.com" >> .env
 
       - name: 의존성 설치 및 빌드
         run: |
