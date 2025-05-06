@@ -150,48 +150,39 @@ const Signup = () => {
       const marketingAgreedAt = isMarketingAgreed ? privacyAgreedAt : null;
 
       const privacyAgreementBody = {
-        privacyAgreedAt: privacyAgreedAt,
-        marketingAgreedAt: marketingAgreedAt,
+        privacyAgreedAt,
+        marketingAgreedAt,
       };
 
       const privacyResponse = await updatePrivacyAgreement(privacyAgreementBody);
-      console.log(privacyAgreementBody)
-
       if (!privacyResponse) {
         alert("개인정보 동의 업데이트에 실패했습니다.");
         return;
       }
 
-      // const selectedTeamPk = teamOptions.find((team) => team.nameKr === selectedTeam)?.pk;
-      // setSelectedTeam({pk: selectedTeamPk, nameKr: selectedTeam});
-
       const userInfoBody = {
-        nickname: nickname,
+        nickname,
         team: selectedTeam.nameKr === "응원팀이 없어요." ? null : selectedTeam.pk,
       };
 
       const userInfoResponse = await updateUserInfo(userInfoBody);
-      console.log(userInfoBody);
-
       if (!userInfoResponse) {
         alert("유저 정보 업데이트에 실패했습니다.");
         return;
       }
 
+      // 회원가입 완료 후 유저 정보 다시 가져와서 로그인 처리
+      const user = await fetchUserInfo();
+      if (user) {
+        login(user); // 로그인 상태 설정
+      }
+
       alert("회원가입 성공!");
-      login();
       navigate("/");
     } catch (error) {
       console.error("회원가입 중 오류가 발생했습니다.", error);
       alert("회원가입 중 오류가 발생했습니다.");
     }
-
-    console.log("Signup submitted", {
-      nickname,
-      selectedLeague,
-      selectedTeam,
-      marketingAgreed: isMarketingAgreed,
-    });
   };
 
   const selectedLeagueData = leagues.find(
