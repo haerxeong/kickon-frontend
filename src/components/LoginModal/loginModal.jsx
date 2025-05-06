@@ -24,14 +24,16 @@ const LoginModal = () => {
 
     if (!isLoginModalOpen) return null;
 
-const handleSocialLogin = (provider) => {
-  if (provider !== "naver" && provider !== "kakao") {
-    console.error("Unknown provider");
-    return;
-  }
+    const handleSocialLogin = (provider) => {
+        if (provider !== "naver" && provider !== "kakao") {
+            console.error("Unknown provider");
+            return;
+        }
 
-  window.location.href = `${import.meta.env.VITE_BASE_URL}/oauth2/authorization/${provider}?state=http://localhost:5173/signup?provider=${provider}`;
-}
+        const redirectState = `${window.location.origin}/signup?provider=${provider}`;
+
+        window.location.href = `${import.meta.env.VITE_BASE_URL}/oauth2/authorization/${provider}?state=${encodeURIComponent(redirectState)}`;
+    };
 
     return (
         <ModalOverlay onClick={() => dispatch(closeLoginModal())}>
