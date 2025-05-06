@@ -111,12 +111,17 @@ const Signup = () => {
 
   const handleNicknameChange = (e) => {
     const value = e.target.value;
-    setNickname(value);
 
-    if (!value.length) {
+    if (value.length > 8) {
+      setNicknameError("닉네임은 최대 8글자까지 입력할 수 있어요.");
+    } else if (!value.length) {
       setNicknameError("닉네임을 입력해 주세요.");
     } else {
       setNicknameError("");
+    }
+
+    if (value.length <= 8) {
+      setNickname(value); // 8자 이하만 상태 반영
     }
   };
 
