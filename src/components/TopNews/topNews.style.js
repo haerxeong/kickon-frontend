@@ -16,7 +16,7 @@ export const TopNewsContainer = styled.div`
 
 export const ContainerTitle = styled.div`
     color: #000;
-    font-family: Pretendard, serif;
+    font-family: Pretendard;
     font-size: 0.8rem;
     font-style: normal;
     font-weight: 600;
