@@ -16,7 +16,6 @@ import {
   Thumbnail,
   ProfileIcon,
   ProfileCheckIcon,
-  GoodIcon,
   CommentIcon,
   Divider,
   ContentWrapper,
@@ -26,6 +25,7 @@ import {
   TopSection
 } from "./NewsItem.style";
 import {timeAgo} from "../../utils/timeUtils.js";
+import GoodIcon from "../../assets/good.svg";
 
 const stripHtml = (html) => {
   const tmp = document.createElement("DIV");
@@ -69,7 +69,7 @@ const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, li
               {thumbnailUrl && <Thumbnail src={thumbnailUrl} alt="Thumbnail" />}
             </TopSection>
             <RightInfo>
-              <GoodIcon />
+              <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.1rem' }} />
               <Likes>{likes}</Likes>
               <CommentIcon />
               <Comments>{replies}</Comments>

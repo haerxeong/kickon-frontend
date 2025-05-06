@@ -13,10 +13,11 @@ import {
   PostViews,
   PostLikes,
   TableHeader,
-  ProfileIcon,
 } from "./CommunityBoard.style";
 import {Link, useNavigate} from "react-router-dom";
 import GoodIcon from "../../assets/good.svg";
+import { getBoardHome } from "../../apis/domains/main/getBoardHome";
+import {formatDate} from "../../utils/formatDate.js";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
@@ -82,15 +83,15 @@ const CommunityBoard = ({ type }) => {
                 src={post.user.profileImageUrl}
                 alt="프로필"
                 style={{
-                  width: '0.6rem',
-                  height: '0.6rem',
+                  width: '0.78rem',
+                  height: '0.78rem',
                   borderRadius: '50%',
                   marginRight: '0.3rem'
                 }}
               />
               {post.user.nickname}
             </PostAuthor>
-            <PostDate>{new Date(post.createdAt).toLocaleDateString()}</PostDate>
+            <PostDate>{formatDate(post.createdAt)}</PostDate>
             <PostViews>{post.views}</PostViews>
             <PostLikes>{post.likes}</PostLikes>
           </PostItem>

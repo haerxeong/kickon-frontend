@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
 import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
-import CommunityBoard from "../../components/CommunityBoard/communityBoard.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
