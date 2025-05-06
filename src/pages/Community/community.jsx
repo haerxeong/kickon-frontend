@@ -7,9 +7,9 @@ import { getBoardList } from "../../apis/domains/community/getBoardList";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../apis/axios-instance";
 import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
+import { increaseViewCount } from "../../utils/increaseViewCount.js";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -50,16 +50,8 @@ const Community = () => {
     }, [activeTab, activePage, selectedTeam]);
 
     const handlePostClick = async (postId) => {
-        try {
-            // Call the API to increase the view count
-            await axiosInstance.post('/api/board-view-history', { board: postId });
-            console.log(`View count increased for post ID: ${postId}`);
-
-            // Navigate to the post detail page
-            navigate(`/community/${postId}`);
-        } catch (error) {
-            console.error('Failed to increase view count:', error);
-        }
+        await increaseViewCount("board", postId);
+        navigate(`/community/${postId}`);
     };
 
     return (

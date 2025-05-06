@@ -3,21 +3,13 @@ import * as S from "./NewsItem.style";
 import {timeAgo} from "../../utils/timeUtils.js";
 import { truncateText } from "../../utils/textUtils.js";
 import ProfileSvg from "../../assets/profile.svg";
-import axiosInstance from "../../apis/axios-instance";
-import { stripHtml} from "../../utils/stripHtml.js";
+import { stripHtml } from "../../utils/stripHtml.js";
+import { increaseViewCount } from "../../utils/increaseViewCount.js";
 
 const NewsItem = ({ title, content, onClick, ...props }) => {
   const handleClick = async () => {
-    try {
-      // Call the API to increase the view count
-      await axiosInstance.post('/api/news-view-history', { news: props.pk });
-      console.log(`View count increased for news ID: ${props.pk}`);
-
-      // Navigate to the news detail page
-      if (onClick) onClick();
-    } catch (error) {
-      console.error('Failed to increase view count:', error);
-    }
+    await increaseViewCount("news", props.pk);
+    if (onClick) onClick();
   };
 
   return (

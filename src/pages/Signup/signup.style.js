@@ -56,10 +56,12 @@ export const InputField = styled.input`
   border-radius: 0.4rem;
   font-size: 0.875rem;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
-    border-color: #000;
+    border-color: ${({ hasError }) => (hasError ? "#ff0005" : "#000")};
+    box-shadow: ${({ hasError }) =>
+        hasError ? "0 0 0 2px rgba(255, 0, 5, 0.2)" : "none"};
   }
 
   &::placeholder {
@@ -69,10 +71,10 @@ export const InputField = styled.input`
   }
 
   ${(props) =>
-    props.hasError &&
-    css`
-      border-color: #ff0005;
-    `}
+      props.hasError &&
+      css`
+        border-color: #ff0005;
+      `}
 `;
 
 export const ErrorMessage = styled.span`
