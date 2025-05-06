@@ -10,6 +10,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { getUserInfo } from "../../apis/domains/main/getUserInfo";
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { useNavigate } from "react-router-dom";
+import { BsBan } from "react-icons/bs";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -161,7 +162,6 @@ const ProfileSettings = () => {
       <S.InputGroup>
         <S.InputLabel>
           닉네임
-          <BsQuestionCircle onClick={handleIconClick} />
         </S.InputLabel>
         <S.InputWrapper>
           <S.InputField
@@ -179,28 +179,42 @@ const ProfileSettings = () => {
       </S.InputGroup>
 
       <S.InputGroup>
-        <S.InputLabel>리그</S.InputLabel>
+        <S.InputLabel>
+          리그
+          <BsQuestionCircle onClick={handleIconClick} />
+        </S.InputLabel>
         <S.AccountInfoContainer>
-          {selectedLeagueData && (
+          {selectedLeagueData ? (
             <S.LeftContent>
               <S.SelectedImage src={selectedLeagueData.logoUrl} alt={selectedLeagueData.krName} />
               <S.SelectedName>{selectedLeagueData.krName}</S.SelectedName>
             </S.LeftContent>
-          )}
+          ) : (
+              <S.LeftContent>
+                <BsBan color="#8F8F8F" size={12} style={{ marginRight: "0.7rem" }} />
+                <S.SelectedName>응원팀이 없어요.</S.SelectedName>
+              </S.LeftContent>
+          )
+          }
         </S.AccountInfoContainer>
       </S.InputGroup>
 
+      {selectedTeam ? (
       <S.InputGroup>
         <S.InputLabel>응원팀</S.InputLabel>
+
         <S.AccountInfoContainer>
-          {selectedTeam && (
             <S.LeftContent>
               <S.SelectedImage src={teamLogoUrl} alt={selectedTeam} />
-              <S.SelectedName>{selectedTeam}</S.SelectedName>
+              <S.SelectedName> {selectedTeam} </S.SelectedName>
             </S.LeftContent>
-          )}
         </S.AccountInfoContainer>
+
       </S.InputGroup>
+      ) : (
+          <></>
+      )
+      }
 
       <S.ManageTitle>계정 관리</S.ManageTitle>
       <S.AccountInfoContainer>

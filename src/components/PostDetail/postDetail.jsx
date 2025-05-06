@@ -228,15 +228,20 @@ const PostDetail = () => {
             </S.TimeLabel>{" "}
             | <S.ViewLabel>읽음 {apiPost.views}</S.ViewLabel>
             <S.ArticleMeta>
-              <img src={KickIcon} alt="좋아요수 아이콘" width={10} height={10}/>{" "}
-              {apiPost.likes}
-              <FaRegComment alt="댓글수 아이콘"/> {apiPost.replies}
-              <FiMoreHorizontal
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+                <img src={KickIcon} alt="좋아요수 아이콘" width={10} height={10}/> {apiPost.likes}
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+                <FaRegComment alt="댓글수 아이콘"/> {apiPost.replies}
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+                <FiMoreHorizontal
                   className="more-button"
                   alt="더보기 버튼"
                   onClick={toggleMenu}
-                  style={{cursor: "pointer"}}
-              />
+                  style={{ cursor: "pointer" }}
+                />
+              </span>
               {isMenuOpen && (
                   <S.MoreMenu ref={menuRef}>
                     <S.MenuItem onClick={copyToClipboard}>
