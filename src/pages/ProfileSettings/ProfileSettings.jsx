@@ -10,6 +10,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { getUserInfo } from "../../apis/domains/main/getUserInfo";
 import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { useNavigate } from "react-router-dom";
+import { BsBan } from "react-icons/bs";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -181,24 +182,36 @@ const ProfileSettings = () => {
       <S.InputGroup>
         <S.InputLabel>리그</S.InputLabel>
         <S.AccountInfoContainer>
-          {selectedLeagueData && (
+          {selectedLeagueData ? (
             <S.LeftContent>
-              <S.SelectedImage src={selectedLeagueData.logoUrl} alt={selectedLeagueData.krName} />
-              <S.SelectedName>{selectedLeagueData.krName}</S.SelectedName>
+              <S.SelectedImage src={selectedLeagueData.logoUrl || {BsBan}} alt={selectedLeagueData.krName} />
+              <S.SelectedName>{selectedLeagueData.krName || '응원팀이 없습니다' }</S.SelectedName>
             </S.LeftContent>
-          )}
+          ) : (
+              <S.LeftContent>
+                <BsBan size={24} />
+                <S.SelectedName>응원팀이 없습니다</S.SelectedName>
+              </S.LeftContent>
+          )
+          }
         </S.AccountInfoContainer>
       </S.InputGroup>
 
       <S.InputGroup>
         <S.InputLabel>응원팀</S.InputLabel>
         <S.AccountInfoContainer>
-          {selectedTeam && (
+          {selectedTeam ? (
             <S.LeftContent>
-              <S.SelectedImage src={teamLogoUrl} alt={selectedTeam} />
-              <S.SelectedName>{selectedTeam}</S.SelectedName>
+              <S.SelectedImage src={teamLogoUrl || {BsBan}} alt={selectedTeam} />
+              <S.SelectedName>{selectedTeam || '응원팀이 없습니다'}</S.SelectedName>
             </S.LeftContent>
-          )}
+          ) : (
+              <S.LeftContent>
+                <BsBan size={24} />
+                <S.SelectedName>응원팀이 없습니다</S.SelectedName>
+              </S.LeftContent>
+          )
+          }
         </S.AccountInfoContainer>
       </S.InputGroup>
 
