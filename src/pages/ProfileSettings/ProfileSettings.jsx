@@ -94,8 +94,8 @@ const ProfileSettings = () => {
     setNickname(value);
     if (!value.length) {
       setNicknameError("닉네임을 입력해 주세요.");
-    } else if (value.length > 10) {
-      setNicknameError("닉네임은 10자 이하로 작성해주세요.");
+    } else if (value.length > 8) {
+      setNicknameError("닉네임은 8자 이하로 작성해주세요.");
     } else {
       setNicknameError("");
     }
