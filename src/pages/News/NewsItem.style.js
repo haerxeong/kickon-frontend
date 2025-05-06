@@ -159,7 +159,7 @@ export const TopSection = styled.div`
 export const TeamIcon = styled.img`
     width: 0.8rem;
     height: 0.8rem;
-    object-fit: cover;
+    object-fit: contain;
     margin-right: 0.25rem;
 `;
 

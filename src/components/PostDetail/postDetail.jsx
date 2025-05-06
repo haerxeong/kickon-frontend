@@ -22,6 +22,7 @@ import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import parse, { domToReact } from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
 import { youtubeUrlToIframe } from "../../utils/youtubeUtils.js";
+import NoData from "../../components/NoData/noData.jsx";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,7 +54,7 @@ const PostDetail = () => {
   const menuRef = useRef(null);
   const dispatch = useDispatch();
 
-  // URL 파라미터와 현재 경로 가져오기
+  // 추가된 부분: URL 파라미터와 현재 경로 가져오기
   const { newsPk, boardPk } = useParams();
   const location = useLocation();
   const COMMENTS_PER_PAGE = 10; // 페이지당 댓글 수
@@ -467,8 +468,14 @@ const PostDetail = () => {
 
   // 로딩 중일 때 표시
   if (loading) return <div>로딩 중...</div>;
-  if (error) return <div>{error}</div>;
-  if (!apiPost) return <div>데이터가 없습니다.</div>;
+
+  if (error || !apiPost) {
+    return (
+        <S.ArticleContainer>
+          <NoData onRetry={() => window.location.reload()} />
+          </S.ArticleContainer>
+    );
+  }
 
   const displayComments = comments;
 
@@ -554,6 +561,7 @@ const PostDetail = () => {
           </S.ArticleText>
         </S.ArticleContent>
 
+
         <S.ArticleActions>
           <S.LikeButton
               isLiked={isLiked}
@@ -625,11 +633,11 @@ const PostDetail = () => {
                                   color: "#000",
                                 }}
                             >
-                              {comment.user.nickname}
-                            </span>
+                    {comment.user.nickname}
+                  </span>
                             <span style={{fontSize: "0.7rem", color: "#888"}}>
-                              {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
-                            </span>
+                    {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
+                  </span>
                           </S.CommentHeader>
                           <S.CommentLikes
                               key={comment.pk || comment.id}
@@ -704,13 +712,13 @@ const PostDetail = () => {
                                                   color: "#000",
                                                 }}
                                             >
-                                              {reply.user.nickname}
-                                            </span>
+                              {reply.user.nickname}
+                            </span>
                                             <span
                                                 style={{fontSize: "0.65rem", color: "#888"}}
                                             >
-                                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
-                                            </span>
+                              {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
+                            </span>
                                           </S.ReplyHeader>
                                           <S.ReplyLikes
                                               key={reply.pk}
@@ -729,6 +737,7 @@ const PostDetail = () => {
                                           </S.ReplyLikes>
                                         </S.ReplyHeaderWrapper>
                                         <S.ReplyContent>{reply.contents}</S.ReplyContent>
+
                                         {/* New ReplyActions component */}
                                         <S.ReplyActions>
                                           {location.pathname.includes('/community/') && canComment && (
@@ -763,6 +772,7 @@ const PostDetail = () => {
                 totalPages={totalCommentPages}
             />
         )}
+
       </S.ArticleContainer>
   );
 };

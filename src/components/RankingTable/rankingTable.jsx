@@ -6,6 +6,7 @@ import {
   getGambleSeasonRanking,
   getLeagueList,
 } from "../../apis/domains/ranking/ranking.js";
+import NoData from "../NoData/noData.jsx"
 
 const RankingTable = ({ title, type = "season" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -145,44 +146,54 @@ const RankingTable = ({ title, type = "season" }) => {
           </S.HeaderRow>
         </thead>
         <tbody>
-          {loading ? (
-            <div style={{ textAlign: "center", padding: "1rem" }}>
-              로딩 중...
-            </div>
-          ) : error ? (
-            <div style={{ textAlign: "center", padding: "1rem", color: "red" }}>
-              {error}
-            </div>
-          ) : (
+        {loading ? (
+            <tr>
+              <td colSpan="6" style={{ textAlign: "center", padding: "1rem" }}>
+                로딩 중...
+              </td>
+            </tr>
+        ) : error ? (
+            <tr>
+              <td colSpan="6" style={{ textAlign: "center", padding: "1rem", color: "red" }}>
+                {error}
+              </td>
+            </tr>
+        ) : rankings.length === 0 ? (
+            <tr>
+              <td colSpan="6">
+                <NoData onRetry={() => fetchRankings(selectedLeague.pk)} />
+              </td>
+            </tr>
+        ) : (
             rankings.slice(0, 10).map((item) => (
-              <S.TableRow key={item.rankOrder}>
-                <S.TableData>{item.rankOrder}</S.TableData>
-                <S.TeamCell>
-                  <S.TeamLogo
-                    src={item.teamLogoUrl}
-                    alt={item.teamName}
-                    onError={(e) => {
-                      e.target.src = "/path/to/default-logo.png";
-                    }}
-                  />
-                  <S.TableData>{item.teamName}</S.TableData>
-                </S.TeamCell>
-                {type === "season" ? (
-                  <>
-                    <S.TableData>{item.gameNum}</S.TableData>
-                    <S.TableData>{item.points}</S.TableData>
-                    <S.TableData>{item.wonScores}</S.TableData>
-                  </>
-                ) : (
-                  <>
-                    <S.TableData />
-                    <S.TableData>{item.gameNum}</S.TableData>
-                    <S.TableData>{item.points}</S.TableData>
-                  </>
-                )}
-              </S.TableRow>
+                <S.TableRow key={item.rankOrder}>
+                  <S.TableData>{item.rankOrder}</S.TableData>
+                  <S.TeamCell>
+                    <S.TeamLogo
+                        src={item.teamLogoUrl}
+                        alt={item.teamName}
+                        onError={(e) => {
+                          e.target.src = "/path/to/default-logo.png";
+                        }}
+                    />
+                    <S.TableData>{item.teamName}</S.TableData>
+                  </S.TeamCell>
+                  {type === "season" ? (
+                      <>
+                        <S.TableData>{item.gameNum}</S.TableData>
+                        <S.TableData>{item.points}</S.TableData>
+                        <S.TableData>{item.wonScores}</S.TableData>
+                      </>
+                  ) : (
+                      <>
+                        <S.TableData />
+                        <S.TableData>{item.gameNum}</S.TableData>
+                        <S.TableData>{item.points}</S.TableData>
+                      </>
+                  )}
+                </S.TableRow>
             ))
-          )}
+        )}
         </tbody>
       </S.Table>
     </S.TableContainer>

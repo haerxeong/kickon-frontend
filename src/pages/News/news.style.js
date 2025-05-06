@@ -71,3 +71,7 @@ export const NewsList = styled.div`
                 border-bottom: none;
         }
 `;
+
+export const NoDataWrapper = styled.div`
+  margin: 7rem 0 20rem 0; // 위아래 마진
+`;

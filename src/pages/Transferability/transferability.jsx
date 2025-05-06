@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import * as S from './transferability.style.js';
 import ballIcon from '../../assets/good_black.svg';
 import playerImage from '../../assets/player.png';
+import NoData from '../../components/NoData/noData.jsx';
 
 const Transferability = () => {
     const [inputValue, setInputValue] = useState('');
     const [transferResult, setTransferResult] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
 
     const handlePredict = async () => {
         if (!inputValue.trim()) return;
         setIsLoading(true);
+        setHasError(false);
 
         try {
             const response = await fetch(`/api/predict?player_name=${encodeURIComponent(inputValue)}`);
@@ -20,9 +23,16 @@ const Transferability = () => {
             // '와 " 자동 치환해서 파싱 시도 (임시 fix, 보안 주의)
             const safeText = text.replace(/'/g, '"'); // ' → "로 교체
             const data = JSON.parse(safeText);
+
+            if (!data.transfer_chance && data.message) {
+                throw new Error(data.message);
+            }
+
             setTransferResult(data);
         } catch (error) {
             console.error('예측 요청 실패:', error);
+            setHasError(true); // 에러 감지
+            setTransferResult(null); // 결과 초기화
         } finally {
             setIsLoading(false);
         }
@@ -53,6 +63,8 @@ const Transferability = () => {
 
                 {isLoading ? (
                     <S.Spinner />
+                ) : hasError ? (
+                    <NoData onRetry={handlePredict} />
                 ) : !transferResult ? (
                     <S.PlayerImage src={playerImage} alt="선수 이미지" />
                 ) : (
