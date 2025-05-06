@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 export const NewsContainer = styled.div`
     width: 30rem;
+    //min-height: 55.625rem;
+    height: auto;
     flex-shrink: 0;
     border-radius: 0.45rem;
     border: 1px solid #DCDCDC;
@@ -171,4 +173,12 @@ export const PostViews = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+export const NoDataWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 7rem 0;
 `;

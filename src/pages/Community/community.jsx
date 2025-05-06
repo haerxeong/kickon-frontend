@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import {
-    NewsContainer, Tab, TabContainer, TableHeader, PostAuthor, PostDate,
-    PostItem, PostLikes, PostsWrapper, PostTitle, PostViews
-} from "./community.style.js";
+import * as S from "./community.style.js";
 import GoodIcon from "../../assets/good_black.svg";
 import ProfileIcon from "../../assets/profile.svg";
-import * as S from "../../components/Pagination/pagination.style.js";
+import * as PS from "../../components/Pagination/pagination.style.js";
 import { getBoardList } from "../../apis/domains/community/getBoardList";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../apis/axios-instance";
 import {formatDate} from "../../utils/formatDate.js";
+import NoData from "../../components/NoData/noData.jsx";
+import CommunityBoard from "../../components/CommunityBoard/communityBoard.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -65,75 +64,82 @@ const Community = () => {
     };
 
     return (
-        <NewsContainer>
-            <TabContainer>
-                {tabs.map((tab) => (
-                    <Tab
-                        key={tab}
-                        active={activeTab === tab}
-                        onClick={() => {
-                            setActiveTab(tab);
-                            setActivePage(1); // Reset page on tab change
-                        }}
-                    >
-                        {tab}
-                    </Tab>
-                ))}
-            </TabContainer>
+        <>
+            <S.NewsContainer>
+                <S.TabContainer>
+                    {tabs.map((tab) => (
+                        <S.Tab
+                            key={tab}
+                            active={activeTab === tab}
+                            onClick={() => {
+                                setActiveTab(tab);
+                                setActivePage(1); // Reset page on tab change
+                            }}
+                        >
+                            {tab}
+                        </S.Tab>
+                    ))}
+                </S.TabContainer>
 
-            <TableHeader>
-                <div className="title">제목</div>
-                <div className="author">글쓴이</div>
-                <div className="date">날짜</div>
-                <div className="views">조회</div>
-                <div className="likes">
-                    <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
-                    킥
-                </div>
-            </TableHeader>
+                <S.TableHeader>
+                    <div className="title">제목</div>
+                    <div className="author">글쓴이</div>
+                    <div className="date">날짜</div>
+                    <div className="views">조회</div>
+                    <div className="likes">
+                        <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.25rem' }} />
+                        킥
+                    </div>
+                </S.TableHeader>
 
-            <PostsWrapper>
-                {posts.map((post) => (
-                    <PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
-                        <PostTitle>
-                            <span className="clamp">
-                                {post.title}
-                                {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
-                            </span>
-                        </PostTitle>
+                <S.PostsWrapper>
+                    {posts.length === 0 ? (
+                        <S.NoDataWrapper>
+                            <NoData onRetry={() => window.location.reload()} />
+                        </S.NoDataWrapper>
+                    ) : (
+                        posts.map((post) => (
+                            <S.PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
+                                <S.PostTitle>
+                                    <span className="clamp">
+                                        {post.title}
+                                        {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                                    </span>
+                                </S.PostTitle>
+                                <S.PostAuthor>
+                                    <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
+                                    {post.user.nickname}
+                                </S.PostAuthor>
+                                <S.PostDate>{formatDate(post.createdAt)}</S.PostDate>
+                                <S.PostViews>{post.views}</S.PostViews>
+                                <S.PostLikes>{post.likes}</S.PostLikes>
+                            </S.PostItem>
+                        ))
+                    )}
+                </S.PostsWrapper>
 
-                        <PostAuthor>
-                            <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
-                            {post.user.nickname}
-                        </PostAuthor>
-                        <PostDate>{formatDate(post.createdAt)}</PostDate>
-
-                        <PostViews>{post.views}</PostViews>
-                        <PostLikes>{post.likes}</PostLikes>
-                    </PostItem>
-                ))}
-            </PostsWrapper>
-
-            <S.PaginationWrapper>
-                <S.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
-                             disabled={activePage === 1}>
-                    <GrFormPrevious /> 이전
-                </S.NavButton>
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <S.PageButton
-                        key={i + 1}
-                        active={activePage === i + 1}
-                        onClick={() => setActivePage(i + 1)}
-                    >
-                        {i + 1}
-                    </S.PageButton>
-                ))}
-                <S.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
-                             disabled={activePage === totalPages}>
-                    다음 <GrFormNext />
-                </S.NavButton>
-            </S.PaginationWrapper>
-        </NewsContainer>
+                <PS.PaginationWrapper>
+                    <PS.NavButton onClick={() => activePage > 1 && setActivePage(prev => prev - 1)}
+                                  disabled={activePage === 1}>
+                        <GrFormPrevious /> 이전
+                    </PS.NavButton>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <PS.PageButton
+                            key={i + 1}
+                            active={activePage === i + 1}
+                            onClick={() => setActivePage(i + 1)}
+                        >
+                            {i + 1}
+                        </PS.PageButton>
+                    ))}
+                    <PS.NavButton onClick={() => activePage < totalPages && setActivePage(prev => prev + 1)}
+                                  disabled={activePage === totalPages}>
+                        다음 <GrFormNext />
+                    </PS.NavButton>
+                </PS.PaginationWrapper>
+            </S.NewsContainer>
+            <CommunityBoard type="communityDetail" />
+        </>
     );
 };
 

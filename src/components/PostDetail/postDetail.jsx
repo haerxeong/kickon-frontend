@@ -21,6 +21,7 @@ import { getCommunityCommentList } from "../../apis/domains/community/getCommuni
 import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import parse from 'html-react-parser';
 import axiosInstance from "../../apis/axios-instance.js";
+import NoData from "../../components/NoData/noData.jsx";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -467,11 +468,16 @@ const PostDetail = () => {
 
   // 로딩 중일 때 표시
   if (loading) return <div>로딩 중...</div>;
-  if (error) return <div>{error}</div>;
-  if (!apiPost) return <div>데이터가 없습니다.</div>;
+
+  if (error || !apiPost) {
+    return (
+        <S.ArticleContainer>
+          <NoData onRetry={() => window.location.reload()} />
+          </S.ArticleContainer>
+    );
+  }
 
   const displayComments = comments;
-
 
   return (
       <S.ArticleContainer>
