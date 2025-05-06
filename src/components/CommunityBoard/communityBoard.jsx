@@ -18,6 +18,7 @@ import {Link, useNavigate} from "react-router-dom";
 import GoodIcon from "../../assets/good.svg";
 import { getBoardHome } from "../../apis/domains/main/getBoardHome";
 import {formatDate} from "../../utils/formatDate.js";
+import NoData from "../../components/NoData/noData.jsx";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
@@ -68,34 +69,37 @@ const CommunityBoard = ({ type }) => {
         </div>
       </TableHeader>
       <PostsWrapper>
-        {posts.map((post) => (
-          <PostItem
-            key={post.pk}
-            onClick={() => navigate(`/community/${post.pk}`)}
-          >
-            <PostTitle>
-              {post.title}
-              {/*{post.hasImage && <img src={ImageIcon} alt="이미지" />}*/}
-              {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
-            </PostTitle>
-            <PostAuthor>
-              <img
-                src={post.user.profileImageUrl}
-                alt="프로필"
-                style={{
-                  width: '0.78rem',
-                  height: '0.78rem',
-                  borderRadius: '50%',
-                  marginRight: '0.1rem'
-                }}
-              />
-              {post.user.nickname}
-            </PostAuthor>
-            <PostDate>{formatDate(post.createdAt)}</PostDate>
-            <PostViews>{post.views}</PostViews>
-            <PostLikes>{post.likes}</PostLikes>
-          </PostItem>
-        ))}
+        {posts.length === 0 ? (
+            <NoData />
+        ) : (
+            posts.map((post) => (
+                <PostItem
+                    key={post.pk}
+                    onClick={() => navigate(`/community/${post.pk}`)}
+                >
+                  <PostTitle>
+                    {post.title}
+                    {post.replies > 0 && <span className="reply-count">({post.replies})</span>}
+                  </PostTitle>
+                  <PostAuthor>
+                    <img
+                        src={post.user.profileImageUrl}
+                        alt="프로필"
+                        style={{
+                          width: '0.78rem',
+                          height: '0.78rem',
+                          borderRadius: '50%',
+                          marginRight: '0.1rem'
+                        }}
+                    />
+                    {post.user.nickname}
+                  </PostAuthor>
+                  <PostDate>{formatDate(post.createdAt)}</PostDate>
+                  <PostViews>{post.views}</PostViews>
+                  <PostLikes>{post.likes}</PostLikes>
+                </PostItem>
+            ))
+        )}
       </PostsWrapper>
     </CommunityBoardContainer>
   );
