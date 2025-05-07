@@ -138,9 +138,9 @@ const RankingTable = ({ title, type = "season" }) => {
               </>
             ) : (
               <>
-                <S.TableHeader />
                 <S.TableHeader>경기</S.TableHeader>
                 <S.TableHeader>점수</S.TableHeader>
+                <S.TableHeader />
               </>
             )}
           </S.HeaderRow>
@@ -186,9 +186,13 @@ const RankingTable = ({ title, type = "season" }) => {
                       </>
                   ) : (
                       <>
-                        <S.TableData />
                         <S.TableData>{item.gameNum}</S.TableData>
-                        <S.TableData>{item.points}</S.TableData>
+                        <S.TableData>
+                          {type === "gamble"
+                              ? (item.points / 1000).toFixed(3)
+                              : item.points}
+                        </S.TableData>
+                        <S.TableData />
                       </>
                   )}
                 </S.TableRow>
