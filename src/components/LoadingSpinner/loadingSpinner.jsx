@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { SpinnerContainer, SpinnerCircle } from './LoadingSpinner.style';
+import { SpinnerContainer, SpinnerCircle } from './loadingSpinner.style';
 
 const LoadingSpinner = () => {
     const [rotation, setRotation] = useState(0);
