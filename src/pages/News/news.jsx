@@ -29,15 +29,14 @@ const News = () => {
                 const isAllTab = activeTab === "전체";
 
                 const hasTeam = selectedTeam?.pk !== null;
-                const hasLeagueFromTeam = selectedTeam?.leaguePk !== null;
                 console.log("selectedTeam", selectedTeam);
 
                 const params = {
                     size: 10,
                     page: activePage,
                     order: isPopularTab ? "hot" : "recent",
-                    ...(isTeamTab && hasTeam && hasLeagueFromTeam
-                            ? { team: selectedTeam.pk, league: selectedTeam.leaguePk }
+                    ...(isTeamTab && hasTeam
+                            ? { team: selectedTeam.pk }
                             : !isAllTab && !isPopularTab && selectedLeague?.pk
                                 ? { league: selectedLeague.pk }
                                 : {}

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchUserInfo } from "../apis/domains/auth/fetchUserInfo";
 import {useLeagueTeamStore} from "../store/useLeagueTeamStore.js";
+import axiosInstance from "../apis/axios-instance";
 
 export const AuthContext = createContext();
 
@@ -9,24 +10,27 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // 인증 여부 로딩 완료 여부
 
-  const login = (userData) => {
+  const login = (userData, tokens) => {
+    if (tokens?.accessToken && tokens?.refreshToken) {
+      localStorage.setItem("accessToken", tokens.accessToken);
+      localStorage.setItem("refreshToken", tokens.refreshToken);
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${tokens.accessToken}`;
+    }
+
     setUser(userData);
     setIsAuthenticated(true);
 
-    // 응원팀 있을 때만 설정
     if (userData?.teamPk && userData?.teamName && userData?.leaguePk && userData?.leagueName) {
       useLeagueTeamStore.getState().setSelectedTeam({
         pk: userData.teamPk,
         nameKr: userData.teamName,
         leaguePk: userData.leaguePk,
       });
-
       useLeagueTeamStore.getState().setSelectedLeague({
         pk: userData.leaguePk,
         nameKr: userData.leagueName,
       });
     } else {
-      // 응원팀 없는 경우 null로 초기화
       useLeagueTeamStore.getState().reset();
     }
   };

@@ -7,7 +7,6 @@ import Profile from "../components/Profile/profile";
 import TopNews from "../components/TopNews/topNews";
 import Footer from "../components/Footer/footer";
 import styled from "styled-components";
-import { rankings } from "../mocks/rankings.js";
 import WriteButton from "../components/WriteButton/writeButton.jsx";
 
 // 전체 레이아웃 Wrapper

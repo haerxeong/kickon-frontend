@@ -67,7 +67,7 @@ axiosInstance.interceptors.response.use(
             }
 
             // 그 외 서버 응답이 있는 오류 (FailResponse)
-            return error.response.data;
+            return Promise.reject(error);
         }
         return Promise.reject(error); // 기타 오류
     },
