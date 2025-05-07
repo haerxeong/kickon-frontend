@@ -164,8 +164,9 @@ const ContentWrapper = styled.div`
     justify-content: center;
 
     @media (max-width: 950px) {
-        /* 컬럼 숨길 때 flex-direction 무의미, 그냥 MainContent만 보임 */
+        display: block;      // flex 해제!
         padding: 0;
+        max-width: 100vw;
     }
 `;
 
@@ -194,7 +195,7 @@ const RightColumn = styled.div`
     }
 `;
 
-// MainContent: 950px 이하에서 100%로 확장
+// MainContent
 const MainContent = styled.main`
     width: 30rem;
     flex-shrink: 0;
@@ -204,11 +205,12 @@ const MainContent = styled.main`
 
     @media (max-width: 950px) {
         width: 100%;
-        max-width: 100vw;
+        max-width: 30rem;    // 원하는 최대 너비
         padding: 0 1rem;
-        margin: 0 auto;
+        margin: 0 auto;      // 중앙 정렬!
     }
 `;
+
 
 // 메인 배너
 const StyledMainBanner = styled(MainBanner)`
