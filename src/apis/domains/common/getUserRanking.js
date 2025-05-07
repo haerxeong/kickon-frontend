@@ -25,7 +25,7 @@ export const getUserRanking = async () => {
             ranking: response.data.ranking || "-"
         };
     } catch (error) {
-        console.error('유저 랭킹 정보 가져오기 실패: ', error.toJSON());
+        console.error('유저 랭킹 정보 가져오기 실패: ', error);
         // Return default values for any API error
         return {
             totalPoints: 0,

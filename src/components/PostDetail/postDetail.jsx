@@ -20,6 +20,7 @@ import { youtubeUrlToIframe } from "../../utils/youtubeUtils.js";
 import NoData from "../../components/NoData/noData.jsx";
 import Comment from "../../components/Comment/comment.jsx";
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
+import { useAuthGuard } from "../../hooks/useAuthGuard.js";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,6 +41,8 @@ const PostDetail = () => {
   // 추가된 부분: URL 파라미터와 현재 경로 가져오기
   const { newsPk, boardPk } = useParams();
   const location = useLocation();
+
+  const requireAuth = useAuthGuard();
 
   const handleClickOutside = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
@@ -185,6 +188,22 @@ const PostDetail = () => {
     }
   };
 
+  const handleKick = async () => {
+    if (!requireAuth()) return; // 로그인 안 돼 있으면 모달 띄우고 중단
+
+    try {
+      await toggleKick({ isLiked: !isLiked, newsPk, boardPk });
+
+      setIsLiked(!isLiked); // 상태 토글
+      setApiPost((prev) => ({
+        ...prev,
+        likes: isLiked ? prev.likes - 1 : prev.likes + 1,
+      }));
+    } catch (error) {
+      console.error("Failed to toggle 킥:", error);
+    }
+  };
+
   // 로딩 중일 때 표시
   if (loading) return <LoadingSpinner />;
 
@@ -285,21 +304,7 @@ const PostDetail = () => {
 
 
         <S.ArticleActions>
-          <S.LikeButton
-              isLiked={isLiked}
-              onClick={async () => {
-                try {
-                  await toggleKick({ isLiked: !isLiked, newsPk, boardPk });
-                  setIsLiked(!isLiked); // Toggle the local state
-                  setApiPost((prev) => ({
-                    ...prev,
-                    likes: isLiked ? prev.likes - 1 : prev.likes + 1, // Update likes count
-                  }));
-                } catch (error) {
-                  console.error("Failed to toggle 킥:", error);
-                }
-              }}
-          >
+          <S.LikeButton isLiked={isLiked} onClick={handleKick}>
             <img src={isLiked ? RKickIcon : BKickIcon} alt="킥 아이콘" width={14} height={14} />
             <span>킥</span>
             <span className="likes">{apiPost.likes}</span>
