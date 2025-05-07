@@ -226,6 +226,13 @@ const PostEditor = ({ type = "news" }) => {
         };
     };
 
+    const handleCancel = () => {
+        const confirmLeave = window.confirm("작성 중인 글이 사라집니다. 정말 나가시겠어요?");
+        if (confirmLeave) {
+            navigate(-1); // 이전 페이지로
+        }
+    };
+
     // const modules = {
     //     toolbar: {
     //         container: [
@@ -374,7 +381,7 @@ const PostEditor = ({ type = "news" }) => {
 
             {/* 버튼 영역 */}
             <S.ButtonContainer>
-                <S.CancelButton>취소</S.CancelButton>
+                <S.CancelButton onClick={handleCancel}>취소</S.CancelButton>
                 <S.SubmitButton onClick={handleSubmit}>작성완료</S.SubmitButton>
             </S.ButtonContainer>
         </S.Container>

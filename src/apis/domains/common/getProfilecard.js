@@ -13,7 +13,7 @@ export const getProfilecard = async () => {
 
         return response.data; // Return the Profile data
     } catch (error) {
-        console.error('유저 정보 가져오기 실패: ', error.toJSON());
+        console.error('유저 정보 가져오기 실패: ', error);
         throw error; // Re-throw the error for further handling
     }
 };
