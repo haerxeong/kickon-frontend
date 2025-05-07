@@ -148,11 +148,7 @@ const RankingTable = ({ title, type = "season" }) => {
         </thead>
         <tbody>
         {loading ? (
-            <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "1rem" }}>
-                <LoadingSpinner />
-              </td>
-            </tr>
+            <LoadingSpinner />
         ) : error ? (
             <tr>
               <td colSpan="6" style={{ textAlign: "center", padding: "1rem", color: "red" }}>
