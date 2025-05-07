@@ -225,7 +225,7 @@ const PostDetail = () => {
             {apiPost.user?.nickname}
             <FaCheckCircle/>
             <S.TimeLabel>
-              {new Date(apiPost.createdAt).toLocaleString()}
+              {new Date(new Date(apiPost.createdAt).getTime() + 9 * 60 * 60 * 1000).toLocaleString()}
             </S.TimeLabel>{" "}
             | <S.ViewLabel>읽음 {apiPost.views}</S.ViewLabel>
             <S.ArticleMeta>

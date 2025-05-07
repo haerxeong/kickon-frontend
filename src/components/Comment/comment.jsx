@@ -253,7 +253,7 @@ const Comment = ({postType, postPk, canComment}) => {
                                     {reply.user.nickname}
                                 </span>
                                 <span style={{fontSize: "0.65rem", color: "#888"}}>
-                                    {dayjs(reply.createdAt).format('YYYY.MM.DD HH:mm')}
+                                    {dayjs(reply.createdAt).add(9, 'hour').format('YYYY.MM.DD HH:mm')}
                                 </span>
                             </S.ReplyHeader>
                             <S.ReplyLikes
@@ -366,7 +366,7 @@ const Comment = ({postType, postPk, canComment}) => {
                                         {comment.user.nickname}
                                     </span>
                                     <span style={{fontSize: "0.7rem", color: "#888"}}>
-                                        {dayjs(comment.createdAt).format('YYYY.MM.DD HH:mm')}
+                                        {dayjs(comment.createdAt).add(9, 'hour').format('YYYY.MM.DD HH:mm')}
                                     </span>
                                 </S.CommentHeader>
                                 <S.CommentLikes
