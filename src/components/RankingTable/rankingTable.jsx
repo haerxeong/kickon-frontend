@@ -7,6 +7,7 @@ import {
   getLeagueList,
 } from "../../apis/domains/ranking/ranking.js";
 import NoData from "../NoData/noData.jsx"
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const RankingTable = ({ title, type = "season" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -147,11 +148,7 @@ const RankingTable = ({ title, type = "season" }) => {
         </thead>
         <tbody>
         {loading ? (
-            <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "1rem" }}>
-                로딩 중...
-              </td>
-            </tr>
+            <LoadingSpinner />
         ) : error ? (
             <tr>
               <td colSpan="6" style={{ textAlign: "center", padding: "1rem", color: "red" }}>

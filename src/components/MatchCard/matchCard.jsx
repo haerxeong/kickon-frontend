@@ -15,6 +15,7 @@ import {fetchMatchData} from "../../apis/domains/common/getMatchList.js";
 import {getProfilecard} from "../../apis/domains/common/getProfilecard.js";
 import {postMatchPrediction} from "../../apis/domains/common/postGamble.js";
 import {patchMatchPrediction} from "../../apis/domains/common/patchGamble.js";
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 
 const MatchCard = ({league}) => {
@@ -560,7 +561,7 @@ const MatchCard = ({league}) => {
     };
 
     if (loading) {
-        return <div>데이터를 불러오는 중입니다...</div>;
+        return <LoadingSpinner />;
     }
 
     if (error) {

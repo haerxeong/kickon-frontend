@@ -15,6 +15,7 @@ import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import { getUserRanking } from "../../apis/domains/common/getUserRanking.js";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const Profile = () => {
     const [userData, setUserData] = useState({
@@ -86,7 +87,7 @@ const Profile = () => {
 const UserCard = ({ userData, isLoading, error, onLogout }) => {
     const navigate = useNavigate();
     if (isLoading) {
-        return <CardContainer>로딩 중...</CardContainer>;
+        return <CardContainer><LoadingSpinner /></CardContainer>;
     }
 
     if (error) {
