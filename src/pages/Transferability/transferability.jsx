@@ -16,12 +16,21 @@ const Transferability = () => {
         setHasError(false);
 
         try {
-            const response = await fetch(`/api/predict?player_name=${encodeURIComponent(inputValue)}`);
-            const text = await response.text(); // JSON 파싱 전에 원본 확인
+            const baseUrl = import.meta.env.VITE_API_PREDICT_URL;
+            const url = `${baseUrl}/default/kickon-transfer-predict?player_name=${encodeURIComponent(inputValue)}`;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                cache: 'no-store', // 304 방지
+            });
+
+            const text = await response.text();
             console.log("예측 응답 원문:", text);
 
-            // '와 " 자동 치환해서 파싱 시도 (임시 fix, 보안 주의)
-            const safeText = text.replace(/'/g, '"'); // ' → "로 교체
+            const safeText = text.replace(/'/g, '"');
             const data = JSON.parse(safeText);
 
             if (!data.transfer_chance && data.message) {
@@ -31,8 +40,8 @@ const Transferability = () => {
             setTransferResult(data);
         } catch (error) {
             console.error('예측 요청 실패:', error);
-            setHasError(true); // 에러 감지
-            setTransferResult(null); // 결과 초기화
+            setHasError(true);
+            setTransferResult(null);
         } finally {
             setIsLoading(false);
         }

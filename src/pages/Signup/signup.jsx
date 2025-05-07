@@ -13,6 +13,7 @@ import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { fetchUserInfo } from "../../apis/domains/auth/fetchUserInfo";
+import axiosInstance from "../../apis/axios-instance";
 
 const Signup = () => {
   const [nickname, setNickname] = useState("");
@@ -130,38 +131,52 @@ const Signup = () => {
       alert("필수 약관에 동의해주세요.");
       return;
     }
+
     try {
       const privacyAgreedAt = new Date().toISOString().split('.')[0] + "Z";
       const marketingAgreedAt = isMarketingAgreed ? privacyAgreedAt : null;
 
-      const privacyAgreementBody = {
-        privacyAgreedAt,
-        marketingAgreedAt,
-      };
-      await updatePrivacyAgreement(privacyAgreementBody);
+      await updatePrivacyAgreement({ privacyAgreedAt, marketingAgreedAt });
 
-      const userInfoBody = {
+      await updateUserInfo({
         nickname,
         team: selectedTeam.nameKr === "응원팀이 없어요." ? null : selectedTeam.pk,
-      };
-      await updateUserInfo(userInfoBody);
+      });
 
-      const user = await fetchUserInfo();
-      let queryStr = location.search.includes("?accessToken=")
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // refreshToken으로 새 accessToken 요청
+      const queryStr = location.search.includes("?accessToken=")
           ? location.search.replace("?accessToken=", "&accessToken=")
           : location.search;
-
       const queryParams = new URLSearchParams(queryStr);
-      const accessToken = queryParams.get("accessToken");
       const refreshToken = queryParams.get("refreshToken");
-      if (user) {
-        login(user, { accessToken, refreshToken });
+
+      const res = await axiosInstance.post("/auth/refresh", { refreshToken });
+      const newAccessToken = res?.data?.accessToken;
+      const newRefreshToken = res?.data?.refreshToken;
+
+      if (!newAccessToken || !newRefreshToken) {
+        throw new Error("토큰 재발급 실패: 응답에 토큰 없음");
       }
+
+      localStorage.setItem("accessToken", newAccessToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
+
+      console.log("새 액세스 토큰", newAccessToken);
+      console.log("새 리프레시 토큰", newRefreshToken);
+
+      const user = await fetchUserInfo();
+
+      login(user, {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      });
 
       alert("회원가입 성공!");
       navigate("/");
     } catch (error) {
-      console.error("회원가입 중 오류가 발생했습니다.", error);
+      console.error("회원가입 중 오류:", error);
       alert("회원가입 중 오류가 발생했습니다.");
     }
   };
