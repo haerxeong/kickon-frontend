@@ -122,7 +122,7 @@
 // };
 //
 // export default RootLayout;
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header/header";
 import MainBanner from "../components/MainBanner/mainBanner";
@@ -235,8 +235,20 @@ const RootLayout = () => {
     const isNewsPage = location.pathname.startsWith("/news");
     const isCommunityPage = location.pathname.startsWith("/community");
 
-    // 950px 이하에서는 컬럼 없이 MainContent만 보여줌
-    const isNarrow = window.innerWidth <= 950;
+    // 1. windowWidth 상태 추가
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    // 2. resize 이벤트로 windowWidth 갱신
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // 3. isNarrow를 state 기반으로 계산
+    const isNarrow = windowWidth <= 950;
 
     return (
         <Layout isHomePage={isHomePage}>

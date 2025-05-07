@@ -87,7 +87,6 @@ export const HeaderWrapper = styled.header`
         padding: 0 2rem;
     }
     @media (max-width: 768px) {
-        height: 2.5rem;
         padding: 0 1rem;
     }
 `;
@@ -122,7 +121,33 @@ export const NavItem = styled(Link)`
     &:visited,
     &:active,
     &:focus {
-        color: #000;
+        color: ${(props) => {
+            const { currentPath, itemPath } = props;
+
+            // Case 1: Home - both #000
+            if (currentPath === "/") return "#000";
+
+            // Case 2: News - News #FFF, Club Community #8F8F8F
+            if (currentPath.includes("/news")) {
+                return itemPath === "/news" ? "#FFF" : "#8F8F8F";
+            }
+
+            // Case 3: Club Community #FFF, News #8F8F8F
+            if (currentPath.includes("/community")) {
+                return itemPath === "/community" ? "#FFF" : "#8F8F8F";
+            }
+
+            // Case 4: Transferability - Transferability #FFF, others #8F8F8F
+            if (currentPath.includes("/transferability")) {
+                return itemPath === "/transferability" ? "#FFF" : "#8F8F8F";
+            }
+
+            // Case 5: Signup - same as profile settings (both #FFF)
+            if (currentPath === "/signup") return "#FFF";
+
+            // Default (fallback) using isDark prop
+            return props.isDark ? "#FFF" : "#000";
+        }};
         outline: none;
     }
 
@@ -138,7 +163,6 @@ export const NavItem = styled(Link)`
         margin-left: 0.5rem;
         font-size: 0.7rem;
     }
-    
 `;
 
 
