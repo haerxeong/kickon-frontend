@@ -60,6 +60,7 @@ const Comment = ({postType, postPk, canComment}) => {
     };
 
     const handleCommentSubmit = async () => {
+        if (!canComment) return alert("같은 팀만 댓글을 작성할 수 있습니다.");
         if (!commentInput.trim()) return alert("댓글을 입력해주세요.");
         try {
             const url = postType === 'news' ? "/api/news-reply" : "/api/board-reply";
@@ -76,6 +77,7 @@ const Comment = ({postType, postPk, canComment}) => {
 
     // parentId를 항상 rootCommentId로 받도록 수정
     const handleReplySubmit = async (rootCommentId, parentType = 'comment') => {
+        if (!canComment) return alert("같은 팀만 답글을 작성할 수 있습니다.");
         const replyText = replyInputs[rootCommentId];
         if (!replyText || !replyText.trim()) return alert("답글을 입력해주세요.");
 
@@ -239,7 +241,7 @@ const Comment = ({postType, postPk, canComment}) => {
                         </S.ReplyHeaderWrapper>
                         <S.ReplyContent>{reply.contents}</S.ReplyContent>
                         <S.ReplyActions>
-                            {(location.pathname.includes('/community/') || canComment) && (
+                            {canComment && (
                                 <S.ReplyActionButton
                                     isActive={openReplyIds[reply.pk]}
                                     onClick={() => toggleReplyBox(reply.pk)}
@@ -286,7 +288,7 @@ const Comment = ({postType, postPk, canComment}) => {
 
     return (
         <S.CommentsSection>
-            {(location.pathname.includes('/community/') || canComment) && (
+            {canComment && (
                 <S.CommentInputBox>
                     <S.CommentInputLabel>댓글 쓰기</S.CommentInputLabel>
                     <S.CommentInputContainer>
@@ -345,7 +347,7 @@ const Comment = ({postType, postPk, canComment}) => {
                             </S.CommentHeaderWrapper>
                             <S.CommentContent>{comment.contents}</S.CommentContent>
                             <S.CommentActions>
-                                {(location.pathname.includes('/community/') || canComment) && (
+                                {canComment && (
                                     <S.ReplyButton
                                         isActive={openReplyIds[comment.pk]}
                                         onClick={() => toggleReplyBox(comment.pk)}
