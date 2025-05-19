@@ -166,3 +166,33 @@ export const TeamName = styled.span`
   text-align: left;
 `;
 
+export const HelpWrapper = styled.span`
+  position: relative;
+  display: inline-block;
+  margin-left: 0.5rem;
+
+  &:hover > div {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+export const Tooltip = styled.div`
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 250px;
+  background-color: #333;
+  color: #FFF;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  border-radius: 4px;
+  white-space: pre-line;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+`;
