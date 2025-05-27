@@ -21,6 +21,7 @@ import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
 import { increaseViewCount } from "../../utils/increaseViewCount";
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
+import defaultProfileImage from "../../assets/profile.svg";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
@@ -94,7 +95,7 @@ const CommunityBoard = ({ type }) => {
                   </PostTitle>
                   <PostAuthor>
                     <img
-                        src={post.user.profileImageUrl}
+                        src={post.user.profileImageUrl ? post.user.profileImageUrl : defaultProfileImage}
                         alt="프로필"
                         style={{
                           width: '0.78rem',
