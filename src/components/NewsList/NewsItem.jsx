@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import defaultProfileImage from "../../assets/profile.svg"; // 기본 프로필 이미지 import
+import defaultTeamLogo from "../../assets/good.svg"; // 기본 팀 로고로 일단 good.svg를 사용
 import {
   NewsItemContainer,
   NewsBadge,
@@ -28,17 +29,51 @@ import GoodIcon from "../../assets/good.svg";
 import {stripHtml} from "../../utils/stripHtml.js";
 import { increaseViewCount } from "../../utils/increaseViewCount";
 
-const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, likes, replies, category }) => {
+const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, likes, replies, category, team, onNewsClick, isCompact }) => {
   const navigate = useNavigate();
-  const plainTextContent = stripHtml(content).substring(0, 100) + (stripHtml(content).length > 100 ? "..." : "");
+  const plainTextContent = stripHtml(content).substring(0, isCompact ? 50 : 100) + (stripHtml(content).length > (isCompact ? 50 : 100) ? "..." : "");
 
   const handleClick = async () => {
     try {
       await increaseViewCount("news", pk);
-      navigate(`/news/${pk}`);
+      
+      if (onNewsClick) {
+        // 상세 뉴스 데이터를 객체로 전달
+        onNewsClick({
+          pk,
+          title,
+          content,
+          thumbnailUrl,
+          user,
+          createdAt,
+          views: views + 1, // 조회수 증가
+          likes,
+          replies,
+          category,
+          team
+        });
+      } else {
+        navigate(`/news/${pk}`);
+      }
     } catch (error) {
       console.error("조회수 증가 실패:", error);
-      navigate(`/news/${pk}`);
+      if (onNewsClick) {
+        onNewsClick({
+          pk,
+          title,
+          content,
+          thumbnailUrl,
+          user,
+          createdAt,
+          views,
+          likes,
+          replies,
+          category,
+          team
+        });
+      } else {
+        navigate(`/news/${pk}`);
+      }
     }
   };
 
@@ -46,14 +81,14 @@ const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, li
   const profileImage = user.profileImageUrl || defaultProfileImage;
 
   return (
-      <NewsItemContainer onClick={handleClick}>
+      <NewsItemContainer onClick={handleClick} className={isCompact ? 'news-item compact' : ''}>
         <ContentWrapper>
           <TextContentWrapper>
             <TopSection>
               <div>
                 <NewsBadge>{category}</NewsBadge>
-                <NewsTitle>{title}</NewsTitle>
-                <NewsContent>{plainTextContent}</NewsContent>
+                <NewsTitle className="title">{title}</NewsTitle>
+                <NewsContent className="content">{plainTextContent}</NewsContent>
                 <LeftInfo>
                   <ProfileIcon src={profileImage} alt="Profile" />
                   <Nickname>{user.nickname}</Nickname>
@@ -67,7 +102,7 @@ const NewsItem = ({ pk, title, content, thumbnailUrl, user, createdAt, views, li
                   <Reads>읽음 {views}</Reads>
                 </LeftInfo>
               </div>
-              {thumbnailUrl && <Thumbnail src={thumbnailUrl} alt="Thumbnail" />}
+              {thumbnailUrl && <Thumbnail className="thumbnail" src={thumbnailUrl} alt="Thumbnail" />}
             </TopSection>
             <RightInfo>
               <img src={GoodIcon} alt="좋아요" style={{ width: '0.7rem', height: '0.7rem', marginRight: '0.1rem' }} />
