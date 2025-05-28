@@ -133,6 +133,10 @@ export const NavItem = styled(Link)`
             return itemPath === "/community" ? "#FFF" : "#8F8F8F";
         }
 
+        if (currentPath.includes("/market")) {
+            return itemPath === "/market" ? "#FFF" : "#8F8F8F";
+        }
+
         // Case 4: Transferability - Transferability #FFF, others #8F8F8F
         if (currentPath.includes("/transferability")) {
             return itemPath === "/transferability" ? "#FFF" : "#8F8F8F";
@@ -162,6 +166,10 @@ export const NavItem = styled(Link)`
             // Case 3: Club Community #FFF, News #8F8F8F
             if (currentPath.includes("/community")) {
                 return itemPath === "/community" ? "#FFF" : "#8F8F8F";
+            }
+
+            if (currentPath.includes("/market")) {
+                return itemPath === "/market" ? "#FFF" : "#8F8F8F";
             }
 
             // Case 4: Transferability - Transferability #FFF, others #8F8F8F
