@@ -84,7 +84,8 @@ export const Thumbnail = styled.img`
   flex-shrink: 0;
   border-radius: 0.36rem;
   object-fit: cover; // 이미지 비율 유지를 위해 추가
-  margin: 1rem 0 0 1rem;
+  margin: 0;
+  align-self: center;
 `;
 
 export const ProfileIcon = styled.img.attrs({
@@ -160,5 +161,6 @@ export const TopSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
 `;
