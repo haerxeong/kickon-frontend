@@ -258,4 +258,4 @@ const Transferability = () => {
     );
 };
 
-export default Transferability;dd
+export default Transferability;
