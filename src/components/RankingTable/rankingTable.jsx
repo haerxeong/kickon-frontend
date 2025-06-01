@@ -8,6 +8,7 @@ import {
 } from "../../apis/domains/ranking/ranking.js";
 import NoData from "../NoData/noData.jsx"
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
+import { RiQuestionLine } from "react-icons/ri";
 
 const RankingTable = ({ title, type = "season" }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,7 +104,20 @@ const RankingTable = ({ title, type = "season" }) => {
 
   return (
     <S.TableContainer>
-      <S.Title>{title}</S.Title>
+      <S.Title>
+        {title}
+        {type === "gamble" && (
+            <S.HelpWrapper>
+              <RiQuestionLine size="0.8rem" color="#aaa" style={{ verticalAlign: "center" }}/>
+              <S.Tooltip>
+                승부예측은 경기 결과를 맞히는 기능입니다.<br />
+                예측이 적중하면 포인트가 적립되고,<br />
+                이 포인트를 기반으로 내가 응원하는 팀의<br />
+                승부예측 순위가 결정됩니다.<br />
+              </S.Tooltip>
+            </S.HelpWrapper>
+        )}
+      </S.Title>
       <S.Divider />
       {selectedLeague && (
         <S.LeagueSelector onClick={toggleDropdown}>
