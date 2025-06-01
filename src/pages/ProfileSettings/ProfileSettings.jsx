@@ -12,6 +12,7 @@ import { updateUserInfo } from "../../apis/domains/auth/updateUserInfo";
 import { useNavigate } from "react-router-dom";
 import { BsBan } from "react-icons/bs";
 import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
+import { uploadImageToS3 } from "../../utils/imageUpload.js"; // 경로 확인 필요
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -70,25 +71,8 @@ const ProfileSettings = () => {
     fetchUserData();
   }, []);
 
-  // 이미지 클릭 시 파일 선택 창 열기
   const handleImageClick = () => {
     fileInputRef.current.click();
-  };
-
-  const handleIconClick = () => {
-    alert("아이콘이 클릭되었습니다");
-  };
-
-  // 이미지 변경 처리 함수
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleNicknameChange = (e) => {
@@ -103,6 +87,19 @@ const ProfileSettings = () => {
     }
   };
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const s3Url = await uploadImageToS3(file);
+        setProfileImage(s3Url);
+      } catch (error) {
+        alert("이미지 업로드에 실패했습니다.");
+        console.error(error);
+      }
+    }
+  };
+
   const handleUpdate = async () => {
     if (!nickname) {
       alert("닉네임을 입력해주세요.");
@@ -112,25 +109,23 @@ const ProfileSettings = () => {
     try {
       const userData = {
         nickname,
-        team: teamPk
+        team: teamPk,
+        profileImageUrl: profileImage !== ProfileImageDefault ? profileImage : null,
       };
 
       const response = await updateUserInfo(userData);
-      
+
       if (response.code && response.code.split('_').includes('SUCCESS')) {
         alert("프로필이 성공적으로 업데이트되었습니다.");
         navigate("/");
       } else if (response === "DUPLICATED_NICKNAME") {
         setNicknameError("이미 사용중인 닉네임입니다.");
-      } else if (response === "INVALID_REQUEST") {
-        setNicknameError("유효하지 않은 요청입니다.");
       } else {
-        console.error(response);
         alert("프로필 업데이트에 실패했습니다.");
       }
     } catch (error) {
-      console.error("Profile update failed:", error);
       alert("프로필 업데이트에 실패했습니다.");
+      console.error("Profile update failed:", error);
     }
   };
 
@@ -152,11 +147,11 @@ const ProfileSettings = () => {
         <S.ProfileImage src={profileImage} alt="프로필 이미지" />
         <S.CameraIcon src={CameraIcon} alt="카메라" onClick={handleImageClick} />
         <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-          style={{ display: "none" }}
-          accept="image/*"
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+            style={{ display: "none" }}
+            accept="image/*"
         />
       </S.ProfileImageContainer>
 
@@ -182,7 +177,7 @@ const ProfileSettings = () => {
       <S.InputGroup>
         <S.InputLabel>
           리그
-          <BsQuestionCircle onClick={handleIconClick} />
+          <BsQuestionCircle />
         </S.InputLabel>
         <S.AccountInfoContainer>
           {selectedLeagueData ? (
