@@ -3,12 +3,14 @@ import * as S from './transferability.style.js';
 import ballIcon from '../../assets/good_black.svg';
 import playerImage from '../../assets/player.png';
 import NoData from '../../components/NoData/noData.jsx';
+import { useAuthGuard } from "../../hooks/useAuthGuard.js";
 
 const Transferability = () => {
     const [inputValue, setInputValue] = useState('');
     const [transferResult, setTransferResult] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [hasError, setHasError] = useState(false);
+    const requireAuth = useAuthGuard();
 
     const handlePredict = async () => {
         if (!inputValue.trim()) return;
@@ -54,6 +56,11 @@ const Transferability = () => {
         return '👉 “로열티 높은 ‘우리’ 팀 선수입니다!”';
     };
 
+    const handleClickPredict = () => {
+        if (!requireAuth()) return; // 로그인 안 됐으면 모달 띄우고 리턴
+        handlePredict(); // 로그인 상태면 예측 실행
+    };
+
     return (
         <S.Container>
             <S.ContentWrapper>
@@ -88,7 +95,7 @@ const Transferability = () => {
                 )}
             </S.ContentWrapper>
 
-            <S.PredictButton onClick={handlePredict} disabled={isLoading}>
+            <S.PredictButton onClick={handleClickPredict} disabled={isLoading}>
                 <S.BallIcon src={ballIcon} alt="축구공" />
                 <S.ButtonText>갈까? 말까?</S.ButtonText>
             </S.PredictButton>
