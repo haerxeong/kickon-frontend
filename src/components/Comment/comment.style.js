@@ -187,23 +187,6 @@ export const ReplyInputWrapper = styled.div`
     width: calc(100%);
 `;
 
-export const ReplyInput = styled.textarea`
-    flex: 1;
-    border: none;
-    padding: 0.625rem;
-    font-size: 0.583rem;
-    background: transparent;
-    min-height: 2.5rem;
-    max-height: 5rem;
-    overflow-y: auto;
-    resize: none;
-    background: var(--Black-black_100, #f8f8f8);
-
-    &:focus {
-        outline: none;
-    }
-`;
-
 // 새로운 contentEditable 입력창 스타일 - 글자색 검정으로 수정
 export const EditableReplyInput = styled.div`
     flex: 1;
