@@ -8,6 +8,7 @@ import GoodIcon from "../../assets/good.svg";
 import { useLeagueTeamStore } from "../../store/useLeagueTeamStore.js";
 import { getItemList } from "../../apis/domains/market/getItemList.js";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../utils/formatDate.js";
 
 const Market = () => {
     const [marketplaceItems, setMarketplaceItems] = useState([]);
@@ -69,8 +70,7 @@ const Market = () => {
                                     {item.user?.nickname}
                                 </M.MarketplaceAuthor>
                                 <M.MarketplaceStats>
-                                    <span><Eye size={10} />{item.viewCount}</span>
-                                    <span><img src={GoodIcon} alt="좋아요" width={10} height={10} />{item.likeCount}</span>
+                                    <span>{formatDate(item.createdAt)}</span>
                                 </M.MarketplaceStats>
                             </M.MarketplaceInfo>
                         </M.MarketplaceContent>
