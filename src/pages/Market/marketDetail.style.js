@@ -1,0 +1,93 @@
+import styled from "styled-components";
+
+export const ArticleContainer = styled.div`
+    width: 30rem;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 0.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+`;
+
+export const ArticleImage = styled.img`
+    width: 100%;
+    height: auto;
+    max-height: 14rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+`;
+
+export const ArticleLabel = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+export const ArticleCategory = styled.span`
+    font-size: 0.75rem;
+    color: #c00c0b;
+    font-weight: 600;
+`;
+
+export const ArticleStatus = styled.span`
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  color: white;
+  background-color: ${({ status }) =>
+    status === "SOLD" ? "#8f8f8f" : "#c00c0b"};
+`;
+
+export const ArticleHeader = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+`;
+
+export const ArticleTitle = styled.h2`
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+`;
+
+export const ArticleInfo = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #444;
+
+    svg {
+        margin-left: 0.25rem;
+    }
+`;
+
+export const TimeLabel = styled.span`
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: #8f8f8f;
+`;
+
+export const ArticleContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+`;
+
+export const ArticleText = styled.div`
+    font-size: 0.75rem;
+    color: #222;
+
+    b {
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #000;
+    }
+
+    div {
+        line-height: 1.4;
+    }
+`;
