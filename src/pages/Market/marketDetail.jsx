@@ -4,6 +4,7 @@ import ProfileIcon from "../../assets/profile.svg";
 import NoData from "../../components/NoData/noData.jsx";
 import { useParams } from "react-router-dom";
 import { getItemDetail } from "../../apis/domains/market/getItemDetail.js";
+import { Phone } from "lucide-react";
 
 const MarketDetail = () => {
     const { pk } = useParams();
@@ -18,6 +19,14 @@ const MarketDetail = () => {
         };
         fetchDetail();
     }, [pk]);
+
+    const handleCopyPhone = () => {
+        if (data?.phoneNumber) {
+            navigator.clipboard.writeText(data.phoneNumber)
+                .then(() => alert("전화번호가 복사되었습니다!"))
+                .catch(() => alert("복사에 실패했습니다."));
+        }
+    };
 
     if (error || !data) {
         return (
@@ -70,10 +79,12 @@ const MarketDetail = () => {
                     <div>{data.price.toLocaleString()}원</div>
                 </S.ArticleText>
 
-                <S.ArticleText>
-                    <b>연락처</b>
-                    <div>{data.phoneNumber}</div>
-                </S.ArticleText>
+                <S.ButtonWrapper>
+                    <S.ContactButton onClick={handleCopyPhone}>
+                        <Phone size={18} />
+                        연락하기
+                    </S.ContactButton>
+                </S.ButtonWrapper>
             </S.ArticleContent>
         </S.ArticleContainer>
     );

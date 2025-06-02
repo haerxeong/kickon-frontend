@@ -91,3 +91,49 @@ export const ArticleText = styled.div`
         line-height: 1.4;
     }
 `;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  text-align: center;
+`;
+
+export const ContactButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 8px 14px;
+  background: #c00c0b;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(255, 71, 87, 0.2);
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #c00c0b;
+  }
+
+  &:hover {
+    background: #a00a0a;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+`;
