@@ -31,6 +31,23 @@ const Comment = ({postType, postPk, canComment}) => {
     // 답글 입력창 ref 관리
     const replyInputRefs = useRef({});
 
+    // 댓글과 답글의 kicked 상태를 likedComments에 초기화하는 함수
+    const initializeLikedComments = (commentsData) => {
+        const likedState = {};
+
+        const processComments = (comments) => {
+            comments.forEach(comment => {
+                likedState[comment.pk] = comment.kicked || false;
+                if (comment.replies && comment.replies.length > 0) {
+                    processComments(comment.replies);
+                }
+            });
+        };
+
+        processComments(commentsData);
+        setLikedComments(likedState);
+    };
+
     const fetchComments = async () => {
         try {
             setLoading(true);
@@ -39,6 +56,9 @@ const Comment = ({postType, postPk, canComment}) => {
             setComments(response.data);
             setCommentsCount(response.meta?.totalItems || 0);
             setTotalCommentPages(response.meta?.totalPages || 1);
+
+            // 서버에서 받은 kicked 상태를 likedComments에 초기화
+            initializeLikedComments(response.data);
         } catch (e) {
             setError("댓글을 불러오는 데 실패했습니다.");
             console.log(error);
