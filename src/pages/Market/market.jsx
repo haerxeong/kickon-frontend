@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Eye } from 'lucide-react';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import * as M from './market.style.js';
 import * as PS from "../../components/Pagination/pagination.style.js";
 import { NewsContainer } from "./market.style.js";
-import GoodIcon from "../../assets/good.svg";
 import { useLeagueTeamStore } from "../../store/useLeagueTeamStore.js";
 import { getItemList } from "../../apis/domains/market/getItemList.js";
 import { useNavigate } from "react-router-dom";
