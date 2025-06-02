@@ -231,9 +231,11 @@ const RootLayout = () => {
     const isDark = !isHomePage;
     const isWritePage =
         location.pathname === "/news/write" ||
-        location.pathname === "/community/write";
+        location.pathname === "/community/write" ||
+        location.pathname === "market/write";
     const isNewsPage = location.pathname.startsWith("/news");
     const isCommunityPage = location.pathname.startsWith("/community");
+    const isMarketPage = location.pathname.startsWith("/market");
 
     // 1. windowWidth 상태 추가
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -274,7 +276,7 @@ const RootLayout = () => {
                             <RightColumn>
                                 <Profile />
                                 <TopNews />
-                                {((isNewsPage || isCommunityPage) && !isWritePage) && (
+                                {((isNewsPage || isCommunityPage || isMarketPage) && !isWritePage) && (
                                     <WriteButton />
                                 )}
                             </RightColumn>

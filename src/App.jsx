@@ -16,6 +16,7 @@ import CommunityDetailPage from "./pages/Community/communityDetail.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import Transferability from "./pages/Transferability/transferability.jsx";
 import Market from "./pages/Market/market.jsx";
+import MarketDetail from "./pages/Market/marketDetail.jsx";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                             <Route path="community/:boardPk" element={<CommunityDetailPage />} />
                             <Route path="/transferability" element={<Transferability />} />
                             <Route path="/market" element={<Market />} />
+                            <Route path="market/:pk" element={<MarketDetail />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
