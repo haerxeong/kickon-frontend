@@ -18,7 +18,6 @@ const Comment = ({postType, postPk, canComment}) => {
     const [openReplyIds, setOpenReplyIds] = useState({});
     const [showReplies, setShowReplies] = useState({});
     const [commentInput, setCommentInput] = useState("");
-    const [replyInputs, setReplyInputs] = useState({});
     const [replyTargets, setReplyTargets] = useState({}); // 답글 대상 저장
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -28,6 +27,9 @@ const Comment = ({postType, postPk, canComment}) => {
 
     const location = useLocation();
     const COMMENTS_PER_PAGE = 10;
+
+    // 답글 입력창 ref 관리
+    const replyInputRefs = useRef({});
 
     const fetchComments = async () => {
         try {
@@ -53,14 +55,7 @@ const Comment = ({postType, postPk, canComment}) => {
         setCommentInput(e.target.value);
     };
 
-    // 수정된 답글 입력 핸들러
-    const handleReplyInputChange = (id, content) => {
-        setReplyInputs(prev => ({
-            ...prev,
-            [id]: content
-        }));
-    };
-
+    // HTML을 일반 텍스트로 변환
     const getPlainTextFromHTML = (html) => {
         const div = document.createElement('div');
         div.innerHTML = html;
@@ -69,25 +64,20 @@ const Comment = ({postType, postPk, canComment}) => {
 
     // @멘션을 포함한 HTML을 서버 전송용 텍스트로 변환
     const formatContentForServer = (html) => {
-        // @멘션 부분을 일반 텍스트로 변환하되 @는 유지
         const div = document.createElement('div');
         div.innerHTML = html;
-
         // span 태그 내의 @멘션을 일반 텍스트로 변환
         const spans = div.querySelectorAll('span[style*="color: #C00C0B"]');
         spans.forEach(span => {
             const textNode = document.createTextNode(span.textContent);
             span.parentNode.replaceChild(textNode, span);
         });
-
         return div.textContent || div.innerText || '';
     };
 
-    // @멘션 스타일을 적용한 HTML 생성
+    // @닉네임 패턴을 찾아서 스타일 적용
     const formatContentForDisplay = (content) => {
         if (!content) return content;
-
-        // @닉네임 패턴을 찾아서 스타일 적용
         return content.replace(/@(\S+)/g, '<span style="color: #C00C0B; font-weight: 500;">@$1</span>');
     };
 
@@ -107,32 +97,30 @@ const Comment = ({postType, postPk, canComment}) => {
         }
     };
 
-    const handleReplySubmit = async (rootCommentId, parentType = 'comment') => {
+    // 답글 등록 - replyId와 rootCommentId를 구분해서 처리
+    const handleReplySubmit = async (replyId, rootCommentId, parentType = 'comment') => {
         if (!canComment) return alert("같은 팀만 답글을 작성할 수 있습니다.");
-        const replyHTML = replyInputs[rootCommentId];
+        const el = replyInputRefs.current[replyId];
+        const replyHTML = el ? el.innerHTML : "";
         if (!replyHTML || !getPlainTextFromHTML(replyHTML).trim()) return alert("답글을 입력해주세요.");
 
         try {
             const isNewsReply = location.pathname.includes('/news/');
             const url = isNewsReply ? "/api/news-reply" : "/api/board-reply";
-
-            // HTML에서 서버 전송용 텍스트로 변환
             const contentForServer = formatContentForServer(replyHTML);
 
             await axiosInstance.post(url, {
                 [postType]: parseInt(postPk),
                 contents: contentForServer,
-                parentReply: rootCommentId
+                parentReply: rootCommentId // 항상 최상위 댓글의 pk를 사용
             });
 
-            setReplyInputs(prev => ({
-                ...prev,
-                [rootCommentId]: ""
-            }));
+            // 입력창 비우기
+            if (el) el.innerHTML = "";
 
             setOpenReplyIds(prev => ({
                 ...prev,
-                [rootCommentId]: false
+                [replyId]: false
             }));
 
             if (parentType === 'comment') {
@@ -148,6 +136,7 @@ const Comment = ({postType, postPk, canComment}) => {
         }
     };
 
+    // 좋아요 토글
     const toggleKick = async (id) => {
         try {
             const currentKickState = likedComments[id] || false;
@@ -211,24 +200,34 @@ const Comment = ({postType, postPk, canComment}) => {
         }
     };
 
+    // 답글창 열기/닫기 및 멘션 세팅
     const toggleReplyBox = (commentId, targetNickname) => {
         setOpenReplyIds(prev => ({
             ...prev,
             [commentId]: !prev[commentId]
         }));
 
-        // 답글 대상 정보 저장
         if (!openReplyIds[commentId]) {
             setReplyTargets(prev => ({
                 ...prev,
                 [commentId]: targetNickname
             }));
-            // 답글 입력창에 @닉네임 미리 설정 (더 안전한 방식)
-            const mentionHtml = `<span style="color: #C00C0B; font-weight: 500;">@${targetNickname}</span>&nbsp;`;
-            setReplyInputs(prev => ({
-                ...prev,
-                [commentId]: mentionHtml
-            }));
+            // 멘션 HTML 준비
+            setTimeout(() => {
+                const el = replyInputRefs.current[commentId];
+                if (el) {
+                    const mentionHtml = `<span style="color: #C00C0B; font-weight: 500;">@${targetNickname}</span>&nbsp;`;
+                    el.innerHTML = mentionHtml;
+                    // 커서를 맨 끝으로 이동
+                    const range = document.createRange();
+                    range.selectNodeContents(el);
+                    range.collapse(false);
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                    el.focus();
+                }
+            }, 0);
         }
     };
 
@@ -241,9 +240,9 @@ const Comment = ({postType, postPk, canComment}) => {
 
     if (loading) return <LoadingSpinner />;
 
+    // 답글 렌더링 - rootCommentId를 전달하여 올바른 parentReply 설정
     const renderReplies = (replies, rootCommentId, level = 1) => {
         if (!replies || replies.length === 0) return null;
-
         return (
             <S.RepliesContainer level={level}>
                 {replies.map(reply => (
@@ -305,23 +304,23 @@ const Comment = ({postType, postPk, canComment}) => {
                                     <S.EditableReplyInput
                                         contentEditable
                                         suppressContentEditableWarning={true}
-                                        dangerouslySetInnerHTML={{ __html: replyInputs[rootCommentId] || '' }}
-                                        onInput={(e) => handleReplyInputChange(rootCommentId, e.target.innerHTML)}
+                                        ref={el => replyInputRefs.current[reply.pk] = el}
+                                        onInput={() => {/* 동기화 불필요! */}}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter' && !e.shiftKey) {
                                                 e.preventDefault();
-                                                handleReplySubmit(rootCommentId, 'reply');
+                                                handleReplySubmit(reply.pk, rootCommentId, 'reply');
                                             }
                                         }}
                                         onPaste={(e) => {
-                                            // 붙여넣기 시 일반 텍스트만 허용
                                             e.preventDefault();
                                             const text = e.clipboardData.getData('text/plain');
                                             document.execCommand('insertText', false, text);
                                         }}
+                                        style={{direction: "ltr", textAlign: "left"}}
                                     />
                                     <S.ReplySubmitButton
-                                        onClick={() => handleReplySubmit(rootCommentId, 'reply')}
+                                        onClick={() => handleReplySubmit(reply.pk, rootCommentId, 'reply')}
                                     >
                                         등록
                                     </S.ReplySubmitButton>
@@ -369,23 +368,23 @@ const Comment = ({postType, postPk, canComment}) => {
             {comments.length > 0 && (
                 <S.CommentsSection>
                     <S.CommentsSectionTitle>댓글 {commentsCount}개</S.CommentsSectionTitle>
-                    {comments.map((comment) => (
+                    {comments.map(comment => (
                         <S.CommentItem key={comment.pk}>
                             <S.CommentHeaderWrapper>
                                 <S.CommentHeader>
                                     <img
                                         src={comment.user.profileImageUrl || ProfileIcon}
                                         alt="프로필 아이콘"
-                                        width={20}
-                                        height={20}
+                                        width={24}
+                                        height={24}
                                         style={{
-                                            borderRadius: '50%',
-                                            objectFit: 'cover'
+                                            borderRadius: "50%",
+                                            objectFit: "cover",
                                         }}
                                     />
                                     <span
                                         style={{
-                                            fontSize: "0.7rem",
+                                            fontSize: "0.8rem",
                                             marginRight: "0.3rem",
                                             color: "#000",
                                         }}
@@ -403,8 +402,8 @@ const Comment = ({postType, postPk, canComment}) => {
                                     <img
                                         src={likedComments[comment.pk] ? RKickIcon : KickIcon}
                                         alt="좋아요 아이콘"
-                                        width={12}
-                                        height={12}
+                                        width={14}
+                                        height={14}
                                     />
                                     {comment.kickCount || 0}
                                 </S.CommentLikes>
@@ -428,23 +427,23 @@ const Comment = ({postType, postPk, canComment}) => {
                                         <S.EditableReplyInput
                                             contentEditable
                                             suppressContentEditableWarning={true}
-                                            dangerouslySetInnerHTML={{ __html: replyInputs[comment.pk] || '' }}
-                                            onInput={(e) => handleReplyInputChange(comment.pk, e.target.innerHTML)}
+                                            ref={el => replyInputRefs.current[comment.pk] = el}
+                                            onInput={() => {/* 동기화 불필요! */}}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' && !e.shiftKey) {
                                                     e.preventDefault();
-                                                    handleReplySubmit(comment.pk, 'comment');
+                                                    handleReplySubmit(comment.pk, comment.pk, 'comment');
                                                 }
                                             }}
                                             onPaste={(e) => {
-                                                // 붙여넣기 시 일반 텍스트만 허용
                                                 e.preventDefault();
                                                 const text = e.clipboardData.getData('text/plain');
                                                 document.execCommand('insertText', false, text);
                                             }}
+                                            style={{direction: "ltr", textAlign: "left"}}
                                         />
                                         <S.ReplySubmitButton
-                                            onClick={() => handleReplySubmit(comment.pk, 'comment')}
+                                            onClick={() => handleReplySubmit(comment.pk, comment.pk, 'comment')}
                                         >
                                             등록
                                         </S.ReplySubmitButton>
@@ -465,18 +464,18 @@ const Comment = ({postType, postPk, canComment}) => {
                                 )}
                             </S.CommentActions>
                             {comment.replies && comment.replies.length > 0 && showReplies[comment.pk] && (
-                                renderReplies(comment.replies, comment.pk)
+                                renderReplies(comment.replies, comment.pk, 1)
                             )}
                         </S.CommentItem>
                     ))}
                 </S.CommentsSection>
             )}
 
-            {commentsCount > 0 && (
+            {totalCommentPages > 1 && (
                 <Pagination
-                    activePage={activePage}
-                    setActivePage={setActivePage}
                     totalPages={totalCommentPages}
+                    currentPage={activePage}
+                    onPageChange={setActivePage}
                 />
             )}
         </S.CommentsSection>
