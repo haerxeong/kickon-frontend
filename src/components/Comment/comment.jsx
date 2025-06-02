@@ -395,8 +395,8 @@ const Comment = ({postType, postPk, canComment}) => {
                                     <img
                                         src={comment.user.profileImageUrl || ProfileIcon}
                                         alt="프로필 아이콘"
-                                        width={24}
-                                        height={24}
+                                        width={20}
+                                        height={20}
                                         style={{
                                             borderRadius: "50%",
                                             objectFit: "cover",
@@ -404,7 +404,7 @@ const Comment = ({postType, postPk, canComment}) => {
                                     />
                                     <span
                                         style={{
-                                            fontSize: "0.8rem",
+                                            fontSize: "0.7rem",
                                             marginRight: "0.3rem",
                                             color: "#000",
                                         }}
@@ -422,8 +422,8 @@ const Comment = ({postType, postPk, canComment}) => {
                                     <img
                                         src={likedComments[comment.pk] ? RKickIcon : KickIcon}
                                         alt="좋아요 아이콘"
-                                        width={14}
-                                        height={14}
+                                        width={12}
+                                        height={12}
                                     />
                                     {comment.kickCount || 0}
                                 </S.CommentLikes>
@@ -490,7 +490,7 @@ const Comment = ({postType, postPk, canComment}) => {
                     ))}
                 </S.CommentsSection>
             )}
-
+f
             {totalCommentPages > 1 && (
                 <Pagination
                     totalPages={totalCommentPages}
