@@ -22,6 +22,7 @@ const PostEditor = ({ type = "news" }) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedTab, setSelectedTab] = useState("");
     const [price, setPrice] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [uploadedImageUrl, setUploadedImageUrl] = useState("");
@@ -49,6 +50,30 @@ const PostEditor = ({ type = "news" }) => {
     const communityTabs = ["전체", selectedTeam?.nameKr || ""];
 
     const marketTabs = ["유니폼", "응원용품","축구화","기타"];
+
+    // 전화번호 포맷팅 함수
+    const formatPhoneNumber = (value) => {
+        // 숫자만 추출
+        const numbers = value.replace(/\D/g, '');
+
+        // 길이에 따라 포맷팅
+        if (numbers.length <= 3) {
+            return numbers;
+        } else if (numbers.length <= 7) {
+            return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+        } else if (numbers.length <= 11) {
+            return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+        } else {
+            // 11자리 초과시 자르기
+            return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+        }
+    };
+
+    const handlePhoneNumberChange = (e) => {
+        const inputValue = e.target.value;
+        const formattedValue = formatPhoneNumber(inputValue);
+        setPhoneNumber(formattedValue);
+    };
 
     useEffect(() => {
         if (selectedTeam?.pk) {
@@ -183,25 +208,68 @@ const PostEditor = ({ type = "news" }) => {
             return;
         }
 
-        const endpoint = isNews ? "/api/news" : "/api/board";
+        // 마켓 타입일 때 필수 필드 검증
+        if (isMarkets) {
+            if (!price.trim()) {
+                alert("가격을 입력해주세요.");
+                return;
+            }
+            if (!phoneNumber.trim()) {
+                alert("전화번호를 입력해주세요.");
+                return;
+            }
+            // 전화번호 형식 검증 (010-0000-0000)
+            const phoneRegex = /^010-\d{4}-\d{4}$/;
+            if (!phoneRegex.test(phoneNumber)) {
+                alert("올바른 전화번호 형식을 입력해주세요. (010-0000-0000)");
+                return;
+            }
+        }
 
-        // 기본 payload
-        const payload = {
-            team: selectedTeamId,
-            title: title.trim(),
-            contents: content.trim(),
-            category: categoryMap[selectedTab],
-        };
+        const endpoint = isNews
+            ? "/api/news"
+            : isMarkets
+                ? "/api/usedProduct"
+                : "/api/board";
+
+
+        let payload;
+
+        if (isMarkets) {
+            payload = {
+                productName: title.trim(),
+                description: content.trim(),
+                price: parseInt(price.trim(), 10),
+                phoneNumber: phoneNumber.trim(),
+                profileImageUrl: uploadedImageUrl,
+                category: selectedTab
+            };
+        } else {
+            payload = {
+                team: selectedTeamId,
+                title: title.trim(),
+                contents: content.trim(),
+                category: categoryMap[selectedTab],
+            };
+        }
+
 
         // 썸네일이 있다면 추가
         if (isNews && uploadedImageUrl) {
             payload.thumbnailUrl = uploadedImageUrl;
         }
 
+
         try {
             await axiosInstance.post(endpoint, payload);
             alert("글 작성이 완료되었습니다.");
-            navigate(type === "news" ? "/news" : "/community"); // Navigate after success
+            if (type === "news") {
+                navigate("/news");
+            } else if (type === "market") {
+                navigate("/market");
+            } else {
+                navigate("/community");
+            }
         } catch (error) {
             console.error("Failed to submit post:", error);
             alert("Failed to submit post.");
@@ -237,29 +305,6 @@ const PostEditor = ({ type = "news" }) => {
             navigate(-1); // 이전 페이지로
         }
     };
-
-    // const modules = {
-    //     toolbar: {
-    //         container: [
-    //             [{ header: [1, 2, false] }],
-    //             ["bold", "italic", "underline"],
-    //             [{ list: "ordered" }, { list: "bullet" }],
-    //             ["blockquote", "link", "image", "video"],
-    //             ["clean"]
-    //         ],
-    //         handlers: {
-    //             image: imageHandler,
-    //         }
-    //     }
-    // };
-    //
-    // const formats = [
-    //     "header",
-    //     "bold", "italic", "underline",
-    //     "list", "bullet",
-    //     "blockquote",
-    //     "link", "image", "video"
-    // ];
 
     return (
         <S.Container>
@@ -354,21 +399,30 @@ const PostEditor = ({ type = "news" }) => {
                                     }
                                 </S.NewsTabDropdown>
                             )}
-                            {isNews && (
-                                <S.HelpIcon>
-                                    <FiHelpCircle size="0.9rem" color="#8F8F8F" />
-                                </S.HelpIcon>
-                            )}
+                            <S.HelpIcon>
+                                <FiHelpCircle size="0.9rem" color="#8F8F8F" />
+                            </S.HelpIcon>
                         </S.TabSectionWrapper>
+                    </S.SearchAndTabSection>
 
-                        {isMarkets && (
+                    {/* 마켓 전용 입력 필드들 - 별도 섹션으로 분리 */}
+                    {isMarkets && (
+                        <S.MarketFieldsSection>
                             <S.PriceInput
+                                type="text"
                                 placeholder="가격"
                                 value={price}
                                 onChange={(e) => setPrice(e.target.value)}
                             />
-                        )}
-                    </S.SearchAndTabSection>
+                            <S.PhoneInput
+                                type="text"
+                                placeholder="판매자 전화번호"
+                                value={phoneNumber}
+                                onChange={handlePhoneNumberChange}
+                                maxLength={13}
+                            />
+                        </S.MarketFieldsSection>
+                    )}
                 </>
             )}
 

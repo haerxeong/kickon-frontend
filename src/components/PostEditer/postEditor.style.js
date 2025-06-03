@@ -55,10 +55,16 @@ export const TeamSearchInput = styled.div`
     }
 `;
 
+export const PriceWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    position: relative;
+`;
 
 export const PriceInput = styled.input`
     display: flex;
     width: 7rem;
+    height: 2.166rem; /* TeamSearchInput과 동일한 높이로 맞춤 */
     padding: 0.416rem 0.74rem;
     align-items: center;
     border-radius: 0.37rem;
@@ -67,11 +73,37 @@ export const PriceInput = styled.input`
     font-size: 0.65rem;
     outline: none;
     box-sizing: border-box;
-
+    
     &::placeholder {
         color: #8F8F8F;
         font-size: 0.65rem;
     }
+`;
+
+export const PhoneInput = styled.input`
+    display: flex;
+    width: 9rem;
+    height: 2.166rem;
+    padding: 0.416rem 0.74rem;
+    align-items: center;
+    border-radius: 0.37rem;
+    border: 1px solid #DCDCDC;
+    background: #fff;
+    font-size: 0.65rem;
+    outline: none;
+    box-sizing: border-box;
+    
+    &::placeholder {
+        color: #8F8F8F;
+        font-size: 0.65rem;
+    }
+`;
+
+export const MarketFieldsSection = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
 `;
 
 export const ClearButton = styled.button`
@@ -310,24 +342,24 @@ export const QuillWrapper = styled.div`
 `;
 
 export const TeamSearchWrapper = styled.div`
-  position: relative;
-  min-width: 0;
+    position: relative;
+    min-width: 0;
 `;
 
 export const SuggestionDropdown = styled.div`
-  width: 13rem;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: white;
-  border: 1px solid #dcdcdc;
-  border-radius: 0.37rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 0.185rem;
+    width: 13rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 0.37rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 0.185rem;
 `;
 
 export const SuggestionItem = styled.div`
@@ -336,46 +368,46 @@ export const SuggestionItem = styled.div`
     color: #333;
     cursor: pointer;
     transition: background-color 0.2s;
-    
-  &:hover {
-    background-color: #f3f3f3;
-  }
+
+    &:hover {
+        background-color: #f3f3f3;
+    }
 `;
 
 export const ImagePreviewContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 200px;
-  margin-bottom: 16px;
-  border-radius: 4px;
-  overflow: hidden;
-  background-color: #f3f3f3;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #f3f3f3;
 `;
 
 export const ImagePreview = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 export const RemoveImageButton = styled.button`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
 `;
 
 export const QuillInnerWrapper = styled.div`
