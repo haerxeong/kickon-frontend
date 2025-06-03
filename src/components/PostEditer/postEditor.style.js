@@ -55,6 +55,25 @@ export const TeamSearchInput = styled.div`
     }
 `;
 
+
+export const PriceInput = styled.input`
+    display: flex;
+    width: 7rem;
+    padding: 0.416rem 0.74rem;
+    align-items: center;
+    border-radius: 0.37rem;
+    border: 1px solid #DCDCDC;
+    background: #fff;
+    font-size: 0.65rem;
+    outline: none;
+    box-sizing: border-box;
+
+    &::placeholder {
+        color: #8F8F8F;
+        font-size: 0.65rem;
+    }
+`;
+
 export const ClearButton = styled.button`
     position: absolute;
     right: 0.7rem;
@@ -162,6 +181,7 @@ export const HelpIcon = styled.div`
     margin-left: 1.2rem;
     cursor: pointer;
 `;
+
 
 export const TitleInput = styled.input`
     display: flex;

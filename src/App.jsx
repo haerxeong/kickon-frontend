@@ -32,6 +32,7 @@ function App() {
                             <Route path="profile" element={<ProfileSettings />} />
                             <Route path="news/write" element={<PostEditor type="news" />} />
                             <Route path="community/write" element={<PostEditor type="community" />} />
+                            <Route path="market/write" element={<PostEditor type="market" />} />
                             <Route path="news/detail" element={<NewsDetailPage />} />
                             <Route path="news/:newsPk" element={<NewsDetailPage />} />
                             <Route path="community/detail" element={<CommunityDetailPage />} />

@@ -21,6 +21,7 @@ const PostEditor = ({ type = "news" }) => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedTab, setSelectedTab] = useState("");
+    const [price, setPrice] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [uploadedImageUrl, setUploadedImageUrl] = useState("");
@@ -37,6 +38,8 @@ const PostEditor = ({ type = "news" }) => {
     const { selectedTeam, selectedLeague } = useLeagueTeamStore();
 
     const isNews = type === "news";
+    const isMarkets = type === "market";
+    const isCommunity = type === "community";
 
     const newsTabs = [
         "부상", "이적", "감독 교체", "재계약",
@@ -44,6 +47,8 @@ const PostEditor = ({ type = "news" }) => {
     ];
 
     const communityTabs = ["전체", selectedTeam?.nameKr || ""];
+
+    const marketTabs = ["유니폼", "응원용품","축구화","기타"];
 
     useEffect(() => {
         if (selectedTeam?.pk) {
@@ -258,13 +263,15 @@ const PostEditor = ({ type = "news" }) => {
 
     return (
         <S.Container>
-            {isNews && (
+            {!isCommunity && (
                 <>
                     {/* 대표 이미지 업로드 섹션 */}
                     {!uploadedImagePreview ? (
                         <S.ImageUploadSection onClick={handleButtonClick}>
                             <PiImageSquare size="0.93rem" color="#8F8F8F" />
-                            <S.ImageUploadText>대표 이미지 추가</S.ImageUploadText>
+                            <S.ImageUploadText>
+                                {isNews ? '대표 이미지 추가' : isMarkets ? '사진 업로드하기' : ''}
+                            </S.ImageUploadText>
                         </S.ImageUploadSection>
                     ) : (
                         <S.ImagePreviewContainer>
@@ -331,24 +338,42 @@ const PostEditor = ({ type = "news" }) => {
 
                             {showDropdown && (
                                 <S.NewsTabDropdown>
-                                    {newsTabs.map((tab) => (
-                                        <S.TabOption key={tab} onClick={() => handleTabSelect(tab)}>
-                                            {tab}
-                                        </S.TabOption>
-                                    ))}
+                                    {isNews &&
+                                        newsTabs.map((tab) => (
+                                            <S.TabOption key={tab} onClick={() => handleTabSelect(tab)}>
+                                                {tab}
+                                            </S.TabOption>
+                                        ))
+                                    }
+                                    {isMarkets &&
+                                        marketTabs.map((tab) => (
+                                            <S.TabOption key={tab} onClick={() => handleTabSelect(tab)}>
+                                                {tab}
+                                            </S.TabOption>
+                                        ))
+                                    }
                                 </S.NewsTabDropdown>
                             )}
-
-                            <S.HelpIcon>
-                                <FiHelpCircle size="0.9rem" color="#8F8F8F" />
-                            </S.HelpIcon>
+                            {isNews && (
+                                <S.HelpIcon>
+                                    <FiHelpCircle size="0.9rem" color="#8F8F8F" />
+                                </S.HelpIcon>
+                            )}
                         </S.TabSectionWrapper>
+
+                        {isMarkets && (
+                            <S.PriceInput
+                                placeholder="가격"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                            />
+                        )}
                     </S.SearchAndTabSection>
                 </>
             )}
 
             {/* 커뮤니티 탭 선택 */}
-            {!isNews && (
+            {isCommunity && (
                 <S.TabSectionWrapper>
                     <S.CommunityTabSelector onClick={() => setShowDropdown(!showDropdown)} selected={!!selectedTab}>
                         <span>{selectedTab || "전체"}</span>
@@ -366,6 +391,7 @@ const PostEditor = ({ type = "news" }) => {
                     )}
                 </S.TabSectionWrapper>
             )}
+
 
             {/* 제목 입력 */}
             <S.TitleInput

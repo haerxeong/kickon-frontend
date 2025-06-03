@@ -232,7 +232,7 @@ const RootLayout = () => {
     const isWritePage =
         location.pathname === "/news/write" ||
         location.pathname === "/community/write" ||
-        location.pathname === "market/write";
+        location.pathname === "/market/write";
     const isNewsPage = location.pathname.startsWith("/news");
     const isCommunityPage = location.pathname.startsWith("/community");
     const isMarketPage = location.pathname.startsWith("/market");
