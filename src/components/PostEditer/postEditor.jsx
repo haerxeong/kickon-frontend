@@ -306,6 +306,29 @@ const PostEditor = ({ type = "news" }) => {
         }
     };
 
+    // const modules = {
+    //     toolbar: {
+    //         container: [
+    //             [{ header: [1, 2, false] }],
+    //             ["bold", "italic", "underline"],
+    //             [{ list: "ordered" }, { list: "bullet" }],
+    //             ["blockquote", "link", "image", "video"],
+    //             ["clean"]
+    //         ],
+    //         handlers: {
+    //             image: imageHandler,
+    //         }
+    //     }
+    // };
+    //
+    // const formats = [
+    //     "header",
+    //     "bold", "italic", "underline",
+    //     "list", "bullet",
+    //     "blockquote",
+    //     "link", "image", "video"
+    // ];
+
     return (
         <S.Container>
             {!isCommunity && (
