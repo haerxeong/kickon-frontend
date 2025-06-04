@@ -241,7 +241,9 @@ const PostDetail = () => {
                 height={24}
                 style={{borderRadius: '50%'}}
             />
-            {apiPost.user?.nickname}
+            {location.pathname.includes('/community/')
+                ? apiPost.nicknameSnapshot
+                : apiPost.user?.nickname}
             <FaCheckCircle/>
             <S.TimeLabel>
               {new Date(new Date(apiPost.createdAt).getTime() + 9 * 60 * 60 * 1000).toLocaleString()}

@@ -36,6 +36,7 @@ const Community = () => {
 
                 if (response.data) {
                     setPosts(response.data);
+                    console.log("dfsfsdfsdfds", response.data);
                     setTotalPages(response.meta.totalPages || 1);
                 } else {
                     setPosts([]);
@@ -99,7 +100,7 @@ const Community = () => {
                                 </S.PostTitle>
                                 <S.PostAuthor>
                                     <img src={post.user.profileImageUrl || ProfileIcon} alt="프로필 아이콘" />
-                                    {post.user.nickname}
+                                    {post.nicknameSnapshot || post.user?.nickname}
                                 </S.PostAuthor>
                                 <S.PostDate>{formatDate(post.createdAt)}</S.PostDate>
                                 <S.PostViews>{post.views}</S.PostViews>

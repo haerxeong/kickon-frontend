@@ -16,6 +16,8 @@ const WriteButton = () => {
             navigate("/news/write");
         } else if (location.pathname.startsWith("/community")) {
             navigate("/community/write");
+        } else if (location.pathname.startsWith("/market")) {
+            navigate("/market/write");
         }
     };
 
