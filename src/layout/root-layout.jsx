@@ -211,6 +211,16 @@ const MainContent = styled.main`
     }
 `;
 
+const MainBannerWrapper = styled.div`
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+
+    @media (max-width: 950px) {
+        border-radius: 0;
+    }
+`;
 
 // 메인 배너
 const StyledMainBanner = styled(MainBanner)`
@@ -255,7 +265,11 @@ const RootLayout = () => {
     return (
         <Layout isHomePage={isHomePage}>
             <Header isDark={isDark} />
-            {isHomePage && <StyledMainBanner />}
+            {isHomePage && (
+                <MainBannerWrapper>
+                    <StyledMainBanner />
+                </MainBannerWrapper>
+            )}
             <MainContainer>
                 {isSignupPage || isWritePage || isProfilePage ? (
                     <MainContent>
