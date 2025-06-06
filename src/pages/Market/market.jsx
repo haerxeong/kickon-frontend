@@ -18,16 +18,35 @@ const Market = () => {
 
     const { selectedTeam } = useLeagueTeamStore();
 
-    const tabs = ["전체", selectedTeam?.nameKr || ""].filter(Boolean);
+    const tabs = ["전체", "판매 내역", selectedTeam?.nameKr || ""].filter(Boolean);
 
     useEffect(() => {
         const fetchItems = async () => {
             const res = await getItemList({ size: itemsPerPage, page: activePage });
-            setMarketplaceItems(res.items || []);
-            setTotalPages(res.totalPages || 1);
+            let filteredItems = res.items || [];
+            
+            // 판매 내역 탭이 선택된 경우 isMine이 true인 아이템만 필터링
+            if (activeTab === "판매 내역") {
+                filteredItems = filteredItems.filter(item => item.isMine);
+            }
+            // 팀 탭이 선택된 경우 해당 팀의 아이템만 필터링
+            else if (activeTab === selectedTeam?.nameKr) {
+                filteredItems = filteredItems.filter(item => item.teamPk === selectedTeam.pk);
+            }
+            
+            setMarketplaceItems(filteredItems);
+            
+            // 필터링된 결과의 페이지 수 계산
+            const filteredTotalPages = Math.ceil(filteredItems.length / itemsPerPage);
+            setTotalPages(filteredTotalPages || 1);
+            
+            // 현재 페이지가 필터링된 결과의 페이지 수보다 크면 첫 페이지로 이동
+            if (activePage > filteredTotalPages) {
+                setActivePage(1);
+            }
         };
         fetchItems();
-    }, [activePage]);
+    }, [activePage, activeTab, selectedTeam]);
 
     const formatPrice = (price) => `${price.toLocaleString()}원`;
 
