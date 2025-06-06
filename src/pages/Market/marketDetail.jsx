@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { getItemDetail } from "../../apis/domains/market/getItemDetail.js";
 import { Phone } from "lucide-react";
 import { updateUsedProductStatus } from '../../apis/domains/market/usedProduct';
+import {stripHtml} from "../../utils/stripHtml.js";
+import {truncateText} from "../../utils/textUtils.js";
 
 const MarketDetail = () => {
     const { pk } = useParams();
@@ -108,7 +110,7 @@ const MarketDetail = () => {
             <S.ArticleContent>
                 <S.ArticleText>
                     <b>상품 설명</b>
-                    <div>{data.description}</div>
+                    <div>{stripHtml(truncateText(data.description))}</div>
                 </S.ArticleText>
 
                 <S.ArticleText>
