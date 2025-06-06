@@ -201,7 +201,7 @@ export const NavItem = styled(Link)`
 `;
 
 
-export const LoginButton = styled(Link)`
+export const LoginButton = styled.button`
   display: ${(props) => (props.currentPath === "/signup" ? "flex" : "none")};
   position: absolute;
   right: 12.5rem;
@@ -211,9 +211,9 @@ export const LoginButton = styled(Link)`
   align-items: center;
   gap: 0.4375rem;
   border-radius: 0.875rem;
-  border: 1px solid #dcdcdc;
-  background: #fff;
-  color: #c00c0b;
+  border: 1px solid #c00c0b;
+  background: #c00c0b;
+  color: #fff;
   text-align: right;
   font-size: 0.7875rem;
   font-style: normal;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../features/modal/modalSlice";
@@ -6,15 +6,27 @@ import * as S from "./header.style";
 import DarkLogoImage from "../../assets/logo_black.svg";
 import LogoImage from "../../assets/logo_white.svg";
 import LoginModal from "../LoginModal/loginModal.jsx";
+import { useAuthGuard } from "../../hooks/useAuthGuard.js";
+import {AuthContext} from "../../context/AuthContext.jsx";
 
 const Header = ({ isDark }) => {
     const location = useLocation();
     const currentPath = location.pathname;
     const dispatch = useDispatch();
+    const { isAuthenticated, logout } = useContext(AuthContext);
+
+    useEffect(() => {
+        console.log("isAuthenticated:", isAuthenticated);
+    }, [isAuthenticated]);
 
     const handleLoginClick = (e) => {
         e.preventDefault(); // 페이지 이동 방지
         dispatch(openLoginModal());
+    };
+
+    const handleLogoutClick = () => {
+        logout();
+        console.log("로그아웃 처리 완료");
     };
 
     return (
@@ -62,16 +74,24 @@ const Header = ({ isDark }) => {
                     이적 예측
                 </S.NavItem>
 
-                <S.LoginButton
-                    as="button" // styled(Link) 대신 일반 버튼처럼 동작하게
-                    currentPath={currentPath}
-                    onClick={handleLoginClick}
-                >
-                    로그인
-                </S.LoginButton>
+                {!isAuthenticated && (
+                    <S.LoginButton
+                        currentPath={currentPath}
+                        onClick={handleLoginClick}
+                    >
+                        로그인
+                    </S.LoginButton>
+                )}
+                {isAuthenticated && (
+                    <S.LoginButton
+                        currentPath={currentPath}
+                        onClick={handleLogoutClick}
+                    >
+                        로그아웃
+                    </S.LoginButton>
+                )}
             </S.HeaderWrapper>
 
-            {/* 로그인 모달 자체는 로그인 상태 Redux에서 제어 */}
             <LoginModal />
         </>
     );
