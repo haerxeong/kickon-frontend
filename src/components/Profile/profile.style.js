@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const ProfileContainer = styled.div`
-    width: 15rem; /* 322px * 0.8 */
+    //width: 15rem; /* 322px * 0.8 */
+    width: 100%;
     height: 7.2rem; /* 144px * 0.8 */
     flex-shrink: 0;
     border-radius: 0.5rem; /* 0.625rem * 0.8 */
@@ -41,7 +42,8 @@ export const StyledButton = styled.button`
     bottom: 1.45rem; /* 1.813rem * 0.8 */
 `;
 export const CardContainer = styled.div`
-    width: 15rem;
+    //width: 15rem;
+    width: 100%;
     height: 6.7rem;
     flex-shrink: 0;
     border-radius: 0.47rem;

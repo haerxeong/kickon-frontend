@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const MatchCardContainer = styled.div`
     display: flex;
-    width: 30rem;
+    //width: 30rem;
+    width: 100%;
     padding: 1.0rem 0.7rem;
     flex-direction: column;
     gap: 0.5rem;

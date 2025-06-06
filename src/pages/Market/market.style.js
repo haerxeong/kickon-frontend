@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const NewsContainer = styled.div`
-    width: 30rem;
+    //width: 30rem;
     //min-height: 55.625rem;
+    width: 100%;
     height: auto;
     flex-shrink: 0;
     border-radius: 0.45rem;

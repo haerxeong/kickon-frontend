@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const TopNewsContainer = styled.div`
-    width: 15rem;
+    //width: 15rem;
+    width: 100%;
     min-height: 8rem;
     flex-shrink: 0;
     border-radius: 0.5rem;
