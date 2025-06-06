@@ -5,18 +5,20 @@ import NoData from "../../components/NoData/noData.jsx";
 import { useParams } from "react-router-dom";
 import { getItemDetail } from "../../apis/domains/market/getItemDetail.js";
 import { Phone } from "lucide-react";
+import { updateUsedProductStatus } from '../../apis/domains/market/usedProduct';
 
 const MarketDetail = () => {
     const { pk } = useParams();
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
 
+    const fetchDetail = async () => {
+        const res = await getItemDetail(pk);
+        setData(res.data);
+        setError(res.error);
+    };
+
     useEffect(() => {
-        const fetchDetail = async () => {
-            const res = await getItemDetail(pk);
-            setData(res.data);
-            setError(res.error);
-        };
         fetchDetail();
     }, [pk]);
 
@@ -25,6 +27,27 @@ const MarketDetail = () => {
             navigator.clipboard.writeText(data.phoneNumber)
                 .then(() => alert("전화번호가 복사되었습니다!"))
                 .catch(() => alert("복사에 실패했습니다."));
+        }
+    };
+
+    const handleStatusChange = async (newStatus) => {
+        try {
+            await updateUsedProductStatus(pk, newStatus);
+            await fetchDetail();
+            alert('상태가 변경되었습니다.');
+        } catch (error) {
+            alert('상태 변경에 실패했습니다.');
+        }
+    };
+
+    const getStatusText = (status) => {
+        switch(status) {
+            case 'SOLD':
+                return '거래완료';
+            case 'RESERVED':
+                return '예약중';
+            default:
+                return '판매중';
         }
     };
 
@@ -44,9 +67,23 @@ const MarketDetail = () => {
 
             <S.ArticleLabel>
                 <S.ArticleCategory>{data.category}</S.ArticleCategory>
-                <S.ArticleStatus status={data.usedProductStatus}>
-                    {data.usedProductStatus === "SOLD" ? "판매완료" : "판매중"}
-                </S.ArticleStatus>
+                {data.isMine ? (
+                    <S.StatusControl>
+                        <select 
+                            value={data.usedProductStatus}
+                            onChange={(e) => handleStatusChange(e.target.value)}
+                            className="status-select"
+                        >
+                            <option value="SALE"> 판매중</option>
+                            <option value="RESERVED"> 예약중</option>
+                            <option value="SOLD">거래완료</option>
+                        </select>
+                    </S.StatusControl>
+                ) : (
+                    <S.ArticleStatus status={data.usedProductStatus}>
+                        {getStatusText(data.usedProductStatus)}
+                    </S.ArticleStatus>
+                )}
             </S.ArticleLabel>
 
             <S.ArticleHeader>

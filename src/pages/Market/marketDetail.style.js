@@ -41,6 +41,29 @@ export const ArticleStatus = styled.span`
     status === "SOLD" ? "#8f8f8f" : "#c00c0b"};
 `;
 
+export const StatusControl = styled.div`
+  .status-select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #E0E0E0;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: #1976D2;
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: #1976D2;
+      box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+    }
+  }
+`;
+
 export const ArticleHeader = styled.div`
     display: flex;
     flex-direction: column;

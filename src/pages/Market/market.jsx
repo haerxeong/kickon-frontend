@@ -31,6 +31,16 @@ const Market = () => {
 
     const formatPrice = (price) => `${price.toLocaleString()}원`;
 
+    const getStatusText = (status) => {
+        switch(status) {
+            case 'SOLD':
+                return '거래완료';
+            case 'RESERVED':
+                return '예약중';
+            default:
+                return '판매중';
+        }
+    };
 
     const handleMarketplaceClick = (itemId) => {
         navigate(`/market/${itemId}`);
@@ -56,8 +66,12 @@ const Market = () => {
                     <M.MarketplaceItem key={item.pk} onClick={() => handleMarketplaceClick(item.pk)}>
                         <M.MarketplaceImage>
                             <img src={item.profileImageUrl} alt={item.productName} />
-                            {item.usedProductStatus === 'SOLD' && <M.StatusBadge status="sold">판매완료</M.StatusBadge>}
-                            {item.usedProductStatus === 'RESERVED' && <M.StatusBadge status="reserved">예약 중</M.StatusBadge>}
+                            {item.usedProductStatus === 'SOLD' && (
+                                <M.StatusBadge status="sold">거래완료</M.StatusBadge>
+                            )}
+                            {item.usedProductStatus === 'RESERVED' && (
+                                <M.StatusBadge status="reserved">예약중</M.StatusBadge>
+                            )}
                         </M.MarketplaceImage>
                         <M.MarketplaceContent>
                             <M.MarketplaceTitle>{item.productName}</M.MarketplaceTitle>
