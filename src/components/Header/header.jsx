@@ -6,7 +6,6 @@ import * as S from "./header.style";
 import DarkLogoImage from "../../assets/logo_black.svg";
 import LogoImage from "../../assets/logo_white.svg";
 import LoginModal from "../LoginModal/loginModal.jsx";
-import { useAuthGuard } from "../../hooks/useAuthGuard.js";
 import {AuthContext} from "../../context/AuthContext.jsx";
 
 const Header = ({ isDark }) => {
@@ -52,6 +51,12 @@ const Header = ({ isDark }) => {
                     isDark={isDark}
                     currentPath={currentPath}
                     itemPath="/community"
+                    onClick={(e) => {
+                        if (!isAuthenticated) {
+                            e.preventDefault(); // 링크 이동 방지
+                            dispatch(openLoginModal()); // 로그인 모달 열기
+                        }
+                    }}
                 >
                     클럽 커뮤니티
                 </S.NavItem>
