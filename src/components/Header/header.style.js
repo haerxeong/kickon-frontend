@@ -229,4 +229,7 @@ export const LoginButton = styled(Link)`
         font-size: 0.65rem;
         padding: 0.3rem 0.5rem;
     }
+    @media (max-width: 960px) {
+        display: flex; /* 960px 이하일 때만 보임 */
+    }
 `;
