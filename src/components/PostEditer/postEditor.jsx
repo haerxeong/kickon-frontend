@@ -49,7 +49,7 @@ const PostEditor = ({ type = "news" }) => {
 
     const communityTabs = ["전체", selectedTeam?.nameKr || ""];
 
-    const marketTabs = ["유니폼", "응원용품","축구화","기타"];
+    const marketTabs = ["유니폼", "굿즈","축구화","응원용품","기타"];
 
     // 전화번호 포맷팅 함수
     const formatPhoneNumber = (value) => {
@@ -242,7 +242,8 @@ const PostEditor = ({ type = "news" }) => {
                 price: parseInt(price.trim(), 10),
                 phoneNumber: phoneNumber.trim(),
                 profileImageUrl: uploadedImageUrl,
-                category: selectedTab
+                category: selectedTab,
+                teamPk: selectedTeamId,
             };
         } else {
             payload = {
