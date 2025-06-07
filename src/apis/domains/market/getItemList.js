@@ -1,15 +1,18 @@
 import axiosInstance from "../../axios-instance.js";
 
-export const getItemList = async ({ size = 6, page = 1 }) => {
+export const getItemList = async ({ size = 6, page = 1, team }) => {
     try {
-        const response = await axiosInstance.get('/api/usedProduct', {
-            params: { size, page },
-        });
+        const params = {
+            size,
+            page,
+            ...(team !== undefined && { team })
+        };
+
+        const response = await axiosInstance.get('/api/usedProduct', { params });
 
         if (response?.code === 'GET_SUCCESS') {
-            console.log('API 응답:', response);
             return {
-                items: response.data, // 실제 상품 리스트
+                items: response.data,
                 totalPages: response.meta?.totalPages || 1,
             };
         } else {

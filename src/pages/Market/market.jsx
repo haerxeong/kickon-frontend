@@ -7,6 +7,7 @@ import { useLeagueTeamStore } from "../../store/useLeagueTeamStore.js";
 import { getItemList } from "../../apis/domains/market/getItemList.js";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate.js";
+import EmptyState from "../../components/EmptyState/emptyState.jsx";
 
 const Market = () => {
     const [marketplaceItems, setMarketplaceItems] = useState([]);
@@ -15,6 +16,7 @@ const Market = () => {
     const itemsPerPage = 6;
     const [activeTab, setActiveTab] = useState("전체");
     const navigate = useNavigate();
+    const [myItems, setMyItems] = useState([]);
 
     const { selectedTeam } = useLeagueTeamStore();
 
@@ -22,31 +24,31 @@ const Market = () => {
 
     useEffect(() => {
         const fetchItems = async () => {
-            const res = await getItemList({ size: itemsPerPage, page: activePage });
-            let filteredItems = res.items || [];
-            
-            // 판매 내역 탭이 선택된 경우 isMine이 true인 아이템만 필터링
             if (activeTab === "판매 내역") {
-                filteredItems = filteredItems.filter(item => item.isMine);
-            }
-            // 팀 탭이 선택된 경우 해당 팀의 아이템만 필터링
-            else if (activeTab === selectedTeam?.nameKr) {
-                filteredItems = filteredItems.filter(item => item.teamPk === selectedTeam.pk);
-            }
-            
-            setMarketplaceItems(filteredItems);
-            
-            // 필터링된 결과의 페이지 수 계산
-            const filteredTotalPages = Math.ceil(filteredItems.length / itemsPerPage);
-            setTotalPages(filteredTotalPages || 1);
-            
-            // 현재 페이지가 필터링된 결과의 페이지 수보다 크면 첫 페이지로 이동
-            if (activePage > filteredTotalPages) {
-                setActivePage(1);
+                const res = await getItemList({ size: 100, page: 1 });
+                const mine = (res.items || []).filter(item => item.isMine);
+                setMyItems(mine);
+                setTotalPages(Math.max(1, Math.ceil(mine.length / itemsPerPage)));
+                setMarketplaceItems(mine.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage));
+            } else {
+                const params = {
+                    size: itemsPerPage,
+                    page: activePage,
+                    team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined
+                };
+                const res = await getItemList(params);
+                setMarketplaceItems(res.items || []);
+                setTotalPages(res.totalPages || 1);
             }
         };
         fetchItems();
-    }, [activePage, activeTab, selectedTeam]);
+    }, [activeTab, activePage, selectedTeam]);
+
+    useEffect(() => {
+        if (activeTab === "판매 내역") {
+            setMarketplaceItems(myItems.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage));
+        }
+    }, [activePage, myItems, activeTab]);
 
     const formatPrice = (price) => `${price.toLocaleString()}원`;
 
@@ -80,34 +82,43 @@ const Market = () => {
                     </M.Tab>
                 ))}
             </M.TabContainer>
-            <M.MarketplaceGrid>
-                {marketplaceItems.map((item) => (
-                    <M.MarketplaceItem key={item.pk} onClick={() => handleMarketplaceClick(item.pk)}>
-                        <M.MarketplaceImage>
-                            <img src={item.profileImageUrl} alt={item.productName} />
-                            {item.usedProductStatus === 'SOLD' && (
-                                <M.StatusBadge status="sold">거래완료</M.StatusBadge>
-                            )}
-                            {item.usedProductStatus === 'RESERVED' && (
-                                <M.StatusBadge status="reserved">예약중</M.StatusBadge>
-                            )}
-                        </M.MarketplaceImage>
-                        <M.MarketplaceContent>
-                            <M.MarketplaceTitle>{item.productName}</M.MarketplaceTitle>
-                            <M.MarketplacePrice>{formatPrice(item.price)}</M.MarketplacePrice>
-                            <M.MarketplaceInfo>
-                                <M.MarketplaceAuthor>
-                                    <img src={item.user?.profileImageUrl} alt="프로필" />
-                                    {item.user?.nickname}
-                                </M.MarketplaceAuthor>
-                                <M.MarketplaceStats>
-                                    <span>{formatDate(item.createdAt)}</span>
-                                </M.MarketplaceStats>
-                            </M.MarketplaceInfo>
-                        </M.MarketplaceContent>
-                    </M.MarketplaceItem>
-                ))}
-            </M.MarketplaceGrid>
+            {activeTab === "판매 내역" && marketplaceItems.length === 0 ? (
+                <EmptyState
+                    message="판매 내역이 없습니다."
+                    subMessage="상품을 등록해보세요!"
+                    buttonText="상품 등록하기"
+                    onRetry={() => navigate("/market/write")}
+                />
+            ) : (
+                <M.MarketplaceGrid>
+                    {marketplaceItems.map((item) => (
+                        <M.MarketplaceItem key={item.pk} onClick={() => handleMarketplaceClick(item.pk)}>
+                            <M.MarketplaceImage>
+                                <img src={item.profileImageUrl} alt={item.productName} />
+                                {item.usedProductStatus === 'SOLD' && (
+                                    <M.StatusBadge status="sold">거래완료</M.StatusBadge>
+                                )}
+                                {item.usedProductStatus === 'RESERVED' && (
+                                    <M.StatusBadge status="reserved">예약중</M.StatusBadge>
+                                )}
+                            </M.MarketplaceImage>
+                            <M.MarketplaceContent>
+                                <M.MarketplaceTitle>{item.productName}</M.MarketplaceTitle>
+                                <M.MarketplacePrice>{formatPrice(item.price)}</M.MarketplacePrice>
+                                <M.MarketplaceInfo>
+                                    <M.MarketplaceAuthor>
+                                        <img src={item.user?.profileImageUrl} alt="프로필" />
+                                        {item.user?.nickname}
+                                    </M.MarketplaceAuthor>
+                                    <M.MarketplaceStats>
+                                        <span>{formatDate(item.createdAt)}</span>
+                                    </M.MarketplaceStats>
+                                </M.MarketplaceInfo>
+                            </M.MarketplaceContent>
+                        </M.MarketplaceItem>
+                    ))}
+                </M.MarketplaceGrid>
+            )}
 
             <PS.PaginationWrapper>
                 <PS.NavButton
