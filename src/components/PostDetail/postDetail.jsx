@@ -139,7 +139,8 @@ const PostDetail = () => {
             // 사용자의 팀 정보와 현재 게시글의 팀 정보 비교하여 댓글 작성 가능 여부 설정
             if (userProfile && userProfile.teamPk) {
               const postTeamPk = response.data.team?.pk;
-              setCanComment(userProfile.teamPk === postTeamPk);
+              if (postTeamPk == null) { setCanComment(true); }
+              else setCanComment(userProfile.teamPk === postTeamPk);
             }
           } else {
             console.error("API 응답에 data가 없음:", response);
