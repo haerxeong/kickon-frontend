@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const CommentInputBox = styled.div`
-    left: 0.8rem;
     display: flex;
-    width: 28rem;
+    width: 95%;
+    max-width: 100%;
     padding: 0.8rem;
     flex-direction: column;
     align-items: flex-start;
@@ -12,6 +12,7 @@ export const CommentInputBox = styled.div`
     background: #f0f0f0;
     color: black;
     margin: 0 auto 3.32rem auto;
+    box-sizing: border-box;
 `;
 
 export const CommentInputLabel = styled.div`
@@ -22,24 +23,27 @@ export const CommentInputLabel = styled.div`
 
 export const CommentInputContainer = styled.div`
     display: flex;
+    width: 100%;
     border: 0.0625rem solid #ddd;
     border-radius: 0.5rem;
     background: #fff;
     align-items: flex-start;
     overflow: hidden;
+    box-sizing: border-box;
 `;
 
 export const CommentInput = styled.textarea`
-    width: 22.5rem;
+    width: 100%;
     flex: 1;
     border: none;
-    padding: 0.875rem; /* 기존 12px -> 14px */
+    padding: 0.875rem;
     font-size: 0.583rem;
     background: transparent;
-    min-height: 4rem; /* 기존 50px -> 64px */
-    max-height: 10rem; /* 기존 150px -> 160px */
+    min-height: 4rem;
+    max-height: 10rem;
     overflow-y: auto;
     resize: none;
+    box-sizing: border-box;
 
     &:focus {
         outline: none;
@@ -60,6 +64,7 @@ export const SubmitButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 `;
 
 export const CommentsSection = styled.div`
@@ -79,7 +84,6 @@ export const CommentsSectionTitle = styled.div`
 
 export const CommentItem = styled.div`
     border-bottom: 0.0625rem solid #eee;
-    //padding: 0.75rem 1rem;
 `;
 
 export const CommentHeaderWrapper = styled.div`
@@ -96,6 +100,7 @@ export const CommentHeader = styled.div`
     gap: 0.375rem;
     margin-bottom: 0.1rem;
 `;
+
 export const CommentLikes = styled.button`
     display: flex;
     align-items: center;
@@ -144,7 +149,7 @@ export const ReplyButton = styled.button`
     font-size: 0.538rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1rem; /* 133.333% */
+    line-height: 1rem;
 
     border-radius: 0.25rem;
     background: ${(props) =>
@@ -166,15 +171,13 @@ export const MoreButton = styled.button`
     gap: 0.25rem;
 
     color: var(--Black-black_700, #676767);
-    /* Button/btn5_Pre_r_12px */
     font-family: Pretendard;
     font-size: 0.538rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1rem; /* 133.333% */
+    line-height: 1rem;
 `;
 
-// 새로 추가된 스타일 컴포넌트
 export const ReplyInputWrapper = styled.div`
     display: flex;
     margin-top: 0.5rem;
@@ -184,10 +187,10 @@ export const ReplyInputWrapper = styled.div`
     background: #fff;
     align-items: flex-start;
     overflow: hidden;
-    width: calc(100%);
+    width: 100%;
+    box-sizing: border-box;
 `;
 
-// 새로운 contentEditable 입력창 스타일 - 글자색 검정으로 수정
 export const EditableReplyInput = styled.div`
     flex: 1;
     border: none;
@@ -198,7 +201,8 @@ export const EditableReplyInput = styled.div`
     max-height: 5rem;
     overflow-y: auto;
     line-height: 1.4;
-    color: #000; /* 입력 글자색을 검정으로 설정 */
+    color: #000;
+    box-sizing: border-box;
 
     &:focus {
         outline: none;
@@ -210,18 +214,15 @@ export const EditableReplyInput = styled.div`
         pointer-events: none;
     }
 
-    /* @멘션 스타일링 - 빨간색 유지 */
     span[style*="color: #C00C0B"] {
         color: #C00C0B !important;
         font-weight: 500;
     }
 
-    /* 일반 텍스트는 검정색으로 강제 설정 */
     * {
         color: #000;
     }
 
-    /* @멘션 span만 빨간색 예외 처리 */
     span[style*="color: #C00C0B"],
     span[style*="color:#C00C0B"] {
         color: #C00C0B !important;
@@ -242,6 +243,7 @@ export const ReplySubmitButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 `;
 
 export const RepliesContainer = styled.div``;
@@ -297,10 +299,9 @@ export const ReplyActions = styled.div`
     align-items: flex-start;
     flex-direction: column;
     gap: 0.5rem;
-    margin-left: 1.625rem; // Aligned with ReplyContent's margin-left
+    margin-left: 1.625rem;
 `;
 
-// Adding a ReplyActionButton styled component for buttons within ReplyActions
 export const ReplyActionButton = styled.button`
     display: flex;
     height: 1.077rem;
@@ -318,7 +319,7 @@ export const ReplyActionButton = styled.button`
     font-size: 0.538rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1rem; /* 133.333% */
+    line-height: 1rem;
 
     border-radius: 0.25rem;
     background: ${(props) =>

@@ -81,7 +81,7 @@ export const ArticleContent = styled.div`
 `;
 
 export const ArticleImage = styled.img`
-    width: 28.5rem;
+    width: 95%;
     object-fit: cover;
     display: flex;
     justify-content: center;

@@ -25,7 +25,7 @@ const MainContainer = styled.div`
     padding: 0.7rem;
 
     @media (max-width: 950px) {
-        padding: 0;
+        padding: 1rem 0 0 0; /* 상단 패딩 추가 */
     }
 `;
 
