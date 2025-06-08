@@ -14,7 +14,7 @@ export const ArticleContainer = styled.div`
 export const ArticleImage = styled.img`
     width: 100%;
     height: auto;
-    max-height: 14rem;
+    //max-height: 14rem;
     object-fit: cover;
     border-radius: 0.5rem;
 `;
@@ -82,6 +82,7 @@ export const ArticleInfo = styled.div`
     gap: 0.4rem;
     font-size: 0.75rem;
     color: #444;
+    position: relative;
 
     svg {
         margin-left: 0.25rem;
@@ -159,4 +160,54 @@ export const ContactButton = styled.button`
     width: 1rem;
     height: 1rem;
   }
+`;
+
+export const MoreMenu = styled.div`
+    width: 6.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid #dcdcdc;
+    background: #fff;
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.16);
+
+    position: absolute; /* 버튼 옆에 위치하도록 설정 */
+    top: calc(100% + 0.2rem);
+    left: calc(100% - 0.6rem);
+    z-index: 100; /* 다른 요소들보다 위에 표시되도록 */
+`;
+
+export const MenuItem = styled.div`
+    width: 100%;
+    display: flex; /* 이모티콘과 텍스트를 수평 배치 */
+    align-items: center; /* 수직 정렬 */
+    padding: 0.42rem 0.89rem;
+    gap: 0.5rem; /* 이모티콘과 텍스트 간 간격 */
+    font-size: 0.7rem; /* 글자 크기 */
+    font-weight: 500;
+    color: #333;
+
+    cursor: pointer;
+
+
+    &:hover {
+        background-color: #f9f9f9;
+    }
+
+    &:first-child:hover {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    &:last-child:hover {
+        border-radius: 0 0 0.5rem 0.5rem;
+    }
+    img, svg {
+        display: block; /* 이미지와 아이콘이 올바르게 표시되도록 설정 */
+        width: auto;
+        height: auto;
+        vertical-align: middle; /* 텍스트와 아이콘 정렬 */
+        margin-right: auto;
+    }
 `;

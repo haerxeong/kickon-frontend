@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import * as S from "./marketDetail.style.js";
 import ProfileIcon from "../../assets/profile.svg";
 import NoData from "../../components/NoData/noData.jsx";
@@ -8,11 +8,20 @@ import { Phone } from "lucide-react";
 import { updateUsedProductStatus } from '../../apis/domains/market/usedProduct';
 import {stripHtml} from "../../utils/stripHtml.js";
 import {truncateText} from "../../utils/textUtils.js";
+import {MdIosShare} from "react-icons/md";
+import {LuSiren} from "react-icons/lu";
+import {openReportModal} from "../../features/modal/modalSlice.js";
+import {useDispatch} from "react-redux";
+import {FiMoreHorizontal} from "react-icons/fi";
 
 const MarketDetail = () => {
     const { pk } = useParams();
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const menuRef = useRef(null);
+    const dispatch = useDispatch();
 
     const fetchDetail = async () => {
         const res = await getItemDetail(pk);
@@ -53,6 +62,67 @@ const MarketDetail = () => {
         }
     };
 
+
+    const handleClickOutside = (e) => {
+        if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
+            setIsMenuOpen(false);
+        }
+    };
+
+    const handleReport = () => {
+        setIsMenuOpen(false);
+        // 현재 경로에 따라 신고 타입 결정
+        const reportType = 'market';
+        const contentId = Number(pk)
+
+        // 신고 모달 열기
+        dispatch(openReportModal({ type: reportType, id: contentId }));
+    };
+
+    const copyToClipboard = () => {
+        const currentUrl = window.location.href;
+
+        // 모던 브라우저에서는 Clipboard API 사용
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(currentUrl)
+                .then(() => {
+                    alert("URL이 클립보드에 복사되었습니다.");
+                })
+                .catch((err) => {
+                    console.error('클립보드 복사 실패:', err);
+                });
+        } else {
+            // 구형 브라우저를 위한 대체 방법
+            const tempInput = document.createElement('input');
+            tempInput.value = currentUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert("URL이 클립보드에 복사되었습니다.");
+        }
+    };
+
+    //여기
+    useEffect(() => {
+        // 메뉴 닫기 이벤트 리스너 추가
+        document.addEventListener('click', handleClickOutside);
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+
+    const toggleMenu = () => {
+        setIsMenuOpen((prev) => !prev);
+    };
+
+    useEffect(() => {
+        console.log("isMenuOpen:", isMenuOpen);
+    }, [isMenuOpen]);
+
+
     if (error || !data) {
         return (
             <S.ArticleContainer>
@@ -60,6 +130,7 @@ const MarketDetail = () => {
             </S.ArticleContainer>
         );
     }
+
 
     return (
         <S.ArticleContainer>
@@ -104,6 +175,26 @@ const MarketDetail = () => {
                             new Date(data.createdAt).getTime() + 9 * 60 * 60 * 1000
                         ).toLocaleString()}
                     </S.TimeLabel>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+                        <FiMoreHorizontal
+                            className="more-button"
+                            alt="더보기 버튼"
+                            onClick={toggleMenu}
+                            style={{ cursor: "pointer" }}
+                        />
+                    </span>
+                    {isMenuOpen && (
+                        <S.MoreMenu ref={menuRef}>
+                            <S.MenuItem onClick={copyToClipboard}>
+                                <MdIosShare alt="공유 아이콘" size={15} />
+                                공유하기
+                            </S.MenuItem>
+                            <S.MenuItem onClick={handleReport}>
+                                <LuSiren alt="신고 아이콘" size={15} />
+                                신고하기
+                            </S.MenuItem>
+                        </S.MoreMenu>
+                    )}
                 </S.ArticleInfo>
             </S.ArticleHeader>
 

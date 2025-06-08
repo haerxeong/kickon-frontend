@@ -49,7 +49,7 @@ const PostEditor = ({ type = "news" }) => {
 
     const communityTabs = ["전체", selectedTeam?.nameKr || ""];
 
-    const marketTabs = ["유니폼", "응원용품","축구화","기타"];
+    const marketTabs = ["유니폼", "굿즈","축구화","응원용품","기타"];
 
     // 전화번호 포맷팅 함수
     const formatPhoneNumber = (value) => {
@@ -242,7 +242,8 @@ const PostEditor = ({ type = "news" }) => {
                 price: parseInt(price.trim(), 10),
                 phoneNumber: phoneNumber.trim(),
                 profileImageUrl: uploadedImageUrl,
-                category: selectedTab
+                category: selectedTab,
+                teamPk: selectedTeamId,
             };
         } else {
             payload = {
@@ -478,8 +479,16 @@ const PostEditor = ({ type = "news" }) => {
             />
 
             {/* 글 작성 영역 (ReactQuill 적용) */}
-            <S.QuillWrapper>
-                <MyQuill content={content} setContent={setContent} />
+            <S.QuillWrapper placeholder={isMarkets ? "허위 정보 작성, 불법 물품 거래 시 이용 제한 및 법적 처벌을 받을 수 있습니다." : "내용을 입력하세요."}>
+                <MyQuill
+                    content={content}
+                    setContent={setContent}
+                    placeholder={
+                        isMarkets
+                            ? "허위 정보 작성, 불법 물품 거래 시 이용 제한 및 법적 처벌을 받을 수 있습니다."
+                            : "내용을 입력하세요."
+                    }
+                />
             </S.QuillWrapper>
 
             {/* 버튼 영역 */}
