@@ -23,23 +23,24 @@ export const LogoImage = styled.img`
 
 export const StyledButton = styled.button`
     display: inline-flex;
-    height: 26.4%; /* 1.9rem / 7.2rem */
-    padding: 6.9% 12%; /* 0.5rem 0.9rem 비율로 계산해서 대략 */
+    height: 1.9rem; /* 2.375rem * 0.8 */
+    padding: 0.5rem 0.9rem; /* 0.625rem 1.125rem * 0.8 */
     justify-content: center;
     align-items: center;
-    gap: 6.6%; /* 0.5rem / 7.5rem (button height) 근사치 */
-    border-radius: 13.33%; /* 1rem / 7.5rem */
+    gap: 0.5rem; /* 0.625rem * 0.8 */
+    flex-shrink: 0;
+    border-radius: 1rem; /* 1.25rem * 0.8 */
     background: #C00C0B;
-    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0rem 0.2rem 0.4rem 0rem rgba(0, 0, 0, 0.2);
     color: white;
-    font-size: 9.7%; /* 0.7rem / 7.2rem */
+    font-size: 0.7rem;
     font-weight: 400;
     border: none;
     cursor: pointer;
     position: absolute;
-    left: 23.17%; /* 3.475rem / 15rem */
-    right: 23.17%;
-    bottom: 20.14%; /* 1.45rem / 7.2rem */
+    left: 3.475rem; /* 4.344rem * 0.8 */
+    right: 3.475rem; /* 4.344rem * 0.8 */
+    bottom: 1.45rem; /* 1.813rem * 0.8 */
 `;
 
 export const CardContainer = styled.div`

@@ -3,7 +3,7 @@ import { FaCheckSquare, FaRegCheckSquare } from "react-icons/fa";
 
 export const SignupContainer = styled.div`
   display: flex;
-  width: 31rem;
+  width: 100%;
   padding: 4rem 7rem 2rem 7rem;
   flex-direction: column;
   justify-content: center;
