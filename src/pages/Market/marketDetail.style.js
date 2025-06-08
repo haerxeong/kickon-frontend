@@ -82,6 +82,7 @@ export const ArticleInfo = styled.div`
     gap: 0.4rem;
     font-size: 0.75rem;
     color: #444;
+    position: relative;
 
     svg {
         margin-left: 0.25rem;
@@ -162,7 +163,7 @@ export const ContactButton = styled.button`
 `;
 
 export const MoreMenu = styled.div`
-    width: 6rem;
+    width: 6.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;

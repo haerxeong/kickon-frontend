@@ -62,13 +62,6 @@ const MarketDetail = () => {
         }
     };
 
-    if (error || !data) {
-        return (
-            <S.ArticleContainer>
-                <NoData onRetry={() => window.location.reload()} />
-            </S.ArticleContainer>
-        );
-    }
 
     const handleClickOutside = (e) => {
         if (menuRef.current && !menuRef.current.contains(e.target) && !e.target.closest('.more-button')) {
@@ -120,16 +113,23 @@ const MarketDetail = () => {
         };
     }, []);
 
-    if (!data && !error) {
-        return null; // 또는 로딩 컴포넌트
-    }
 
     const toggleMenu = () => {
         setIsMenuOpen((prev) => !prev);
     };
 
+    useEffect(() => {
+        console.log("isMenuOpen:", isMenuOpen);
+    }, [isMenuOpen]);
 
 
+    if (error || !data) {
+        return (
+            <S.ArticleContainer>
+                <NoData onRetry={() => window.location.reload()} />
+            </S.ArticleContainer>
+        );
+    }
 
 
     return (

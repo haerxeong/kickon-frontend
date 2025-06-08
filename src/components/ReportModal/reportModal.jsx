@@ -27,16 +27,31 @@ const ReportModal = () => {
       }
     }, [isReportModalOpen]);
 
+    let reportReasons;
     // Options for reporting
-    const reportReasons = [
-        { id: "inappropriate", label: "허위사실이에요." },
-        { id: "violence", label: "비방 및 욕설 표현을 사용했어요." },
-        { id: "sexual", label: "선정성 게시글이에요." },
-        { id: "spam", label: "스팸 홍보/도배글이에요." },
-        { id: "privacy", label: "개인정보가 노출되었어요." },
-        { id: "copyright", label: "저작권 및 법적인 문제이에요." },
-        { id: "other", label: "기타" }
-    ];
+    if (location.pathname.includes('/market/')) {
+        reportReasons = [
+            { id: "inappropriate", label: "판매자가 불친절해요." },
+            { id: "violence", label: "거래가 정당하게 이뤄지지 않았어요." },
+            { id: "spam", label: "스팸 홍보/도배글이에요." },
+            { id: "privacy", label: "개인정보가 노출되었어요." },
+            { id: "copyright", label: "저작권 및 법적인 문제이에요." },
+            { id: "other", label: "기타" }
+        ];
+    }
+
+    else {
+        reportReasons = [
+            { id: "inappropriate", label: "허위사실이에요." },
+            { id: "violence", label: "비방 및 욕설 표현을 사용했어요." },
+            { id: "sexual", label: "선정성 게시글이에요." },
+            { id: "spam", label: "스팸 홍보/도배글이에요." },
+            { id: "privacy", label: "개인정보가 노출되었어요." },
+            { id: "copyright", label: "저작권 및 법적인 문제이에요." },
+            { id: "other", label: "기타" }
+        ];
+    }
+
 
     // Single selected option instead of multiple
     const [selectedOption, setSelectedOption] = useState(null);
