@@ -283,7 +283,7 @@ export const QuillWrapper = styled.div`
     width: 100%;
 
     .ql-editor.ql-blank::before {
-        content: "내용을 입력하세요";
+        content: "${props => props.placeholder || '내용을 입력하세요'}";
         //color: #8f8f8f;
         //font-size: 0.95rem;
     }

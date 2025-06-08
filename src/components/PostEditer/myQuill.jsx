@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
-const MyQuill = ({ content, setContent }) => {
+const MyQuill = ({ content, setContent, placeholder }) => {
     const quillRef = useRef(null);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const MyQuill = ({ content, setContent }) => {
             ref={quillRef}
             theme="snow"
             defaultValue={content}
-            placeholder="내용을 입력하세요"
+            placeholder={placeholder}
             style={{ width: "100%" }}
         />
     );
