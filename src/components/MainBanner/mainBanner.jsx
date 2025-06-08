@@ -33,11 +33,11 @@ class MainBanner extends Component {
             <BannerContainer style={{ backgroundImage: `url(${images[currentIndex]})` }}>
 
                 <LeftArrow onClick={this.handlePrev}>
-                    <ChevronLeft size={80} strokeWidth={1} />
+                    <ChevronLeft strokeWidth={1} />
                 </LeftArrow>
 
                 <RightArrow onClick={this.handleNext}>
-                    <ChevronRight size={80} strokeWidth={1} />
+                    <ChevronRight strokeWidth={1} />
                 </RightArrow>
 
                 <IndicatorContainer>

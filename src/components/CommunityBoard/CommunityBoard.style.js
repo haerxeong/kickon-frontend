@@ -5,7 +5,8 @@ import ProfileSvg from "../../assets/profile.svg";
 export const CommunityBoardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30rem;
+  //width: 30rem;
+  width: 100%;
   padding: 1.3rem 0.7rem 0.7rem 0.7rem;
   justify-content: flex-start;
   align-items: center;

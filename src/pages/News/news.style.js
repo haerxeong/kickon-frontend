@@ -7,8 +7,9 @@ export const Container = styled.div`
 `;
 
 export const NewsContainer = styled.div`
-    width: 30rem;
+    //width: 30rem;
     //height: 116.2rem;
+    width: 100%;
     flex-shrink: 0;
     border-radius: 0.44rem;
     border: 1px solid #DCDCDC;

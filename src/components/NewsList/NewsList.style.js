@@ -6,7 +6,8 @@ export const NewsListContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
-  width: 30rem;
+  //width: 30rem;
+    width: 100%;
   padding: 1.35rem 0.71rem 1rem 0.71rem;
   border-radius: 0.625rem;
   border: 0.0625rem solid #DCDCDC;

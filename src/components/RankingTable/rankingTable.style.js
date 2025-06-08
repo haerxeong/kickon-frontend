@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 export const TableContainer = styled.div`
-  width: 15rem;
-  background-color: #fff;
-  border-radius: 0.45rem;
-  border: 1px solid #dcdcdc;
-  padding-bottom: 0.75rem;
-  gap: 0.75rem;
+  //width: 15rem;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 0.45rem;
+    border: 1px solid #dcdcdc;
+    padding-bottom: 0.75rem;
+    gap: 0.75rem;
 `;
 
 export const Title = styled.p`

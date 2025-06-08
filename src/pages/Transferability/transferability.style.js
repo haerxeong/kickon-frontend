@@ -10,7 +10,8 @@ export const ContentWrapper = styled.div`
 `;
 
 export const Container = styled.div`
-    width: 30rem;
+    //width: 30rem;
+    width: 100%;
     height: 37rem;
     border-radius: 0.45rem;
     border: 1px solid #DCDCDC;

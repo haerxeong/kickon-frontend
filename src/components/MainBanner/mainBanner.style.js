@@ -2,13 +2,19 @@ import styled from 'styled-components';
 
 export const BannerContainer = styled.div`
     position: relative;
-    height: 25rem; /* 400px -> 25rem */
+    //height: 25rem; /* 400px -> 25rem */
+    aspect-ratio: 3.7 / 1;
     background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding-left: 1.25rem; /* 20px -> 1.25rem */
+    
+    @media (max-width: 950px) {
+        padding-left: 0;
+        justify-content: center;
+    }
 `;
 
 export const ArrowButton = styled.button`
@@ -18,11 +24,19 @@ export const ArrowButton = styled.button`
     background: transparent;
     border: none;
     color: white;
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: clamp(1.5rem, 4vw, 3rem);  // 👉 여기서 크기 제어
     cursor: pointer;
     z-index: 10;
-    padding: 0.625rem; /* 10px -> 0.625rem */
+    padding: 0.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        width: 2em;
+        height: 2em;
+    }
 
     &:hover {
         color: rgba(255, 255, 255, 0.8);
