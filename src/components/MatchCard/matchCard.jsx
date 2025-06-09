@@ -575,7 +575,9 @@ const MatchCard = ({league}) => {
 
             {proceedingData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex))}
 
-            <Divider/>
+            {proceedingData?.games?.length > 0 && finishedData?.games?.length > 0 && (
+                <Divider />
+            )}
 
             {finishedData.games.map((game, gameIndex) => renderMatchCard(game, gameIndex, true))}
         </>
