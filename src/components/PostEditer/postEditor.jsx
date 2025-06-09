@@ -193,7 +193,7 @@ const PostEditor = ({ type = "news" }) => {
     };
 
     const handleSubmit = async () => {
-        if (!selectedTeamId) {
+        if (!selectedTeamId && !(isCommunity && selectedTab === "전체")) {
             alert("팀을 선택해주세요.");
             return;
         }
@@ -243,6 +243,13 @@ const PostEditor = ({ type = "news" }) => {
                 phoneNumber: phoneNumber.trim(),
                 profileImageUrl: uploadedImageUrl,
                 category: selectedTab
+            };
+        } else if (isCommunity) {
+            payload = {
+                title: title.trim(),
+                contents: content.trim(),
+                category: categoryMap[selectedTab],
+                ...(selectedTab !== "전체" && selectedTeamId && { team: selectedTeamId })  // 팀이 전체가 아닐 때만 포함
             };
         } else {
             payload = {
