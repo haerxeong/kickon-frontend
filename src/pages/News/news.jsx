@@ -9,6 +9,7 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { getNewsList } from "../../apis/domains/news/getNewsList";
 import NoData from "../../components/NoData/noData";
 import Logo from "../../assets/logo_image_redblack.svg"
+import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
 
 const News = () => {
     const [newsList, setNewsList] = useState([]);
@@ -16,6 +17,7 @@ const News = () => {
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(false);
     const { selectedTeam } = useLeagueTeamStore();
     const navigate = useNavigate();
     const leaguePk = selectedLeague?.pk || undefined;
@@ -25,6 +27,7 @@ const News = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
+                setLoading(true);
                 const isTeamTab = selectedTeam?.nameKr && activeTab === selectedTeam.nameKr;
                 const isPopularTab = activeTab === "인기";
                 const isAllTab = activeTab === "전체";
@@ -55,12 +58,16 @@ const News = () => {
                 }
             } catch (error) {
                 console.error("뉴스를 불러오는 데 실패했습니다:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchNews();
     }, [activeTab, activePage, selectedLeague, selectedTeam]);
 
+    if (loading || newsList.length === 0) return <LoadingSpinner />;
+    
     return (
         <S.Container>
             <S.NewsContainer>

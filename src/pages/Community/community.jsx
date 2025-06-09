@@ -11,12 +11,14 @@ import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
 import Logo from "../../assets/logo_image_redblack.svg"
 import { increaseViewCount } from "../../utils/increaseViewCount.js";
+import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const { selectedTeam } = useLeagueTeamStore();
@@ -26,6 +28,7 @@ const Community = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
+                setLoading(true);
                 const params = {
                     size: 20,
                     page: activePage,
@@ -45,6 +48,8 @@ const Community = () => {
                 }
             } catch (error) {
                 console.error("게시글을 불러오는 데 실패했습니다:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -55,6 +60,8 @@ const Community = () => {
         await increaseViewCount("board", postId);
         navigate(`/community/${postId}`);
     };
+
+    if (loading || posts.length === 0) return <LoadingSpinner />;
 
     return (
         <>
