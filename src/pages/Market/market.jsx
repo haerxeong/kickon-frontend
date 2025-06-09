@@ -83,13 +83,22 @@ const Market = () => {
                     </M.Tab>
                 ))}
             </M.TabContainer>
-            {activeTab === "내 판매글" && marketplaceItems.length === 0 ? (
-                <EmptyState
-                    message="판매 내역이 없습니다."
-                    subMessage="상품을 등록해보세요!"
-                    buttonText="상품 등록하기"
-                    onRetry={() => navigate("/market/write")}
-                />
+            {marketplaceItems.length === 0 ? (
+                activeTab === "내 판매글" ? (
+                    <EmptyState
+                        message="판매 내역이 없습니다."
+                        subMessage="상품을 등록해보세요!"
+                        buttonText="상품 등록하기"
+                        onRetry={() => navigate("/market/write")}
+                    />
+                ) : (
+                    <EmptyState
+                        message="등록된 상품이 없습니다."
+                        subMessage="상품을 등록해보세요!"
+                        buttonText="상품 등록하기"
+                        onRetry={() => navigate("/market/write")}
+                    />
+                )
             ) : (
                 <M.MarketplaceGrid>
                     {marketplaceItems.map((item) => (
