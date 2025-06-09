@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { getNewsList } from "../../apis/domains/news/getNewsList";
 import NoData from "../../components/NoData/noData";
+import Logo from "../../assets/logo_image_redblack.svg"
 
 const News = () => {
     const [newsList, setNewsList] = useState([]);
@@ -100,7 +101,9 @@ const News = () => {
                 <S.NewsList>
                     {newsList.length === 0 ? (
                         <S.NoDataWrapper>
-                            <NoData onRetry={() => window.location.reload()} />
+                            {/*<NoData onRetry={() => window.location.reload()} />*/}
+                            <img src={Logo}/>
+                            새 뉴스를 작성해보세요!
                         </S.NoDataWrapper>
                     ) : (
                         newsList.map((item) => (

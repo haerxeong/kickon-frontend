@@ -9,6 +9,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import {formatDate} from "../../utils/formatDate.js";
 import NoData from "../../components/NoData/noData.jsx";
+import Logo from "../../assets/logo_image_redblack.svg"
 import { increaseViewCount } from "../../utils/increaseViewCount.js";
 
 const Community = () => {
@@ -87,7 +88,9 @@ const Community = () => {
                 <S.PostsWrapper>
                     {posts.length === 0 ? (
                         <S.NoDataWrapper>
-                            <NoData onRetry={() => window.location.reload()} />
+                            {/*<NoData onRetry={() => window.location.reload()} />*/}
+                            <img src={Logo}/>
+                            새 글을 작성해보세요!
                         </S.NoDataWrapper>
                     ) : (
                         posts.map((post) => (

@@ -180,6 +180,10 @@ export const NoDataWrapper = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
     align-items: center;
     margin: 7rem 0;
+    color: #000;
+    font-weight: 600;
 `;
