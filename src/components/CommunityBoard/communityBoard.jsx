@@ -22,13 +22,16 @@ import NoData from "../../components/NoData/noData.jsx";
 import { increaseViewCount } from "../../utils/increaseViewCount";
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 import defaultProfileImage from "../../assets/profile.svg";
+import { useAuthGuard } from "../../hooks/useAuthGuard.js";
 
 const CommunityBoard = ({ type }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const requireAuth = useAuthGuard();
 
   const handlePostClick = async (postId) => {
+    if (!requireAuth()) return;
     try {
       await increaseViewCount("board", postId);
       navigate(`/community/${postId}`);
@@ -66,7 +69,10 @@ const CommunityBoard = ({ type }) => {
         <div className="title">
           {type === "communityDetail" ? "함께 볼 만한 게시글" : "클럽 커뮤니티"}
         </div>
-        <MoreLink as={Link} to="/community">
+        <MoreLink onClick={() => {
+          if (!requireAuth()) return;
+          navigate("/community");
+        }}>
           더보기 <MoreIcon />
         </MoreLink>
       </CommunityHeader>
