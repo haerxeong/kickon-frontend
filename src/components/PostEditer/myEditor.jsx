@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { uploadImageToS3 } from '../../utils/imageUpload';
@@ -20,6 +20,15 @@ const MyEditor = ({ content, setContent, placeholder }) => {
             alert('이미지 업로드에 실패했습니다.');
         }
     };
+
+    useEffect(() => {
+        const editorInstance = editorRef.current?.getInstance();
+
+        // 마운트 후 강제로 빈 마크다운 설정
+        if (editorInstance && !content) {
+            editorInstance.setMarkdown('');
+        }
+    }, []);
 
     return (
         <Editor

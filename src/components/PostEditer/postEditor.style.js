@@ -281,63 +281,28 @@ export const QuillWrapper = styled.div`
     font-style: normal;
     line-height: 0.8rem;
     width: 100%;
+    z-index: 1;
 
-    .ql-editor.ql-blank::before {
-        content: "${props => props.placeholder || '내용을 입력하세요'}";
-        //color: #8f8f8f;
-        //font-size: 0.95rem;
-    }
-
-    .quill {
-        border-radius: 4px;
-        //overflow: scroll;
+    .toastui-editor-defaultUI {
         border: 1px solid #dcdcdc;
+        border-radius: 4px;
     }
 
-    .ql-toolbar {
-        border: none !important;
-        border-bottom: 1px solid #dcdcdc !important;
-        background-color: #f9f9f9;
-        padding: 8px !important;
-
-        .ql-formats {
-            margin-right: 12px !important;
-        }
-
-        button {
-            height: 28px;
-            width: 28px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            &:hover {
-                background-color: #e9e9e9;
-            }
-
-            &.ql-active {
-                background-color: #e0e0e0;
-            }
-        }
-    }
-
-    .ql-container {
-        border: none !important;
-        font-family: inherit;
+    .toastui-editor-contents {
         font-size: 1rem;
+        color: #000;
+        padding: 16px;
         min-height: 250px;
     }
 
-    .ql-editor {
-        min-height: 250px;
-        line-height: 1.6;
-        padding: 16px !important;
-
-        &.ql-blank::before {
-            font-style: normal;
-            color: #8f8f8f;
-            font-size: 0.95rem;
-        }
+    .toastui-editor-ww-container::before {
+        color: #8f8f8f;
+        font-size: 0.95rem;
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        pointer-events: none;
+        z-index: 0;
     }
 `;
 

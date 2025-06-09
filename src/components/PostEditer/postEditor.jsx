@@ -483,8 +483,7 @@ const PostEditor = ({ type = "news" }) => {
                 onChange={(e) => setTitle(e.target.value)}
             />
 
-            {/* 글 작성 영역 (ReactQuill 적용) */}
-            <S.QuillWrapper placeholder={isMarkets ? "허위 정보 작성, 불법 물품 거래 시 이용 제한 및 법적 처벌을 받을 수 있습니다." : "내용을 입력하세요."}>
+            <S.QuillWrapper>
                 <MyEditor
                     content={content}
                     setContent={setContent}
