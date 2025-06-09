@@ -14,6 +14,9 @@ import { useNavigate } from "react-router-dom";
 import Quill from "quill";
 import newsCategoryMap  from "../../utils/newsCategoryMap.js";
 import MyQuill from "./myQuill.jsx";
+import MyEditor from "./MyEditor";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 const PostEditor = ({ type = "news" }) => {
     const [teamName, setTeamName] = useState("");
@@ -192,6 +195,11 @@ const PostEditor = ({ type = "news" }) => {
         }
     };
 
+    const getSanitizedHtml = (markdown) => {
+        const rawHtml = marked.parse(markdown || "");
+        return DOMPurify.sanitize(rawHtml);
+    };
+
     const handleSubmit = async () => {
         if (!selectedTeamId && !(isCommunity && selectedTab === "전체")) {
             alert("팀을 선택해주세요.");
@@ -232,13 +240,13 @@ const PostEditor = ({ type = "news" }) => {
                 ? "/api/usedProduct"
                 : "/api/board";
 
+        const sanitizedHtml = getSanitizedHtml(content);
 
         let payload;
-
         if (isMarkets) {
             payload = {
                 productName: title.trim(),
-                description: content.trim(),
+                description: sanitizedHtml,
                 price: parseInt(price.trim(), 10),
                 phoneNumber: phoneNumber.trim(),
                 profileImageUrl: uploadedImageUrl,
@@ -256,17 +264,14 @@ const PostEditor = ({ type = "news" }) => {
             payload = {
                 team: selectedTeamId,
                 title: title.trim(),
-                contents: content.trim(),
+                contents: sanitizedHtml,
                 category: categoryMap[selectedTab],
             };
         }
 
-
-        // 썸네일이 있다면 추가
         if (isNews && uploadedImageUrl) {
             payload.thumbnailUrl = uploadedImageUrl;
         }
-
 
         try {
             await axiosInstance.post(endpoint, payload);
@@ -485,9 +490,8 @@ const PostEditor = ({ type = "news" }) => {
                 onChange={(e) => setTitle(e.target.value)}
             />
 
-            {/* 글 작성 영역 (ReactQuill 적용) */}
-            <S.QuillWrapper placeholder={isMarkets ? "허위 정보 작성, 불법 물품 거래 시 이용 제한 및 법적 처벌을 받을 수 있습니다." : "내용을 입력하세요."}>
-                <MyQuill
+            <S.QuillWrapper>
+                <MyEditor
                     content={content}
                     setContent={setContent}
                     placeholder={

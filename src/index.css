@@ -10,3 +10,9 @@ html, body {
 *, *::before, *::after {
     box-sizing: inherit;
 }
+
+.toastui-editor-toolbar {
+    height: 2.5rem !important;         /* 원하는 높이로 조정 */
+    min-height: 2rem !important;
+    align-items: center !important; /* 수직 정렬도 함께 */
+}

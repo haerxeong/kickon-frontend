@@ -106,6 +106,43 @@ export const ArticleText = styled.div`
     border-radius: 0.625rem;
     object-fit: contain;
   }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: bold;
+        margin: 1rem 0 0.5rem;
+    }
+
+    ul, ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    blockquote {
+        border-left: 4px solid #ccc;
+        padding-left: 1rem;
+        color: #555;
+        margin: 1rem 0;
+    }
+
+    pre {
+        background: #f4f4f4;
+        padding: 0.8rem;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        text-align: left;
+    }
 `;
 
 
