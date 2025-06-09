@@ -20,7 +20,7 @@ const Market = () => {
 
     const { selectedTeam } = useLeagueTeamStore();
 
-    const tabs = ["전체", selectedTeam?.nameKr || "", "판매내역"].filter(Boolean);
+    const tabs = ["전체", selectedTeam?.nameKr || "", "판매 내역"].filter(Boolean);
 
     useEffect(() => {
         const fetchItems = async () => {
