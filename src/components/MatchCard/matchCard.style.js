@@ -286,7 +286,7 @@ export const CountDisplay = styled.div`
 
 export const ConfirmButton = styled.button`
     display: flex;
-    width: 25.9rem;
+    width: 86%;
     height: 1.4rem;
     padding: 0.5rem 1.1rem;
     justify-content: center;
