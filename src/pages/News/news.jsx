@@ -7,9 +7,8 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { getNewsList } from "../../apis/domains/news/getNewsList";
-import NoData from "../../components/NoData/noData";
-import Logo from "../../assets/logo_image_redblack.svg"
 import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
+import EmptyState from "../../components/EmptyState/emptyState.jsx";
 
 const News = () => {
     const [newsList, setNewsList] = useState([]);
@@ -17,7 +16,7 @@ const News = () => {
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const { selectedTeam } = useLeagueTeamStore();
     const navigate = useNavigate();
     const leaguePk = selectedLeague?.pk || undefined;
@@ -27,7 +26,6 @@ const News = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                setLoading(true);
                 const isTeamTab = selectedTeam?.nameKr && activeTab === selectedTeam.nameKr;
                 const isPopularTab = activeTab === "인기";
                 const isAllTab = activeTab === "전체";
@@ -66,8 +64,8 @@ const News = () => {
         fetchNews();
     }, [activeTab, activePage, selectedLeague, selectedTeam]);
 
-    if (loading || newsList.length === 0) return <LoadingSpinner />;
-    
+    if (loading) return <LoadingSpinner />;
+
     return (
         <S.Container>
             <S.NewsContainer>
@@ -107,11 +105,21 @@ const News = () => {
 
                 <S.NewsList>
                     {newsList.length === 0 ? (
-                        <S.NoDataWrapper>
-                            {/*<NoData onRetry={() => window.location.reload()} />*/}
-                            <img src={Logo}/>
-                            새 뉴스를 작성해보세요!
-                        </S.NoDataWrapper>
+                        activeTab === selectedTeam?.nameKr ? (
+                            <EmptyState
+                                message={selectedTeam?.nameKr + " 뉴스가 없습니다."}
+                                subMessage="뉴스를 작성해보세요!"
+                                buttonText="뉴스 작성하기"
+                                onRetry={() => navigate("/news/write")}
+                            />
+                        ) : (
+                            <EmptyState
+                                message="뉴스가 없습니다."
+                                subMessage="뉴스를 작성해보세요!"
+                                buttonText="뉴스 작성하기"
+                                onRetry={() => navigate("/news/write")}
+                            />
+                        )
                     ) : (
                         newsList.map((item) => (
                             <NewsItem

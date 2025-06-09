@@ -8,17 +8,16 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import {formatDate} from "../../utils/formatDate.js";
-import NoData from "../../components/NoData/noData.jsx";
-import Logo from "../../assets/logo_image_redblack.svg"
 import { increaseViewCount } from "../../utils/increaseViewCount.js";
 import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
+import EmptyState from "../../components/EmptyState/emptyState.jsx";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
     const [activeTab, setActiveTab] = useState("전체");
     const [activePage, setActivePage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const { selectedTeam } = useLeagueTeamStore();
@@ -61,7 +60,7 @@ const Community = () => {
         navigate(`/community/${postId}`);
     };
 
-    if (loading || posts.length === 0) return <LoadingSpinner />;
+    if (loading) return <LoadingSpinner />;
 
     return (
         <>
@@ -94,11 +93,21 @@ const Community = () => {
 
                 <S.PostsWrapper>
                     {posts.length === 0 ? (
-                        <S.NoDataWrapper>
-                            {/*<NoData onRetry={() => window.location.reload()} />*/}
-                            <img src={Logo}/>
-                            새 글을 작성해보세요!
-                        </S.NoDataWrapper>
+                        activeTab === selectedTeam?.nameKr ? (
+                            <EmptyState
+                                message={selectedTeam?.nameKr + " 게시글이 없습니다."}
+                                subMessage="글을 작성해보세요!"
+                                buttonText="글 작성하기"
+                                onRetry={() => navigate("/community/write")}
+                            />
+                        ) : (
+                            <EmptyState
+                                message=" 게시글이 없습니다."
+                                subMessage="글을 작성해보세요!"
+                                buttonText="글 작성하기"
+                                onRetry={() => navigate("/community/write")}
+                            />
+                        )
                     ) : (
                         posts.map((post) => (
                             <S.PostItem key={post.pk} onClick={() => handlePostClick(post.pk)}>
