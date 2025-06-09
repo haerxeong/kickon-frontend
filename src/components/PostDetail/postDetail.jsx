@@ -21,6 +21,7 @@ import NoData from "../../components/NoData/noData.jsx";
 import Comment from "../../components/Comment/comment.jsx";
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 import { useAuthGuard } from "../../hooks/useAuthGuard.js";
+import { parseMarkdownToHtml } from '../../utils/markdownParser';
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -116,17 +117,10 @@ const PostDetail = () => {
         setLoading(true);
         let response;
 
-        console.log("현재 경로:", location.pathname);
-        console.log("파라미터:", { newsPk, boardPk });
-
         if (location.pathname.includes('/news/') && newsPk) {
-          console.log("뉴스 상세 조회 시도");
           response = await getNewsDetail(newsPk);
-          console.log("뉴스 API 응답:", response);
         } else if (location.pathname.includes('/community/') && boardPk) {
-          console.log("게시글 상세 조회 시도");
           response = await getBoardDetail(boardPk);
-          console.log("게시글 API 응답:", response);
         }
 
         if (response) {
@@ -282,25 +276,42 @@ const PostDetail = () => {
 
         <S.ArticleContent>
           <S.ArticleText as="div">
-            {parse(
-                youtubeUrlToIframe(apiPost.content), // post.content를 apiPost.content로 변경
-                {
-                  replace: domNode => {
-                    if (
-                        domNode.name === 'iframe' &&
-                        domNode.attribs &&
-                        domNode.attribs.src &&
-                        domNode.attribs.src.includes('youtube.com')
-                    ) {
-                      return (
-                          <S.YoutubeResponsive>
-                            {domToReact([domNode])}
-                          </S.YoutubeResponsive>
-                      );
-                    }
+            {parse(apiPost.content, {
+              replace: (domNode) => {
+                if (
+                    domNode.name === 'a' &&
+                    domNode.attribs?.href?.includes('youtube.com')
+                ) {
+                  const youtubeUrl = domNode.attribs.href;
+                  const videoId = youtubeUrl.split('v=')[1]?.split('&')[0]; // v= 뒤의 ID 추출
+                  if (videoId) {
+                    return (
+                        <S.YoutubeResponsive>
+                          <iframe
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              frameBorder="0"
+                              allowFullScreen
+                              width="100%"
+                              height="315"
+                              title="YouTube video"
+                          />
+                        </S.YoutubeResponsive>
+                    );
                   }
                 }
-            )}
+
+                if (
+                    domNode.name === 'iframe' &&
+                    domNode.attribs?.src?.includes('youtube.com')
+                ) {
+                  return (
+                      <S.YoutubeResponsive>
+                        {domToReact([domNode])}
+                      </S.YoutubeResponsive>
+                  );
+                }
+              }
+            })}
           </S.ArticleText>
         </S.ArticleContent>
 
