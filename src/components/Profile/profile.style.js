@@ -190,10 +190,6 @@ export const StatTitle = styled.div`
     //margin-top: 0.36rem;
 `;
 
-export const handleIconClick = () => {
-    alert("아이콘이 클릭되었습니다");
-};
-
 export const StatValue = styled.div`
     color: #000;
     text-align: center;
@@ -228,4 +224,31 @@ export const LogoutButton = styled.button`
     position: absolute;
     top: 10.4%;
     right: 8%;
+`;
+
+export const Tooltip = styled.div`
+    position: absolute;
+    top: 1.6rem;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    opacity: ${(props) => (props.visible ? 1 : 0)};
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: none;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: -0.4rem;
+        left: 0.6rem;
+        border-width: 0.4rem;
+        border-style: solid;
+        border-color: transparent transparent #333 transparent;
+    }
 `;

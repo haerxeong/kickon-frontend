@@ -14,9 +14,13 @@ const Footer = ({ isDark }) => {
 
           <FooterTextWrapper>
             {/* 서비스 이용약관 및 개인정보처리방침 */}
-            <FooterMenu isDark={isDark}>
-              <a href="/terms">서비스 이용약관</a> | <a href="/privacy"> 개인정보처리방침</a>
-            </FooterMenu>
+              <FooterMenu isDark={isDark}>
+                  <a href="https://lunar-surf-03d.notion.site/20d71dde430d8035b15ae8d2bfd745dd?source=copy_link" target="_blank" rel="noopener noreferrer">
+                      서비스 이용약관
+                  </a>
+                  <span className="divider">|</span>
+                  <a href="https://lunar-surf-03d.notion.site/20d71dde430d80c78293c9bd782efb28?source=copy_link">개인정보처리방침</a>
+              </FooterMenu>
 
             {/* 저작권 및 이메일 정보 (한 줄로 배치) */}
             <FooterTextRow isDark={isDark}>

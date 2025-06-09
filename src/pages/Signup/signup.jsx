@@ -141,6 +141,7 @@ const Signup = () => {
       await updateUserInfo({
         nickname,
         team: selectedTeam.nameKr === "응원팀이 없어요." ? null : selectedTeam.pk,
+        profileImageUrl: "https://ssl.pstatic.net/static/pwe/address/img_profile.png"
       });
 
       await new Promise(resolve => setTimeout(resolve, 300));

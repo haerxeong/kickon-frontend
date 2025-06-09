@@ -6,11 +6,7 @@ import NoData from '../../components/NoData/noData.jsx';
 import NewsList from '../../components/NewsList/newsList.jsx';
 import { FaCheckCircle } from "react-icons/fa";
 import defaultTeamLogo from '../../assets/good.svg';
-import { useNavigate } from 'react-router-dom';
 import { useAuthGuard } from '../../hooks/useAuthGuard.js';
-import { AuthContext } from '../../context/AuthContext.jsx';
-import { useDispatch } from 'react-redux';
-import { openLoginModal } from '../../features/modal/modalSlice.js';
 import defaultProfileImage from "../../assets/profile.svg";
 
 const Transferability = () => {
@@ -21,23 +17,10 @@ const Transferability = () => {
     const [predictionDone, setPredictionDone] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [selectedNews, setSelectedNews] = useState(null);
-    
-    // 로그인 상태 검증을 위한 설정
-    const navigate = useNavigate();
-    const { isAuthenticated } = useContext(AuthContext);
-    const dispatch = useDispatch();
-    
+    const requireAuth = useAuthGuard();
+
     // 뉴스 컨텐츠 참조
     const newsContentRef = useRef(null);
-
-    // 페이지 접근 시 로그인 상태 검증
-    useEffect(() => {
-        if (!isAuthenticated) {
-            // 로그인하지 않은 경우 홈으로 리다이렉트 후 로그인 모달 표시
-            navigate('/');
-            dispatch(openLoginModal());
-        }
-    }, [isAuthenticated, navigate, dispatch]);
 
     // 뉴스 상세보기 시 내용 부분만 스크롤 가능하도록 설정
     useEffect(() => {
@@ -45,6 +28,11 @@ const Transferability = () => {
             newsContentRef.current.scrollTop = 0;
         }
     }, [selectedNews]);
+
+    const handleClickPredict = () => {
+        if (!requireAuth()) return; // 로그인 안 됐으면 모달 띄우고 리턴
+        handlePredict(); // 로그인 상태면 예측 실행
+    };
 
     const handlePredict = async () => {
         if (!inputValue.trim()) return;
@@ -247,7 +235,7 @@ const Transferability = () => {
             </S.ContentWrapper>
 
             <S.PredictButton 
-                onClick={handlePredict} 
+                onClick={handleClickPredict}
                 disabled={isLoading || (predictionDone && !showResult)} 
                 isLoading={isLoading}
             >

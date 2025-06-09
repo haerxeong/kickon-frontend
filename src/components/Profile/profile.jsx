@@ -3,7 +3,7 @@ import {
     ProfileContainer, StyledButton, LogoImage, CardContainer, ProfileInfo, ProfileImage,
     UserDetails, Username, ProfileEdit,
     UserStats, StatBox, StatTitle, StatValue,
-    LogoutButton, handleIconClick, UsernameSuffix, MyTeam
+    LogoutButton, UsernameSuffix, MyTeam, Tooltip
 } from "./profile.style";
 import Logo from "../../assets/logo_image_black.svg";
 import DefaultImage from "../../assets/profile_image.svg";
@@ -86,6 +86,24 @@ const Profile = () => {
 
 const UserCard = ({ userData, isLoading, error, onLogout }) => {
     const navigate = useNavigate();
+    const [tooltipTimer, setTooltipTimer] = useState(null);
+    const [tooltipVisible, setTooltipVisible] = useState(false); // 렌더링 유무
+    const [tooltipFade, setTooltipFade] = useState(false); // opacity 조절
+
+    const handleIconClick = () => {
+        setTooltipVisible(true);
+        setTooltipFade(true);
+
+        setTimeout(() => setTooltipFade(false), 2600); // fade out 시작
+        setTimeout(() => setTooltipVisible(false), 3000); // 완전 제거
+    };
+
+    useEffect(() => {
+        return () => {
+            if (tooltipTimer) clearTimeout(tooltipTimer);
+        };
+    }, [tooltipTimer]);
+
     if (isLoading) {
         return <CardContainer><LoadingSpinner /></CardContainer>;
     }
@@ -125,11 +143,22 @@ const UserCard = ({ userData, isLoading, error, onLogout }) => {
                     <StatTitle>이번 시즌 우리 팀 내 순위</StatTitle>
                     <StatValue>{userData.ranking}위</StatValue>
                 </StatBox>
-                <StatBox>
+                <StatBox style={{ position: "relative" }}>
                     <StatTitle>
                         지금까지 모은 포인트
-                        <BsQuestionCircle onClick={handleIconClick} color="#8F8F8F" size={6} style={{ marginLeft: "0.175rem" }}/>
+                        <BsQuestionCircle
+                            onClick={handleIconClick}
+                            color="#8F8F8F"
+                            size={6}
+                            style={{ marginLeft: "0.3rem", cursor: "pointer" }}
+                        />
                     </StatTitle>
+                    {tooltipVisible && (
+                        <Tooltip visible={tooltipFade}>
+                            예측 성공 시 포인트가 적립됩니다! <br />
+                            향후 리워드 시스템에 사용될 수 있어요.
+                        </Tooltip>
+                    )}
                     <StatValue>{userData.totalPoints} P</StatValue>
                 </StatBox>
             </UserStats>
