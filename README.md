@@ -17,9 +17,7 @@
 * 팬 간 소통과 정보 공유를 활성화하며, 진정한 참여형 축구 커뮤니티를 지향합니다.
 
 ---
-
 <br>
-
 
 # 2. 🧑‍🤝‍🧑 팀원 소개
 * [이해령](https://github.com/haerxeong)
@@ -27,8 +25,6 @@
 * [박상원](https://github.com/psw204)
 
 ---
-
-
 <br>
 
 # 3. 💻 핵심 기능
@@ -39,9 +35,20 @@
 ---
 <br>
 
-# 4. 🛠️ 기술 스택
-   * Frontend: React, React Router, Styled-components, Zustand
-   * 기타: Quill Editor (ReactQuill-new), Axios
+# 4. 🏗️ 서비스 아키텍처
+첨부 예정
+
+---
+<br>
+
+# 5. 🛠️ 기술 스택
+   * Framework/Core: React 19, Vite (번들러)
+   * 라우팅: React Router v7
+   * 상태 관리: Zustand, Redux Toolkit
+   * 스타일링: Styled Components
+   * 폼 및 유효성 검사: React Hook Form, Yup
+   * 에디터: React Quill
+   * 기타 유틸: Axios (API 통신), Day.js (날짜 처리), html-react-parser (HTML 파싱 및 렌더링), React Icons / Lucide-react (아이콘)
 
 ---
 <br>
