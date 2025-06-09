@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Quill from "quill";
 import newsCategoryMap  from "../../utils/newsCategoryMap.js";
 import MyQuill from "./myQuill.jsx";
-import MyEditor from "./MyEditor";
+import MyEditor from "./myEditor.jsx";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
