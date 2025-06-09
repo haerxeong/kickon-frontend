@@ -67,11 +67,20 @@ export const MarketplaceImage = styled.div`
     background-color: #f5f5f5;
     position: relative;
     overflow: hidden;
-    
-    img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img.normal-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+
+    img.logo-image {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
     }
 `;
 

@@ -66,6 +66,12 @@ const Header = ({ isDark }) => {
                     isDark={isDark}
                     currentPath={currentPath}
                     itemPath="/market"
+                    onClick={(e) => {
+                        if (!isAuthenticated) {
+                            e.preventDefault(); // 링크 이동 방지
+                            dispatch(openLoginModal()); // 로그인 모달 열기
+                        }
+                    }}
                 >
                     중고 거래
                 </S.NavItem>
