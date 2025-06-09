@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import * as S from "./topNews.style.js";
 import {getTopNews} from "../../apis/domains/news/getTopNews.js";
 import {useNavigate} from "react-router-dom";
-import defaultImage from "../../assets/xCard.svg"
+import defaultImage from "../../assets/login_logo.svg";
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 
 const TopNews = () => {
@@ -66,6 +66,7 @@ const TopNews = () => {
                                 src={news.thumbnailUrl || defaultImage}
                                 alt="썸네일"
                                 onError={(e) => (e.target.src = defaultImage)}
+                                className={news.thumbnailUrl ? "normal-image" : "default-image"}
                             />
                         </S.NewsImageWrapper>
                         <S.NewsTitle>{news.title}</S.NewsTitle>

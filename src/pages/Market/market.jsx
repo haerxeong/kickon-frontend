@@ -7,6 +7,7 @@ import { useLeagueTeamStore } from "../../store/useLeagueTeamStore.js";
 import { getItemList } from "../../apis/domains/market/getItemList.js";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate.js";
+import Logo from "../../assets/login_logo.svg";
 import EmptyState from "../../components/EmptyState/emptyState.jsx";
 
 const Market = () => {
@@ -20,11 +21,11 @@ const Market = () => {
 
     const { selectedTeam } = useLeagueTeamStore();
 
-    const tabs = ["전체", selectedTeam?.nameKr || "", "판매 내역"].filter(Boolean);
+    const tabs = ["전체", selectedTeam?.nameKr || "", "내 판매글"].filter(Boolean);
 
     useEffect(() => {
         const fetchItems = async () => {
-            if (activeTab === "판매 내역") {
+            if (activeTab === "내 판매글") {
                 const res = await getItemList({ size: 100, page: 1 });
                 const mine = (res.items || []).filter(item => item.isMine);
                 setMyItems(mine);
@@ -45,7 +46,7 @@ const Market = () => {
     }, [activeTab, activePage, selectedTeam]);
 
     useEffect(() => {
-        if (activeTab === "판매 내역") {
+        if (activeTab === "내 판매글") {
             setMarketplaceItems(myItems.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage));
         }
     }, [activePage, myItems, activeTab]);
@@ -82,7 +83,7 @@ const Market = () => {
                     </M.Tab>
                 ))}
             </M.TabContainer>
-            {activeTab === "판매 내역" && marketplaceItems.length === 0 ? (
+            {activeTab === "내 판매글" && marketplaceItems.length === 0 ? (
                 <EmptyState
                     message="판매 내역이 없습니다."
                     subMessage="상품을 등록해보세요!"
@@ -94,7 +95,11 @@ const Market = () => {
                     {marketplaceItems.map((item) => (
                         <M.MarketplaceItem key={item.pk} onClick={() => handleMarketplaceClick(item.pk)}>
                             <M.MarketplaceImage>
-                                <img src={item.profileImageUrl} alt={item.productName} />
+                                <img
+                                    src={item.profileImageUrl && item.profileImageUrl.trim() !== "" ? item.profileImageUrl : Logo}
+                                    alt={item.productName}
+                                    className={item.profileImageUrl && item.profileImageUrl.trim() !== "" ? "normal-image" : "logo-image"}
+                                />
                                 {item.usedProductStatus === 'SOLD' && (
                                     <M.StatusBadge status="sold">거래완료</M.StatusBadge>
                                 )}

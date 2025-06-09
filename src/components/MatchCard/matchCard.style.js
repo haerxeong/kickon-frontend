@@ -48,7 +48,7 @@ export const RightBadge = styled.div`
 
 export const RightText = styled.span`
     position: absolute;
-    left: 26.6rem;
+    left: 87%;
     top: 1.1rem;
     color: #676767;
     text-align: right;
@@ -109,7 +109,7 @@ export const TimeText = styled.span`
 
 export const MatchButtonContainer = styled.div`
     display: flex;
-    width: 25.9rem;
+    width: 86%;
     height: 3.3rem;
     flex-shrink: 0;
     border-radius: 0.4rem;
@@ -325,7 +325,7 @@ export const JoinedText = styled.p`
 `;
 
 export const Divider = styled.div`
-    width: 27.125rem;
+    width: 90%;
     height: 0.0625rem;
     background-color: var(--Black-black_600, #8F8F8F);
     margin: 1.4rem 1.05rem;

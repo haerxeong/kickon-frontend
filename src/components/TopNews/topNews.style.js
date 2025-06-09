@@ -46,13 +46,20 @@ export const NewsImageWrapper = styled.div`
   border-radius: 0.175rem;
   overflow: hidden;
   margin-left: 0.6rem;
-  background-color: #DCDCDC;
+  background-color: #F0F0F0;
 `;
 
 export const NewsImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+    
+    &.default-image {
+        width: 90%;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+    }
 `;
 
 export const NewsTitle = styled.div`
