@@ -155,3 +155,81 @@ export const StatusBadge = styled.span`
     border-radius: 0.25rem;
     font-weight: 500;
 `;
+
+export const HeaderContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+`;
+
+export const CategoryDropdown = styled.div`
+    position: relative;
+    display: inline-block;
+`;
+
+export const DropdownButton = styled.button`
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    background: white;
+    border: none;
+    border-radius: 0.25rem;
+    color: #000;
+    font-size: 0.65rem;
+    font-family: Pretendard;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 4rem;
+    
+    &:hover {
+        border-color: #C00C0B;
+        background: #fafafa;
+    }
+    
+    svg {
+        transition: transform 0.2s ease;
+        transform: ${props => props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+    }
+`;
+
+export const DropdownMenu = styled.div`
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #DCDCDC;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 6rem;
+    margin-top: 0.2rem;
+`;
+
+export const DropdownItem = styled.div`
+    padding: 0.5rem 0.7rem;
+    font-size: 0.65rem;
+    font-family: Pretendard;
+    color: ${props => props.selected ? '#C00C0B' : '#333'};
+    background: ${props => props.selected ? '#fff5f5' : 'white'};
+    cursor: pointer;
+    transition: all 0.15s ease;
+    
+    &:hover {
+        background: ${props => props.selected ? '#fff5f5' : '#f8f8f8'};
+        color: #C00C0B;
+    }
+    
+    &:first-child {
+        border-radius: 0.25rem 0.25rem 0 0;
+    }
+    
+    &:last-child {
+        border-radius: 0 0 0.25rem 0.25rem;
+    }
+    
+    & + & {
+        border-top: 1px solid #f0f0f0;
+    }
+`;
