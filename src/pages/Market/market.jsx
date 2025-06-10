@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate.js";
 import Logo from "../../assets/login_logo.svg";
 import EmptyState from "../../components/EmptyState/emptyState.jsx";
+import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
 
 const Market = () => {
     const [marketplaceItems, setMarketplaceItems] = useState([]);
@@ -18,6 +19,7 @@ const Market = () => {
     const [activeTab, setActiveTab] = useState("전체");
     const navigate = useNavigate();
     const [myItems, setMyItems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const { selectedTeam } = useLeagueTeamStore();
 
@@ -25,23 +27,30 @@ const Market = () => {
 
     useEffect(() => {
         const fetchItems = async () => {
-            if (activeTab === "내 판매글") {
-                const res = await getItemList({ size: 100, page: 1 });
-                const mine = (res.items || []).filter(item => item.isMine);
-                setMyItems(mine);
-                setTotalPages(Math.max(1, Math.ceil(mine.length / itemsPerPage)));
-                setMarketplaceItems(mine.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage));
-            } else {
-                const params = {
-                    size: itemsPerPage,
-                    page: activePage,
-                    team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined
-                };
-                const res = await getItemList(params);
-                setMarketplaceItems(res.items || []);
-                setTotalPages(res.totalPages || 1);
+            try {
+                if (activeTab === "내 판매글") {
+                    const res = await getItemList({ size: 100, page: 1 });
+                    const mine = (res.items || []).filter(item => item.isMine);
+                    setMyItems(mine);
+                    setTotalPages(Math.max(1, Math.ceil(mine.length / itemsPerPage)));
+                    setMarketplaceItems(mine.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage));
+                } else {
+                    const params = {
+                        size: itemsPerPage,
+                        page: activePage,
+                        team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined
+                    };
+                    const res = await getItemList(params);
+                    setMarketplaceItems(res.items || []);
+                    setTotalPages(res.totalPages || 1);
+                }
+            } catch (err) {
+                console.error("마켓 데이터를 불러오는 중 오류 발생:", err);
+            } finally {
+                setLoading(false);
             }
         };
+
         fetchItems();
     }, [activeTab, activePage, selectedTeam]);
 
@@ -53,16 +62,7 @@ const Market = () => {
 
     const formatPrice = (price) => `${price.toLocaleString()}원`;
 
-    const getStatusText = (status) => {
-        switch(status) {
-            case 'SOLD':
-                return '거래완료';
-            case 'RESERVED':
-                return '예약중';
-            default:
-                return '판매중';
-        }
-    };
+    if (loading) return <LoadingSpinner />;
 
     const handleMarketplaceClick = (itemId) => {
         navigate(`/market/${itemId}`);
