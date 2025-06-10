@@ -278,32 +278,35 @@ const PostDetail = () => {
           <S.ArticleText as="div">
             {parse(apiPost.content, {
               replace: (domNode) => {
-                if (
-                    domNode.name === 'a' &&
-                    domNode.attribs?.href?.includes('youtube.com')
-                ) {
-                  const youtubeUrl = domNode.attribs.href;
-                  const videoId = youtubeUrl.split('v=')[1]?.split('&')[0]; // v= 뒤의 ID 추출
+                if (domNode.name === 'a' && domNode.attribs?.href?.includes('youtu')) {
+                  const href = domNode.attribs.href;
+                  let videoId = '';
+
+                  if (href.includes('youtu.be/')) {
+                    videoId = href.split('youtu.be/')[1]?.split('?')[0];
+                  } else if (href.includes('v=')) {
+                    videoId = href.split('v=')[1]?.split('&')[0];
+                  }
+
                   if (videoId) {
                     return (
                         <S.YoutubeResponsive>
                           <iframe
                               src={`https://www.youtube.com/embed/${videoId}`}
                               frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
+                              title="YouTube video"
                               width="100%"
                               height="315"
-                              title="YouTube video"
                           />
                         </S.YoutubeResponsive>
                     );
                   }
                 }
 
-                if (
-                    domNode.name === 'iframe' &&
-                    domNode.attribs?.src?.includes('youtube.com')
-                ) {
+                // 기존 iframe 처리도 유지
+                if (domNode.name === 'iframe' && domNode.attribs?.src?.includes('youtube.com')) {
                   return (
                       <S.YoutubeResponsive>
                         {domToReact([domNode])}
