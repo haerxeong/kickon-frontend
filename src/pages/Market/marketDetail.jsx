@@ -6,13 +6,12 @@ import { useParams } from "react-router-dom";
 import { getItemDetail } from "../../apis/domains/market/getItemDetail.js";
 import { Phone } from "lucide-react";
 import { updateUsedProductStatus } from '../../apis/domains/market/usedProduct';
-import {stripHtml} from "../../utils/stripHtml.js";
-import {truncateText} from "../../utils/textUtils.js";
 import {MdIosShare} from "react-icons/md";
 import {LuSiren} from "react-icons/lu";
 import {openReportModal} from "../../features/modal/modalSlice.js";
 import {useDispatch} from "react-redux";
 import {FiMoreHorizontal} from "react-icons/fi";
+import parse, { domToReact } from 'html-react-parser';
 
 const MarketDetail = () => {
     const { pk } = useParams();
@@ -201,7 +200,43 @@ const MarketDetail = () => {
             <S.ArticleContent>
                 <S.ArticleText>
                     <b>상품 설명</b>
-                    <div>{stripHtml(truncateText(data.description))}</div>
+                    <div>
+                        {parse(data.description || '', {
+                            replace: (domNode) => {
+                                if (domNode.name === 'a' && domNode.attribs?.href?.includes('youtu')) {
+                                    const href = domNode.attribs.href;
+                                    let videoId = '';
+
+                                    if (href.includes('youtu.be/')) {
+                                        videoId = href.split('youtu.be/')[1]?.split('?')[0];
+                                    } else if (href.includes('v=')) {
+                                        videoId = href.split('v=')[1]?.split('&')[0];
+                                    }
+
+                                    if (videoId) {
+                                        return (
+                                            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                                                <iframe
+                                                    src={`https://www.youtube.com/embed/${videoId}`}
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                    title="YouTube video"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: '100%',
+                                                        height: '100%',
+                                                    }}
+                                                />
+                                            </div>
+                                        );
+                                    }
+                                }
+                            },
+                        })}
+                    </div>
                 </S.ArticleText>
 
                 <S.ArticleText>

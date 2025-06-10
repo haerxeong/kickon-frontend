@@ -22,6 +22,8 @@ import Comment from "../../components/Comment/comment.jsx";
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 import { useAuthGuard } from "../../hooks/useAuthGuard.js";
 import { parseMarkdownToHtml } from '../../utils/markdownParser';
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 const PostDetail = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -277,7 +279,7 @@ const PostDetail = () => {
 
         <S.ArticleContent>
           <S.ArticleText as="div">
-            {parse(apiPost.content, {
+            {parse(DOMPurify.sanitize(marked.parse(apiPost.content || "")), {
               replace: (domNode) => {
                 if (domNode.name === 'a' && domNode.attribs?.href?.includes('youtu')) {
                   const href = domNode.attribs.href;
@@ -306,7 +308,7 @@ const PostDetail = () => {
                   }
                 }
 
-                // 기존 iframe 처리도 유지
+                // 기존 iframe 유지
                 if (domNode.name === 'iframe' && domNode.attribs?.src?.includes('youtube.com')) {
                   return (
                       <S.YoutubeResponsive>
@@ -314,7 +316,7 @@ const PostDetail = () => {
                       </S.YoutubeResponsive>
                   );
                 }
-              }
+              },
             })}
           </S.ArticleText>
         </S.ArticleContent>

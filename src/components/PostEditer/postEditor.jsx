@@ -254,9 +254,9 @@ const PostEditor = ({ type = "news" }) => {
         } else if (isCommunity) {
             payload = {
                 title: title.trim(),
-                contents: content.trim(),
+                contents: sanitizedHtml, // HTML 변환된 값으로 통일
                 category: categoryMap[selectedTab],
-                ...(selectedTab !== "전체" && selectedTeamId && { team: selectedTeamId })  // 팀이 전체가 아닐 때만 포함
+                ...(selectedTab !== "전체" && selectedTeamId && { team: selectedTeamId })
             };
         } else {
             payload = {
