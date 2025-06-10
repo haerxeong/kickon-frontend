@@ -10,7 +10,6 @@ import { getTeams } from "../../apis/domains/common/getTeams";
 import axiosInstance from "../../apis/axios-instance.js";
 import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
 import { useNavigate } from "react-router-dom";
-import Quill from "quill";
 import newsCategoryMap  from "../../utils/newsCategoryMap.js";
 import MyEditor from "./myEditor.jsx";
 import { marked } from "marked";
@@ -240,7 +239,8 @@ const PostEditor = ({ type = "news" }) => {
 
         const sanitizedHtml = getSanitizedHtml(content);
 
-        let payload;
+        let payload = {};
+
         if (isMarkets) {
             payload = {
                 productName: title.trim(),
@@ -280,28 +280,28 @@ const PostEditor = ({ type = "news" }) => {
         }
     };
 
-    const imageHandler = () => {
-        const input = document.createElement("input");
-        input.setAttribute("type", "file");
-        input.setAttribute("accept", "image/*");
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (!file) return;
-
-            try {
-                const imageUrl = await uploadImageToS3(file);
-                const quill = Quill.find(document.querySelector(".ql-editor")); // 현재 에디터 인스턴스
-                const range = quill.getSelection(true);
-
-                quill.insertEmbed(range.index, "image", imageUrl);
-                quill.setSelection(range.index + 1); // 커서 다음 줄로 이동
-            } catch (error) {
-                alert("이미지 업로드에 실패했습니다.");
-            }
-        };
-    };
+    // const imageHandler = () => {
+    //     const input = document.createElement("input");
+    //     input.setAttribute("type", "file");
+    //     input.setAttribute("accept", "image/*");
+    //     input.click();
+    //
+    //     input.onchange = async () => {
+    //         const file = input.files[0];
+    //         if (!file) return;
+    //
+    //         try {
+    //             const imageUrl = await uploadImageToS3(file);
+    //             const quill = Quill.find(document.querySelector(".ql-editor")); // 현재 에디터 인스턴스
+    //             const range = quill.getSelection(true);
+    //
+    //             quill.insertEmbed(range.index, "image", imageUrl);
+    //             quill.setSelection(range.index + 1); // 커서 다음 줄로 이동
+    //         } catch (error) {
+    //             alert("이미지 업로드에 실패했습니다.");
+    //         }
+    //     };
+    // };
 
     const handleCancel = () => {
         const confirmLeave = window.confirm("작성 중인 글이 사라집니다. 정말 나가시겠어요?");
@@ -309,29 +309,6 @@ const PostEditor = ({ type = "news" }) => {
             navigate(-1); // 이전 페이지로
         }
     };
-
-    // const modules = {
-    //     toolbar: {
-    //         container: [
-    //             [{ header: [1, 2, false] }],
-    //             ["bold", "italic", "underline"],
-    //             [{ list: "ordered" }, { list: "bullet" }],
-    //             ["blockquote", "link", "image", "video"],
-    //             ["clean"]
-    //         ],
-    //         handlers: {
-    //             image: imageHandler,
-    //         }
-    //     }
-    // };
-    //
-    // const formats = [
-    //     "header",
-    //     "bold", "italic", "underline",
-    //     "list", "bullet",
-    //     "blockquote",
-    //     "link", "image", "video"
-    // ];
 
     return (
         <S.Container>
