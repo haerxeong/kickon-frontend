@@ -4,7 +4,6 @@ import { PiImageSquare } from "react-icons/pi";
 import { IoClose } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa6";
 import { FiHelpCircle } from "react-icons/fi";
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { uploadImageToS3 } from "../../utils/imageUpload";
 import { getTeams } from "../../apis/domains/common/getTeams";
@@ -13,7 +12,6 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore.js'
 import { useNavigate } from "react-router-dom";
 import Quill from "quill";
 import newsCategoryMap  from "../../utils/newsCategoryMap.js";
-import MyQuill from "./myQuill.jsx";
 import MyEditor from "./myEditor.jsx";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
