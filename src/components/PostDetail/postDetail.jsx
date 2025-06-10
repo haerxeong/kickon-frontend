@@ -330,7 +330,6 @@ const PostDetail = () => {
             canComment={canComment}
         />
 
-
       </S.ArticleContainer>
   );
 };
