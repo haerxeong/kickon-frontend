@@ -45,13 +45,13 @@ const Market = () => {
             setLoading(true);
             try {
                 if (activeTab === "내 판매글") {
-                    const res = await getItemList({ size: 1000, page: 1 });
+                    const res = await getItemList({ size: 100, page: 1 });
                     const mine = (res.items || []).filter(item => item.isMine);
                     setMyItems(mine);
                 } else {
                     // 모든 데이터를 한 번에 가져오기
                     const params = {
-                        size: 1000,
+                        size: 100,
                         page: 1,
                         team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined
                     };
