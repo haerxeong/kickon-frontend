@@ -39,6 +39,70 @@ export const Tab = styled.div`
     }
 `;
 
+// 검색창 관련 스타일 추가
+export const SearchContainer = styled.div`
+    margin-bottom: 1rem;
+`;
+
+export const SearchInputWrapper = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+    &:focus-within {
+        border-color: #C00C0B;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(192, 12, 11, 0.1);
+    }
+
+    svg {
+        color: #8c8c8c;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+`;
+
+export const SearchInput = styled.input`
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.7rem;
+    font-family: Pretendard;
+    color: #333;
+
+    &::placeholder {
+        color: #8c8c8c;
+    }
+`;
+
+export const SearchClearButton = styled.button`
+    background: none;
+    border: none;
+    color: #8c8c8c;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #f0f0f0;
+        color: #333;
+    }
+`;
+
 export const MarketplaceGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -54,7 +118,7 @@ export const MarketplaceItem = styled.div`
     cursor: pointer;
     transition: all 0.2s ease;
     background: white;
-    
+
     &:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
@@ -123,7 +187,7 @@ export const MarketplaceAuthor = styled.div`
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    
+
     img {
         width: 0.7rem;
         height: 0.7rem;
@@ -136,7 +200,7 @@ export const MarketplaceStats = styled.div`
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    
+
     span {
         display: flex;
         align-items: center;
@@ -154,13 +218,6 @@ export const StatusBadge = styled.span`
     padding: 0.2rem 0.4rem;
     border-radius: 0.25rem;
     font-weight: 500;
-`;
-
-export const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 0.5rem;
 `;
 
 export const CategoryDropdown = styled.div`

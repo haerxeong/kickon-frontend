@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import * as M from './market.style.js';
 import * as PS from "../../components/Pagination/pagination.style.js";
 import { NewsContainer } from "./market.style.js";
@@ -20,9 +20,10 @@ const Market = () => {
     const [activeTab, setActiveTab] = useState("전체");
     const [selectedCategory, setSelectedCategory] = useState("전체");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태 추가
     const navigate = useNavigate();
     const [myItems, setMyItems] = useState([]);
-    const [allItems, setAllItems] = useState([]); // 모든 아이템 저장
+    const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const { selectedTeam } = useLeagueTeamStore();
@@ -50,7 +51,7 @@ const Market = () => {
                 } else {
                     // 모든 데이터를 한 번에 가져오기
                     const params = {
-                        size: 1000, // 충분히 큰 수로 모든 데이터 가져오기
+                        size: 1000,
                         page: 1,
                         team: activeTab === selectedTeam?.nameKr ? selectedTeam.pk : undefined
                     };
@@ -67,7 +68,7 @@ const Market = () => {
         fetchItems();
     }, [activeTab, selectedTeam]);
 
-    // 카테고리와 페이지 변경에 따른 아이템 표시
+    // 카테고리, 검색어, 페이지 변경에 따른 아이템 표시
     useEffect(() => {
         let itemsToShow = [];
 
@@ -82,6 +83,13 @@ const Market = () => {
             itemsToShow = itemsToShow.filter(item => item.category === selectedCategory);
         }
 
+        // 검색어 필터링
+        if (searchQuery.trim() !== "") {
+            itemsToShow = itemsToShow.filter(item =>
+                item.productName.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+
         // 페이지네이션 적용
         const totalFiltered = itemsToShow.length;
         const startIndex = (activePage - 1) * itemsPerPage;
@@ -89,14 +97,24 @@ const Market = () => {
 
         setMarketplaceItems(itemsToShow.slice(startIndex, endIndex));
         setTotalPages(Math.max(1, Math.ceil(totalFiltered / itemsPerPage)));
-    }, [activeTab, selectedCategory, activePage, myItems, allItems]);
+    }, [activeTab, selectedCategory, searchQuery, activePage, myItems, allItems]);
 
     const formatPrice = (price) => `${price.toLocaleString()}원`;
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
-        setActivePage(1); // 카테고리 변경 시 첫 페이지로
+        setActivePage(1);
         setIsDropdownOpen(false);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        setActivePage(1); // 검색 시 첫 페이지로 이동
+    };
+
+    const handleSearchClear = () => {
+        setSearchQuery("");
+        setActivePage(1);
     };
 
     if (loading) return <LoadingSpinner />;
@@ -144,6 +162,24 @@ const Market = () => {
                 </M.CategoryDropdown>
             </M.TabContainer>
 
+            {/* 검색창 추가 */}
+            <M.SearchContainer>
+                <M.SearchInputWrapper>
+                    <Search size={16} />
+                    <M.SearchInput
+                        type="text"
+                        placeholder="상품명으로 검색..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                    {searchQuery && (
+                        <M.SearchClearButton onClick={handleSearchClear}>
+                            ×
+                        </M.SearchClearButton>
+                    )}
+                </M.SearchInputWrapper>
+            </M.SearchContainer>
+
             {marketplaceItems.length === 0 ? (
                 activeTab === "내 판매글" ? (
                     <EmptyState
@@ -151,6 +187,13 @@ const Market = () => {
                         subMessage="상품을 등록해보세요!"
                         buttonText="상품 등록하기"
                         onRetry={() => navigate("/market/write")}
+                    />
+                ) : searchQuery.trim() !== "" ? (
+                    <EmptyState
+                        message={`"${searchQuery}"에 대한 검색 결과가 없습니다.`}
+                        subMessage="다른 검색어를 시도해보세요."
+                        buttonText="검색어 지우기"
+                        onRetry={handleSearchClear}
                     />
                 ) : (
                     <EmptyState
