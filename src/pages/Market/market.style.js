@@ -39,6 +39,70 @@ export const Tab = styled.div`
     }
 `;
 
+// 검색창 관련 스타일 추가
+export const SearchContainer = styled.div`
+    margin-bottom: 1rem;
+`;
+
+export const SearchInputWrapper = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+    &:focus-within {
+        border-color: #C00C0B;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(192, 12, 11, 0.1);
+    }
+
+    svg {
+        color: #8c8c8c;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+`;
+
+export const SearchInput = styled.input`
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.7rem;
+    font-family: Pretendard;
+    color: #333;
+
+    &::placeholder {
+        color: #8c8c8c;
+    }
+`;
+
+export const SearchClearButton = styled.button`
+    background: none;
+    border: none;
+    color: #8c8c8c;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #f0f0f0;
+        color: #333;
+    }
+`;
+
 export const MarketplaceGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -54,7 +118,7 @@ export const MarketplaceItem = styled.div`
     cursor: pointer;
     transition: all 0.2s ease;
     background: white;
-    
+
     &:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
@@ -123,7 +187,7 @@ export const MarketplaceAuthor = styled.div`
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    
+
     img {
         width: 0.7rem;
         height: 0.7rem;
@@ -136,7 +200,7 @@ export const MarketplaceStats = styled.div`
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    
+
     span {
         display: flex;
         align-items: center;
@@ -154,4 +218,75 @@ export const StatusBadge = styled.span`
     padding: 0.2rem 0.4rem;
     border-radius: 0.25rem;
     font-weight: 500;
+`;
+
+export const CategoryDropdown = styled.div`
+    position: relative;
+    display: inline-block;
+`;
+
+export const DropdownButton = styled.button`
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    background: white;
+    border: none;
+    border-radius: 0.25rem;
+    color: #000;
+    font-size: 0.65rem;
+    font-family: Pretendard;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 4rem;
+    
+    &:hover {
+        border-color: #C00C0B;
+        background: #fafafa;
+    }
+    
+    svg {
+        transition: transform 0.2s ease;
+        transform: ${props => props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+    }
+`;
+
+export const DropdownMenu = styled.div`
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #DCDCDC;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 6rem;
+    margin-top: 0.2rem;
+`;
+
+export const DropdownItem = styled.div`
+    padding: 0.5rem 0.7rem;
+    font-size: 0.65rem;
+    font-family: Pretendard;
+    color: ${props => props.selected ? '#C00C0B' : '#333'};
+    background: ${props => props.selected ? '#fff5f5' : 'white'};
+    cursor: pointer;
+    transition: all 0.15s ease;
+    
+    &:hover {
+        background: ${props => props.selected ? '#fff5f5' : '#f8f8f8'};
+        color: #C00C0B;
+    }
+    
+    &:first-child {
+        border-radius: 0.25rem 0.25rem 0 0;
+    }
+    
+    &:last-child {
+        border-radius: 0 0 0.25rem 0.25rem;
+    }
+    
+    & + & {
+        border-top: 1px solid #f0f0f0;
+    }
 `;
