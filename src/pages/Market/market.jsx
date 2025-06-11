@@ -11,6 +11,8 @@ import { formatDate } from "../../utils/formatDate.js";
 import Logo from "../../assets/login_logo.svg";
 import EmptyState from "../../components/EmptyState/emptyState.jsx";
 import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
+import {useAuthGuard} from "../../hooks/useAuthGuard.js";
+import * as S from "../News/news.style.js";
 
 const Market = () => {
     const [marketplaceItems, setMarketplaceItems] = useState([]);
@@ -25,6 +27,7 @@ const Market = () => {
     const [myItems, setMyItems] = useState([]);
     const [allItems, setAllItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const requireAuth = useAuthGuard();
 
     const { selectedTeam } = useLeagueTeamStore();
 
@@ -117,6 +120,13 @@ const Market = () => {
         setActivePage(1);
     };
 
+    const handleWriteClick = () => {
+        if (!requireAuth()) return;
+
+        navigate("/market/write");
+
+    };
+
     if (loading) return <LoadingSpinner />;
 
     const handleMarketplaceClick = (itemId) => {
@@ -160,6 +170,9 @@ const Market = () => {
                         </M.DropdownMenu>
                     )}
                 </M.CategoryDropdown>
+                <M.MobileWrite onClick={handleWriteClick}>
+                    글쓰기
+                </M.MobileWrite>
             </M.TabContainer>
 
             {/* 검색창 추가 */}

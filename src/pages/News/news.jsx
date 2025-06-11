@@ -9,6 +9,7 @@ import { useLeagueTeamStore } from '../../store/useLeagueTeamStore';
 import { getNewsList } from "../../apis/domains/news/getNewsList";
 import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
 import EmptyState from "../../components/EmptyState/emptyState.jsx";
+import {useAuthGuard} from "../../hooks/useAuthGuard.js";
 
 const News = () => {
     const [newsList, setNewsList] = useState([]);
@@ -19,6 +20,7 @@ const News = () => {
     const [loading, setLoading] = useState(true);
     const { selectedTeam } = useLeagueTeamStore();
     const navigate = useNavigate();
+    const requireAuth = useAuthGuard();
     const leaguePk = selectedLeague?.pk || undefined;
 
     const tabs = ["전체", "인기", selectedTeam?.nameKr || ""].filter(Boolean);
@@ -64,6 +66,13 @@ const News = () => {
         fetchNews();
     }, [activeTab, activePage, selectedLeague, selectedTeam]);
 
+    const handleWriteClick = () => {
+        if (!requireAuth()) return;
+
+        navigate("/news/write");
+
+    };
+
     if (loading) return <LoadingSpinner />;
 
     return (
@@ -100,6 +109,11 @@ const News = () => {
                             activeTab={activeTab}
                         />
                     </S.LeagueTab>
+
+                    <S.MobileWrite onClick={handleWriteClick}>
+                        글쓰기
+                    </S.MobileWrite>
+
 
                 </S.TabContainer>
 

@@ -62,3 +62,36 @@ export const NewsList = styled.div`
                 border-bottom: none;
         }
 `;
+
+export const MobileWrite = styled.button`
+    display: none;
+    position: absolute;
+    height: 1.7rem;
+    padding: 0.4375rem 0.7875rem;
+    margin-right: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4375rem;
+    border-radius: 0.875rem;
+    border: 1px solid #c00c0b;
+    background: #c00c0b;
+    color: #fff;
+    text-align: right;
+    font-size: 0.7875rem;
+    font-style: normal;
+    font-weight: 400;
+    text-decoration: none;
+
+    @media (max-width: 1200px) {
+        right: 2rem;
+    }
+    @media (max-width: 768px) {
+        right: 1rem;
+        height: 1.3rem;
+        font-size: 0.65rem;
+        padding: 0.3rem 0.5rem;
+    }
+    @media (max-width: 960px) {
+        display: flex; /* 960px 이하일 때만 보임 */
+    }
+`;

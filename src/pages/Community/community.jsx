@@ -11,6 +11,8 @@ import {formatDate} from "../../utils/formatDate.js";
 import { increaseViewCount } from "../../utils/increaseViewCount.js";
 import LoadingSpinner from "../../components/LoadingSpinner/loadingSpinner.jsx";
 import EmptyState from "../../components/EmptyState/emptyState.jsx";
+import WriteButton from "../../components/WriteButton/writeButton.jsx";
+import {useAuthGuard} from "../../hooks/useAuthGuard.js";
 
 const Community = () => {
     const [posts, setPosts] = useState([]);
@@ -19,6 +21,7 @@ const Community = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const requireAuth = useAuthGuard();
 
     const { selectedTeam } = useLeagueTeamStore();
 
@@ -60,6 +63,14 @@ const Community = () => {
         navigate(`/community/${postId}`);
     };
 
+    const handleWriteClick = () => {
+        if (!requireAuth()) return;
+
+        navigate("/community/write");
+
+    };
+
+
     if (loading) return <LoadingSpinner />;
 
     return (
@@ -78,6 +89,9 @@ const Community = () => {
                             {tab}
                         </S.Tab>
                     ))}
+                    <S.MobileWrite onClick={handleWriteClick}>
+                        글쓰기
+                    </S.MobileWrite>
                 </S.TabContainer>
 
                 <S.TableHeader>
