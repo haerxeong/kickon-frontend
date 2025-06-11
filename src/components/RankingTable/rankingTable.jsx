@@ -24,36 +24,42 @@ const RankingTable = ({ title, type = "season" }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [leaguesResponse, userInfoResponse] = await Promise.all([
-          getLeagueList(),
-          getProfilecard()
-        ]);
-
+        
+        // 리그 목록 가져오기
+        const leaguesResponse = await getLeagueList();
         console.log('리그 목록 응답:', leaguesResponse);
-        console.log('사용자 정보 응답:', userInfoResponse);
 
-        if (leaguesResponse && leaguesResponse.data) {
-          setLeagues(leaguesResponse.data);
-          
-          // 사용자가 로그인되어 있고 선호 리그가 있는 경우
-          if (userInfoResponse && userInfoResponse.leaguePk) {
-            console.log('선호 리그 ID:', userInfoResponse.leaguePk);
-            const preferredLeague = leaguesResponse.data.find(
-              league => league.pk === userInfoResponse.leaguePk
-            );
-            console.log('찾은 선호 리그:', preferredLeague);
-            if (preferredLeague) {
-              setSelectedLeague(preferredLeague);
-            } else {
-              // 선호 리그를 찾지 못한 경우 첫 번째 리그를 기본값으로 설정
-              setSelectedLeague(leaguesResponse.data[0]);
-            }
+        if (!leaguesResponse || !leaguesResponse.data) {
+          setError("리그 목록을 불러오는데 실패했습니다.");
+          return;
+        }
+
+        setLeagues(leaguesResponse.data);
+        
+        // 사용자 정보 가져오기 (실패해도 계속 진행)
+        let userInfoResponse = null;
+        try {
+          userInfoResponse = await getProfilecard();
+          console.log('사용자 정보 응답:', userInfoResponse);
+        } catch (userErr) {
+          console.log('사용자 정보 가져오기 실패 (로그인하지 않은 상태일 수 있음):', userErr);
+        }
+
+        // 사용자가 로그인되어 있고 선호 리그가 있는 경우
+        if (userInfoResponse && userInfoResponse.leaguePk) {
+          console.log('선호 리그 ID:', userInfoResponse.leaguePk);
+          const preferredLeague = leaguesResponse.data.find(
+            league => league.pk === userInfoResponse.leaguePk
+          );
+          console.log('찾은 선호 리그:', preferredLeague);
+          if (preferredLeague) {
+            setSelectedLeague(preferredLeague);
           } else {
-            // 로그인하지 않았거나 선호 리그가 없는 경우 첫 번째 리그를 기본값으로 설정
             setSelectedLeague(leaguesResponse.data[0]);
           }
         } else {
-          setError("리그 목록을 불러오는데 실패했습니다.");
+          // 로그인하지 않았거나 선호 리그가 없는 경우 첫 번째 리그를 기본값으로 설정
+          setSelectedLeague(leaguesResponse.data[0]);
         }
       } catch (err) {
         console.error("데이터 가져오기 실패:", err);
@@ -93,15 +99,13 @@ const RankingTable = ({ title, type = "season" }) => {
           setRankings(response.data.data);
         } else {
           setRankings([]);
-          setError("순위 데이터를 불러오는데 실패했습니다.");
         }
       } else {
         setRankings([]);
-        setError("순위 데이터를 불러오는데 실패했습니다.");
       }
     } catch (err) {
       console.error("순위 데이터 가져오기 실패:", err);
-      setError("순위 데이터를 불러오는데 실패했습니다.");
+      setRankings([]);
     } finally {
       setLoading(false);
     }
