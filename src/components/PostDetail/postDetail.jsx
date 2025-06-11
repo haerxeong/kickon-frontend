@@ -309,12 +309,33 @@ const PostDetail = () => {
                 }
 
                 // 기존 iframe 유지
-                if (domNode.name === 'iframe' && domNode.attribs?.src?.includes('youtube.com')) {
-                  return (
-                      <S.YoutubeResponsive>
-                        {domToReact([domNode])}
-                      </S.YoutubeResponsive>
-                  );
+                if (domNode.name === 'a' && domNode.attribs?.href?.includes('youtu')) {
+                  const href = domNode.attribs.href;
+                  let videoId = '';
+
+                  if (href.includes('youtu.be/')) {
+                    videoId = href.split('youtu.be/')[1]?.split('?')[0];
+                  } else if (href.includes('youtube.com/watch?v=')) {
+                    videoId = href.split('v=')[1]?.split('&')[0];
+                  } else if (href.includes('youtube.com/shorts/')) {
+                    videoId = href.split('shorts/')[1]?.split('?')[0];
+                  }
+
+                  if (videoId) {
+                    return (
+                        <S.YoutubeResponsive>
+                          <iframe
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title="YouTube video"
+                              width="100%"
+                              height="315"
+                          />
+                        </S.YoutubeResponsive>
+                    );
+                  }
                 }
               },
             })}
