@@ -5,4 +5,5 @@ const NotFound = () => {
   return <NoData onRetry={() => window.location.href = "/"} />;
 };
 
+
 export default NotFound;
