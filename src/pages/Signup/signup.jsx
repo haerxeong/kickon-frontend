@@ -340,7 +340,15 @@ const Signup = () => {
             )}
             <S.CheckboxLabel>
               서비스 이용약관 동의 (필수)
-              <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
+              <S.ViewTermsLink
+                  as="a"
+                  href="https://lunar-surf-03d.notion.site/20d71dde430d8035b15ae8d2bfd745dd?source=copy_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+              >
+                약관 보기
+              </S.ViewTermsLink>
             </S.CheckboxLabel>
           </S.CheckboxWrapper>
 
@@ -354,7 +362,12 @@ const Signup = () => {
             )}
             <S.CheckboxLabel>
               개인정보처리방침 동의 (필수)
-              <S.ViewTermsLink>약관 보기</S.ViewTermsLink>
+              <S.ViewTermsLink as="a"
+                               href="https://lunar-surf-03d.notion.site/20d71dde430d8035b15ae8d2bfd745dd?source=copy_link"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               onClick={(e) => e.stopPropagation()}
+              >약관 보기</S.ViewTermsLink>
             </S.CheckboxLabel>
           </S.CheckboxWrapper>
 
@@ -368,7 +381,12 @@ const Signup = () => {
             )}
             <S.CheckboxLabel>
               마케팅 정보 수신 동의 (선택){" "}
-              <S.ViewTermsLink>약관 보기</S.ViewTermsLink>{" "}
+              <S.ViewTermsLink as="a"
+                               href="https://lunar-surf-03d.notion.site/20d71dde430d8035b15ae8d2bfd745dd?source=copy_link"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               onClick={(e) => e.stopPropagation()}
+              >약관 보기</S.ViewTermsLink>{" "}
             </S.CheckboxLabel>
           </S.CheckboxWrapper>
         </S.CheckboxContainer>
