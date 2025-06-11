@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const NewsContainer = styled.div`
     //width: 30rem;
     width: 100%;
@@ -40,6 +39,38 @@ export const Tab = styled.div`
     }
 `;
 
+export const MobileWrite = styled.button`
+    position: absolute;
+    height: 1.7rem;
+    padding: 0.4375rem 0.7875rem;
+    margin-right: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4375rem;
+    border-radius: 0.875rem;
+    border: 1px solid #c00c0b;
+    background: #c00c0b;
+    color: #fff;
+    text-align: right;
+    font-size: 0.7875rem;
+    font-style: normal;
+    font-weight: 400;
+    text-decoration: none;
+
+    @media (max-width: 1200px) {
+        right: 2rem;
+    }
+    @media (max-width: 768px) {
+        right: 1rem;
+        height: 1.3rem;
+        font-size: 0.65rem;
+        padding: 0.3rem 0.5rem;
+    }
+    @media (max-width: 960px) {
+        display: flex; /* 960px 이하일 때만 보임 */
+    }
+`;
+
 export const TableHeader = styled.div`
     display: flex;
     width: 100%;
@@ -53,7 +84,7 @@ export const TableHeader = styled.div`
         flex: 6;
         text-align: center;
     }
-    
+
     .author {
         flex: 2.14;
         text-align: center;
@@ -62,12 +93,12 @@ export const TableHeader = styled.div`
         flex: 1.5;
         text-align: center;
     }
-    
+
     .views {
         flex: 1;
         text-align: center;
     }
-    
+
     .likes {
         flex: 1;
         text-align: center;
@@ -78,24 +109,24 @@ export const TableHeader = styled.div`
 `;
 
 export const PostsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
 `;
 
 export const PostItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0.55rem 0;
-  border-bottom: 0.0625rem solid #f0f0f0;
-  cursor: pointer;
-  
-  &:last-child {
-    border-bottom: none;
-  }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.55rem 0;
+    border-bottom: 0.0625rem solid #f0f0f0;
+    cursor: pointer;
+
+    &:last-child {
+        border-bottom: none;
+    }
 `;
 
 export const PostTitle = styled.div`
@@ -127,24 +158,22 @@ export const PostTitle = styled.div`
     }
 `;
 
-
-
 export const PostAuthor = styled.div`
-  flex: 2.14;
-  font-size: 0.55rem;
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.25rem;
-  font-weight: 350;
+    flex: 2.14;
+    font-size: 0.55rem;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    font-weight: 350;
 
-  img {
-      width: 0.85rem; 
-      height: 0.85rem;
-      border-radius: 50%;
-      object-fit: cover;
-  }
+    img {
+        width: 0.85rem;
+        height: 0.85rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
 `;
 
 export const PostDate = styled.div`
