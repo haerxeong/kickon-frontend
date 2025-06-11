@@ -6,6 +6,7 @@ import {
   getGambleSeasonRanking,
   getLeagueList,
 } from "../../apis/domains/ranking/ranking.js";
+import { getProfilecard } from "../../apis/domains/common/getProfilecard.js";
 import NoData from "../NoData/noData.jsx"
 import LoadingSpinner from "../LoadingSpinner/loadingSpinner.jsx";
 import { RiQuestionLine } from "react-icons/ri";
@@ -18,31 +19,51 @@ const RankingTable = ({ title, type = "season" }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 리그 목록 가져오기
+  // 리그 목록과 사용자 정보 가져오기
   useEffect(() => {
-    const fetchLeagues = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await getLeagueList();
+        const [leaguesResponse, userInfoResponse] = await Promise.all([
+          getLeagueList(),
+          getProfilecard()
+        ]);
 
-        if (response && response.data) {
-          setLeagues(response.data);
-          // 첫 번째 리그를 기본값으로 설정
-          if (response.data.length > 0 && !selectedLeague) {
-            setSelectedLeague(response.data[0]);
+        console.log('리그 목록 응답:', leaguesResponse);
+        console.log('사용자 정보 응답:', userInfoResponse);
+
+        if (leaguesResponse && leaguesResponse.data) {
+          setLeagues(leaguesResponse.data);
+          
+          // 사용자가 로그인되어 있고 선호 리그가 있는 경우
+          if (userInfoResponse && userInfoResponse.leaguePk) {
+            console.log('선호 리그 ID:', userInfoResponse.leaguePk);
+            const preferredLeague = leaguesResponse.data.find(
+              league => league.pk === userInfoResponse.leaguePk
+            );
+            console.log('찾은 선호 리그:', preferredLeague);
+            if (preferredLeague) {
+              setSelectedLeague(preferredLeague);
+            } else {
+              // 선호 리그를 찾지 못한 경우 첫 번째 리그를 기본값으로 설정
+              setSelectedLeague(leaguesResponse.data[0]);
+            }
+          } else {
+            // 로그인하지 않았거나 선호 리그가 없는 경우 첫 번째 리그를 기본값으로 설정
+            setSelectedLeague(leaguesResponse.data[0]);
           }
         } else {
           setError("리그 목록을 불러오는데 실패했습니다.");
         }
       } catch (err) {
-        console.error("리그 목록 가져오기 실패:", err);
-        setError("리그 목록을 불러오는데 실패했습니다.");
+        console.error("데이터 가져오기 실패:", err);
+        setError("데이터를 불러오는데 실패했습니다.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchLeagues();
+    fetchData();
   }, []);
 
   // 순위 데이터 가져오기 (시즌 또는 승부예측)
