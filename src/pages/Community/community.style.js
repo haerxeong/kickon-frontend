@@ -40,6 +40,7 @@ export const Tab = styled.div`
 `;
 
 export const MobileWrite = styled.button`
+    display: none;
     position: absolute;
     height: 1.7rem;
     padding: 0.4375rem 0.7875rem;
